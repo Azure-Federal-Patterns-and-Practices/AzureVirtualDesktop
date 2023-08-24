@@ -371,7 +371,7 @@ module validations 'modules/validations.bicep' = {
     Availability: Availability
     DeploymentScriptNamePrefix: DeploymentScriptNamePrefix
     DiskSku: DiskSku
-    DomainName: DiskName
+    DomainName: DomainName
     Fslogix: Fslogix
     ActiveDirectorySolution: ActiveDirectorySolution
     HostPoolType: HostPoolType
