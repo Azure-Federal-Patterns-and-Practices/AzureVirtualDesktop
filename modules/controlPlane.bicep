@@ -6,6 +6,7 @@ param HostPoolType string
 param Location string
 param LogAnalyticsWorkspaceResourceId string
 param MaxSessionLimit int
+param Monitoring bool
 param SecurityPrincipalIds array
 param TagsApplicationGroup object
 param TagsHostPool object
@@ -66,7 +67,7 @@ resource hostPool 'Microsoft.DesktopVirtualization/hostPools@2021-03-09-preview'
   }
 }
 
-resource hostPoolDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+resource hostPoolDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = if (Monitoring) {
   name: 'diag-${HostPoolName}'
   scope: hostPool
   properties: {
@@ -105,7 +106,7 @@ resource workspace 'Microsoft.DesktopVirtualization/workspaces@2021-03-09-previe
   }
 }
 
-resource workspaceDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+resource workspaceDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = if (Monitoring) {
   name: 'diag-${WorkspaceName}'
   scope: workspace
   properties: {

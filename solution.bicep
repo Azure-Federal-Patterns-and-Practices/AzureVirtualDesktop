@@ -436,8 +436,9 @@ module controlPlane 'modules/controlPlane.bicep' = {
     HostPoolName: HostPoolName
     HostPoolType: HostPoolType
     Location: ControlPlaneLocation
-    LogAnalyticsWorkspaceResourceId: logAnalyticsWorkspace.outputs.ResourceId
+    LogAnalyticsWorkspaceResourceId: Monitoring ? logAnalyticsWorkspace.outputs.ResourceId : ''
     MaxSessionLimit: MaxSessionLimit
+    Monitoring: Monitoring
     SecurityPrincipalIds: SecurityPrincipalObjectIds
     TagsApplicationGroup: union({
       'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
@@ -513,7 +514,7 @@ module fslogix 'modules/fslogix/fslogix.bicep' = if (Fslogix) {
     DelegatedSubnetId: validations.outputs.anfSubnetId
     DeploymentScriptNamePrefix: DeploymentScriptNamePrefix
     DiskEncryption: DiskEncryption
-    DiskEncryptionSetResourceId: diskEncryption.outputs.diskEncryptionSetResourceId
+    DiskEncryptionSetResourceId: DiskEncryption ? diskEncryption.outputs.diskEncryptionSetResourceId : ''
     DiskSku: DiskSku
     DnsServers: validations.outputs.anfDnsServers
     DomainJoinPassword: DomainJoinPassword
@@ -576,7 +577,7 @@ module fslogix 'modules/fslogix/fslogix.bicep' = if (Fslogix) {
   ]
 }
 
-module sentinel 'modules/sentinel.bicep' = {
+module sentinel 'modules/sentinel.bicep' = if (Monitoring) {
   name: 'Sentinel_${Timestamp}'
   scope: resourceGroup(SentinelSubscriptionId, SentinelResourceGroup)
   params: {
@@ -603,7 +604,7 @@ module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
     AvailabilitySetsIndex: BeginAvSetRange
     DeploymentScriptNamePrefix: DeploymentScriptNamePrefix
     DiskEncryption: DiskEncryption
-    DiskEncryptionSetResourceId: diskEncryption.outputs.diskEncryptionSetResourceId
+    DiskEncryptionSetResourceId: DiskEncryption ? diskEncryption.outputs.diskEncryptionSetResourceId : ''
     DiskName: DiskName
     DiskSku: DiskSku
     DivisionRemainderValue: DivisionRemainderValue
@@ -636,8 +637,8 @@ module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
     ResourceGroupManagement: ResourceGroupManagement
     SecurityPrincipalObjectIds: SecurityPrincipalObjectIds
     Sentinel: Sentinel
-    SentinelWorkspaceId: sentinel.outputs.sentinelWorkspaceId
-    SentinelWorkspaceResourceId: sentinel.outputs.sentinelWorkspaceResourceId
+    SentinelWorkspaceId: Monitoring ? sentinel.outputs.sentinelWorkspaceId : ''
+    SentinelWorkspaceResourceId: Monitoring ? sentinel.outputs.sentinelWorkspaceResourceId : ''
     SessionHostBatchCount: SessionHostBatchCount
     SessionHostIndex: SessionHostIndex
     StorageAccountPrefix: StorageAccountPrefix

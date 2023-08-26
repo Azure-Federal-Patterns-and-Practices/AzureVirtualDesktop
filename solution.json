@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "480382231535378883"
+      "templateHash": "2393708155004613487"
     }
   },
   "parameters": {
@@ -2325,11 +2325,12 @@
           "Location": {
             "value": "[parameters('ControlPlaneLocation')]"
           },
-          "LogAnalyticsWorkspaceResourceId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Monitoring_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ResourceId.value]"
-          },
+          "LogAnalyticsWorkspaceResourceId": "[if(parameters('Monitoring'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Monitoring_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ResourceId.value), createObject('value', ''))]",
           "MaxSessionLimit": {
             "value": "[parameters('MaxSessionLimit')]"
+          },
+          "Monitoring": {
+            "value": "[parameters('Monitoring')]"
           },
           "SecurityPrincipalIds": {
             "value": "[parameters('SecurityPrincipalObjectIds')]"
@@ -2360,7 +2361,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "16846699951736869594"
+              "templateHash": "14300815811947869099"
             }
           },
           "parameters": {
@@ -2387,6 +2388,9 @@
             },
             "MaxSessionLimit": {
               "type": "int"
+            },
+            "Monitoring": {
+              "type": "bool"
             },
             "SecurityPrincipalIds": {
               "type": "array"
@@ -2468,6 +2472,7 @@
               }
             },
             {
+              "condition": "[parameters('Monitoring')]",
               "type": "Microsoft.Insights/diagnosticSettings",
               "apiVersion": "2021-05-01-preview",
               "scope": "[format('Microsoft.DesktopVirtualization/hostPools/{0}', parameters('HostPoolName'))]",
@@ -2527,6 +2532,7 @@
               ]
             },
             {
+              "condition": "[parameters('Monitoring')]",
               "type": "Microsoft.Insights/diagnosticSettings",
               "apiVersion": "2021-05-01-preview",
               "scope": "[format('Microsoft.DesktopVirtualization/workspaces/{0}', parameters('WorkspaceName'))]",
@@ -3534,9 +3540,7 @@
           "DiskEncryption": {
             "value": "[parameters('DiskEncryption')]"
           },
-          "DiskEncryptionSetResourceId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('DiskEncryption_{0}', parameters('Timestamp'))), '2022-09-01').outputs.diskEncryptionSetResourceId.value]"
-          },
+          "DiskEncryptionSetResourceId": "[if(parameters('DiskEncryption'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('DiskEncryption_{0}', parameters('Timestamp'))), '2022-09-01').outputs.diskEncryptionSetResourceId.value), createObject('value', ''))]",
           "DiskSku": {
             "value": "[parameters('DiskSku')]"
           },
@@ -5310,6 +5314,7 @@
       ]
     },
     {
+      "condition": "[parameters('Monitoring')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
       "name": "[format('Sentinel_{0}', parameters('Timestamp'))]",
@@ -5410,9 +5415,7 @@
           "DiskEncryption": {
             "value": "[parameters('DiskEncryption')]"
           },
-          "DiskEncryptionSetResourceId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('DiskEncryption_{0}', parameters('Timestamp'))), '2022-09-01').outputs.diskEncryptionSetResourceId.value]"
-          },
+          "DiskEncryptionSetResourceId": "[if(parameters('DiskEncryption'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('DiskEncryption_{0}', parameters('Timestamp'))), '2022-09-01').outputs.diskEncryptionSetResourceId.value), createObject('value', ''))]",
           "DiskName": {
             "value": "[variables('DiskName')]"
           },
@@ -5501,12 +5504,8 @@
           "Sentinel": {
             "value": "[variables('Sentinel')]"
           },
-          "SentinelWorkspaceId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('SentinelSubscriptionId'), variables('SentinelResourceGroup')), 'Microsoft.Resources/deployments', format('Sentinel_{0}', parameters('Timestamp'))), '2022-09-01').outputs.sentinelWorkspaceId.value]"
-          },
-          "SentinelWorkspaceResourceId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('SentinelSubscriptionId'), variables('SentinelResourceGroup')), 'Microsoft.Resources/deployments', format('Sentinel_{0}', parameters('Timestamp'))), '2022-09-01').outputs.sentinelWorkspaceResourceId.value]"
-          },
+          "SentinelWorkspaceId": "[if(parameters('Monitoring'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('SentinelSubscriptionId'), variables('SentinelResourceGroup')), 'Microsoft.Resources/deployments', format('Sentinel_{0}', parameters('Timestamp'))), '2022-09-01').outputs.sentinelWorkspaceId.value), createObject('value', ''))]",
+          "SentinelWorkspaceResourceId": "[if(parameters('Monitoring'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('SentinelSubscriptionId'), variables('SentinelResourceGroup')), 'Microsoft.Resources/deployments', format('Sentinel_{0}', parameters('Timestamp'))), '2022-09-01').outputs.sentinelWorkspaceResourceId.value), createObject('value', ''))]",
           "SessionHostBatchCount": {
             "value": "[variables('SessionHostBatchCount')]"
           },
