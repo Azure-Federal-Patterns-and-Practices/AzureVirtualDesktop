@@ -2,22 +2,22 @@ param _artifactsLocation string
 @secure()
 param _artifactsLocationSasToken string
 param AcceleratedNetworking string
+param ActiveDirectorySolution string
 param Availability string
+param AvailabilitySetNamePrefix string
 param AvailabilitySetsCount int
 param AvailabilitySetsIndex int
-param AvailabilitySetsPrefix string
 param AvailabilityZones array
 param DeploymentScriptNamePrefix string
 param DiskEncryption bool
 param DiskEncryptionSetResourceId string
-param DiskName string
+param DiskNamePrefix string
 param DiskSku string
 param DivisionRemainderValue int
 @secure()
 param DomainJoinPassword string
 param DomainJoinUserPrincipalName string
 param DomainName string
-param ActiveDirectorySolution string
 param DrainMode bool
 param FslogixSolution string
 param Fslogix bool
@@ -32,8 +32,8 @@ param LogAnalyticsWorkspaceName string
 param ManagedIdentityResourceId string
 param MaxResourcesPerTemplateDeployment int
 param Monitoring bool
-param NamingStandard string
 param NetAppFileShares array
+param NetworkInterfaceNamePrefix string
 param OuPath string
 param PooledHostPool bool
 param ResourceGroupControlPlane string
@@ -57,18 +57,18 @@ param TagsNetworkInterfaces object
 param TagsVirtualMachines object
 param Timestamp string
 param TrustedLaunch string
+param VirtualMachineNamePrefix string
 @secure()
 param VirtualMachinePassword string
 param VirtualMachineSize string
 param VirtualMachineUsername string
 param VirtualNetwork string
 param VirtualNetworkResourceGroup string
-param VmName string
 
 var VirtualMachineUserLoginRoleDefinitionResourceId = resourceId('Microsoft.Authorization/roleDefinitions', 'fb879df8-f326-4884-b1cf-06f3ad86be52')
 
 resource availabilitySets 'Microsoft.Compute/availabilitySets@2019-07-01' = [for i in range(0, AvailabilitySetsCount): if (PooledHostPool && Availability == 'AvailabilitySets') {
-  name: '${AvailabilitySetsPrefix}${padLeft((i + AvailabilitySetsIndex), 2, '0')}'
+  name: '${AvailabilitySetNamePrefix}${padLeft((i + AvailabilitySetsIndex), 2, '0')}'
   location: Location
   tags: TagsAvailabilitySets
   sku: {
@@ -102,11 +102,11 @@ module virtualMachines 'virtualMachines.bicep' = [for i in range(1, SessionHostB
     ActiveDirectorySolution: ActiveDirectorySolution
     Availability: Availability
     AvailabilityZones: AvailabilityZones
-    AvailabilitySetsPrefix: AvailabilitySetsPrefix
+    AvailabilitySetNamePrefix: AvailabilitySetNamePrefix
     DeploymentScriptNamePrefix: DeploymentScriptNamePrefix
     DiskEncryption: DiskEncryption
     DiskEncryptionSetResourceId: DiskEncryptionSetResourceId
-    DiskName: DiskName
+    DiskNamePrefix: DiskNamePrefix
     DiskSku: DiskSku
     DomainJoinPassword: DomainJoinPassword
     DomainJoinUserPrincipalName: DomainJoinUserPrincipalName
@@ -124,8 +124,8 @@ module virtualMachines 'virtualMachines.bicep' = [for i in range(1, SessionHostB
     LogAnalyticsWorkspaceName: LogAnalyticsWorkspaceName
     ManagedIdentityResourceId: ManagedIdentityResourceId
     Monitoring: Monitoring
-    NamingStandard: NamingStandard
     NetAppFileShares: NetAppFileShares
+    NetworkInterfaceNamePrefix: NetworkInterfaceNamePrefix
     OuPath: OuPath
     ResourceGroupControlPlane: ResourceGroupControlPlane
     ResourceGroupManagement: ResourceGroupManagement
@@ -145,12 +145,12 @@ module virtualMachines 'virtualMachines.bicep' = [for i in range(1, SessionHostB
     TagsVirtualMachines: TagsVirtualMachines
     Timestamp: Timestamp
     TrustedLaunch: TrustedLaunch
+    VirtualMachineNamePrefix: VirtualMachineNamePrefix
     VirtualMachinePassword: VirtualMachinePassword
     VirtualMachineSize: VirtualMachineSize
     VirtualMachineUsername: VirtualMachineUsername
     VirtualNetwork: VirtualNetwork
     VirtualNetworkResourceGroup: VirtualNetworkResourceGroup
-    VmName: VmName
   }
   dependsOn: [
     availabilitySets

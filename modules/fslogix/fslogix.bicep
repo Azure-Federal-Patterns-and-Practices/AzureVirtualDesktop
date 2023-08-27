@@ -10,6 +10,7 @@ param DelegatedSubnetId string
 param DeploymentScriptNamePrefix string
 param DiskEncryption bool
 param DiskEncryptionSetResourceId string
+param DiskNamePrefix string
 param DiskSku string
 param DnsServers string
 @secure()
@@ -22,11 +23,10 @@ param FslogixSolution string
 param FslogixStorage string
 param KerberosEncryption string
 param Location string
-param ManagementVmName string
-param NamingStandard string
 param NetAppAccountName string
 param NetAppCapacityPoolName string
 param Netbios string
+param NetworkInterfaceNamePrefix string
 param OuPath string
 param PrivateEndpoint bool
 param ResourceGroupManagement string
@@ -34,7 +34,7 @@ param ResourceGroupStorage string
 param SecurityPrincipalIds array
 param SecurityPrincipalNames array
 param SmbServerLocation string
-param StorageAccountPrefix string
+param StorageAccountNamePrefix string
 param StorageCount int
 param StorageIndex int
 param StorageSku string
@@ -51,6 +51,7 @@ param TrustedLaunch string
 param UserAssignedIdentityResourceId string
 param VirtualNetwork string
 param VirtualNetworkResourceGroup string
+param VirtualMachineNamePrefix string
 @secure()
 param VirtualMachinePassword string
 param VirtualMachineUsername string
@@ -63,13 +64,13 @@ module managementVirtualMachine 'managementVirtualMachine.bicep' = if (contains(
   params: {
     DiskEncryption: DiskEncryption
     DiskEncryptionSetResourceId: DiskEncryptionSetResourceId
+    DiskNamePrefix: DiskNamePrefix
     DiskSku: DiskSku
     DomainJoinPassword: DomainJoinPassword
     DomainJoinUserPrincipalName: DomainJoinUserPrincipalName
     DomainName: DomainName
     Location: Location
-    ManagementVmName: ManagementVmName
-    NamingStandard: NamingStandard
+    NetworkInterfaceNamePrefix: NetworkInterfaceNamePrefix
     Subnet: Subnet
     TagsNetworkInterfaces: TagsNetworkInterfaces
     TagsVirtualMachines: TagsVirtualMachines
@@ -78,6 +79,7 @@ module managementVirtualMachine 'managementVirtualMachine.bicep' = if (contains(
     UserAssignedIdentityResourceId: UserAssignedIdentityResourceId
     VirtualNetwork: VirtualNetwork
     VirtualNetworkResourceGroup: VirtualNetworkResourceGroup
+    VirtualMachineNamePrefix: VirtualMachineNamePrefix
     VirtualMachinePassword: VirtualMachinePassword
     VirtualMachineUsername: VirtualMachineUsername
   }
@@ -100,7 +102,7 @@ module azureNetAppFiles 'azureNetAppFiles.bicep' = if (StorageSolution == 'Azure
     FileShares: FileShares
     FslogixSolution: FslogixSolution
     Location: Location
-    ManagementVmName: ManagementVmName
+    ManagementVmName: managementVirtualMachine.outputs.Name
     NetAppAccountName: NetAppAccountName
     NetAppCapacityPoolName: NetAppCapacityPoolName
     OuPath: OuPath
@@ -115,9 +117,6 @@ module azureNetAppFiles 'azureNetAppFiles.bicep' = if (StorageSolution == 'Azure
     Timestamp: Timestamp
     UserAssignedIdentityResourceId: UserAssignedIdentityResourceId
   }
-  dependsOn: [
-    managementVirtualMachine
-  ]
 }
 
 // Azure Files for FSLogix
@@ -140,7 +139,7 @@ module azureFiles 'azureFiles/azureFiles.bicep' = if (StorageSolution == 'AzureS
     FslogixStorage: FslogixStorage
     KerberosEncryption: KerberosEncryption
     Location: Location
-    ManagementVmName: ManagementVmName
+    ManagementVmName: managementVirtualMachine.outputs.Name
     Netbios: Netbios
     OuPath: OuPath
     PrivateEndpoint: PrivateEndpoint
@@ -148,7 +147,7 @@ module azureFiles 'azureFiles/azureFiles.bicep' = if (StorageSolution == 'AzureS
     ResourceGroupStorage: ResourceGroupStorage
     SecurityPrincipalIds: SecurityPrincipalIds
     SecurityPrincipalNames: SecurityPrincipalNames
-    StorageAccountPrefix: StorageAccountPrefix
+    StorageAccountNamePrefix: StorageAccountNamePrefix
     StorageCount: StorageCount
     StorageIndex: StorageIndex
     StorageSku: StorageSku
@@ -163,9 +162,6 @@ module azureFiles 'azureFiles/azureFiles.bicep' = if (StorageSolution == 'AzureS
     VirtualNetwork: VirtualNetwork
     VirtualNetworkResourceGroup: VirtualNetworkResourceGroup
   }
-  dependsOn: [
-    managementVirtualMachine
-  ]
 }
 
 output netAppShares array = StorageSolution == 'AzureNetAppFiles' ? azureNetAppFiles.outputs.fileShares : [

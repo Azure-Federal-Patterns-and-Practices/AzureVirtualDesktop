@@ -3,7 +3,7 @@ param _artifactsLocation string
 param _artifactsLocationSasToken string
 param AutomationAccountName string
 param Location string
-param StorageAccountPrefix string
+param StorageAccountNamePrefix string
 param StorageCount int
 param StorageIndex int
 param StorageResourceGroupName string
@@ -38,7 +38,7 @@ module schedules 'schedules.bicep' = [for i in range(StorageIndex, StorageCount)
   name: 'Schedules_${i}_${Timestamp}'
   params: {
     AutomationAccountName: automationAccount.name
-    StorageAccountName: '${StorageAccountPrefix}${padLeft(i, 2, '0')}'
+    StorageAccountName: '${StorageAccountNamePrefix}${padLeft(i, 2, '0')}'
     TimeZone: TimeZone
   }
 }]
@@ -50,7 +50,7 @@ module jobSchedules 'jobSchedules.bicep' = [for i in range(StorageIndex, Storage
     Environment: environment().name
     RunbookName: RunbookName
     ResourceGroupName: StorageResourceGroupName
-    StorageAccountName: '${StorageAccountPrefix}${padLeft(i, 2, '0')}'
+    StorageAccountName: '${StorageAccountNamePrefix}${padLeft(i, 2, '0')}'
     SubscriptionId: SubscriptionId
     Timestamp: Timestamp
   }

@@ -1,13 +1,13 @@
 param DiskEncryption bool
 param DiskEncryptionSetResourceId string
+param DiskNamePrefix string
 param DiskSku string
 @secure()
 param DomainJoinPassword string
 param DomainJoinUserPrincipalName string
 param DomainName string
 param Location string
-param ManagementVmName string
-param NamingStandard string
+param NetworkInterfaceNamePrefix string
 param Subnet string
 param TagsNetworkInterfaces object
 param TagsVirtualMachines object
@@ -16,11 +16,13 @@ param TrustedLaunch string
 param UserAssignedIdentityResourceId string
 param VirtualNetwork string
 param VirtualNetworkResourceGroup string
+param VirtualMachineNamePrefix string
 @secure()
 param VirtualMachinePassword string
 param VirtualMachineUsername string
 
-var NicName = 'nic-${NamingStandard}-mgt'
+var NicName = '${NetworkInterfaceNamePrefix}-mgt'
+var VmName = '${VirtualMachineNamePrefix}mgt'
 
 resource networkInterface 'Microsoft.Network/networkInterfaces@2020-05-01' = {
   name: NicName
@@ -46,7 +48,7 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-05-01' = {
 }
 
 resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-11-01' = {
-  name: ManagementVmName
+  name: VmName
   location: Location
   tags: TagsVirtualMachines
   properties: {
@@ -71,12 +73,12 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-11-01' = {
           } : null
           storageAccountType: DiskSku
         }
-        name: 'disk-${NamingStandard}-mgt'
+        name: '${DiskNamePrefix}-mgt'
       }
       dataDisks: []
     }
     osProfile: {
-      computerName: ManagementVmName
+      computerName: VmName
       adminUsername: VirtualMachineUsername
       adminPassword: VirtualMachinePassword
       windowsConfiguration: {
@@ -141,3 +143,5 @@ resource extension_JsonADDomainExtension 'Microsoft.Compute/virtualMachines/exte
     }
   }
 }
+
+output Name string = virtualMachine.name

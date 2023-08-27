@@ -23,7 +23,7 @@ param ResourceGroupManagement string
 param ResourceGroupStorage string
 param SecurityPrincipalIds array
 param SecurityPrincipalNames array
-param StorageAccountPrefix string
+param StorageAccountNamePrefix string
 param StorageCount int
 param StorageIndex int
 param StorageSku string
@@ -65,7 +65,7 @@ var VirtualNetworkRules = {
 }
 
 resource storageAccounts 'Microsoft.Storage/storageAccounts@2022-09-01' = [for i in range(0, StorageCount): {
-  name: '${StorageAccountPrefix}${padLeft(i + StorageIndex, 2, '0')}'
+  name: '${StorageAccountNamePrefix}${padLeft(i + StorageIndex, 2, '0')}'
   location: Location
   tags: TagsStorageAccounts
   sku: {
@@ -135,7 +135,7 @@ module shares 'shares.bicep' = [for i in range(0, StorageCount): {
 }]
 
 resource privateEndpoints 'Microsoft.Network/privateEndpoints@2020-05-01' = [for i in range(0, StorageCount): if (PrivateEndpoint) {
-  name: 'pe-${StorageAccountPrefix}${padLeft(i + StorageIndex, 2, '0')}'
+  name: 'pe-${StorageAccountNamePrefix}${padLeft(i + StorageIndex, 2, '0')}'
   location: Location
   tags: TagsPrivateEndpoints
   properties: {
@@ -158,7 +158,7 @@ resource privateEndpoints 'Microsoft.Network/privateEndpoints@2020-05-01' = [for
 
 resource privateDnsZoneGroups 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2021-08-01' = [for i in range(0, StorageCount): if (PrivateEndpoint) {
   parent: privateEndpoints[i]
-  name: '${StorageAccountPrefix}${padLeft(i + StorageIndex, 2, '0')}'
+  name: '${StorageAccountNamePrefix}${padLeft(i + StorageIndex, 2, '0')}'
   properties: {
     privateDnsZoneConfigs: [
       {
@@ -180,7 +180,7 @@ module ntfsPermissions '../ntfsPermissions.bicep' = if (contains(ActiveDirectory
   params: {
     _artifactsLocation: _artifactsLocation
     _artifactsLocationSasToken: _artifactsLocationSasToken
-    CommandToExecute: 'powershell -ExecutionPolicy Unrestricted -File Set-NtfsPermissions.ps1 -ClientId ${ClientId} -DomainJoinPassword "${DomainJoinPassword}" -DomainJoinUserPrincipalName ${DomainJoinUserPrincipalName} -ActiveDirectorySolution ${ActiveDirectorySolution} -Environment ${environment().name} -FslogixSolution ${FslogixSolution} -KerberosEncryptionType ${KerberosEncryption} -Netbios ${Netbios} -OuPath "${OuPath}" -SecurityPrincipalNames "${SecurityPrincipalNames}" -StorageAccountPrefix ${StorageAccountPrefix} -StorageAccountResourceGroupName ${ResourceGroupStorage} -StorageCount ${StorageCount} -StorageIndex ${StorageIndex} -StorageSolution ${StorageSolution} -StorageSuffix ${environment().suffixes.storage} -SubscriptionId ${subscription().subscriptionId} -TenantId ${subscription().tenantId}'
+    CommandToExecute: 'powershell -ExecutionPolicy Unrestricted -File Set-NtfsPermissions.ps1 -ClientId ${ClientId} -DomainJoinPassword "${DomainJoinPassword}" -DomainJoinUserPrincipalName ${DomainJoinUserPrincipalName} -ActiveDirectorySolution ${ActiveDirectorySolution} -Environment ${environment().name} -FslogixSolution ${FslogixSolution} -KerberosEncryptionType ${KerberosEncryption} -Netbios ${Netbios} -OuPath "${OuPath}" -SecurityPrincipalNames "${SecurityPrincipalNames}" -StorageAccountPrefix ${StorageAccountNamePrefix} -StorageAccountResourceGroupName ${ResourceGroupStorage} -StorageCount ${StorageCount} -StorageIndex ${StorageIndex} -StorageSolution ${StorageSolution} -StorageSuffix ${environment().suffixes.storage} -SubscriptionId ${subscription().subscriptionId} -TenantId ${subscription().tenantId}'
     DeploymentScriptNamePrefix: DeploymentScriptNamePrefix
     Location: Location
     ManagementVmName: ManagementVmName

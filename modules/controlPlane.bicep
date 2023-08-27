@@ -1,6 +1,6 @@
-param AppGroupName string
-param CustomRdpProperty string
 param ActiveDirectorySolution string
+param CustomRdpProperty string
+param DesktopApplicationGroupName string
 param HostPoolName string
 param HostPoolType string
 param Location string
@@ -77,7 +77,7 @@ resource hostPoolDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-p
 }
 
 resource appGroup 'Microsoft.DesktopVirtualization/applicationGroups@2021-03-09-preview' = {
-  name: AppGroupName
+  name: DesktopApplicationGroupName
   location: Location
   tags: TagsApplicationGroup
   properties: {
@@ -88,7 +88,7 @@ resource appGroup 'Microsoft.DesktopVirtualization/applicationGroups@2021-03-09-
 
 resource appGroupAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for i in range(0, length(SecurityPrincipalIds)): {
   scope: appGroup
-  name: guid(SecurityPrincipalIds[i], DesktopVirtualizationUserRoleDefinitionResourceId, AppGroupName)
+  name: guid(SecurityPrincipalIds[i], DesktopVirtualizationUserRoleDefinitionResourceId, DesktopApplicationGroupName)
   properties: {
     roleDefinitionId: DesktopVirtualizationUserRoleDefinitionResourceId
     principalId: SecurityPrincipalIds[i]

@@ -3,12 +3,12 @@ param _artifactsLocation string
 param _artifactsLocationSasToken string
 param AcceleratedNetworking string
 param Availability string
-param AvailabilitySetsPrefix string
+param AvailabilitySetNamePrefix string
 param AvailabilityZones array
 param DeploymentScriptNamePrefix string
 param DiskEncryption bool
 param DiskEncryptionSetResourceId string
-param DiskName string
+param DiskNamePrefix string
 param DiskSku string
 @secure()
 param DomainJoinPassword string
@@ -28,8 +28,8 @@ param Location string
 param LogAnalyticsWorkspaceName string
 param ManagedIdentityResourceId string
 param Monitoring bool
-param NamingStandard string
 param NetAppFileShares array
+param NetworkInterfaceNamePrefix string
 param OuPath string
 param ResourceGroupControlPlane string
 param ResourceGroupManagement string
@@ -49,13 +49,13 @@ param TagsNetworkInterfaces object
 param TagsVirtualMachines object
 param Timestamp string
 param TrustedLaunch string
+param VirtualMachineNamePrefix string
 @secure()
 param VirtualMachinePassword string
 param VirtualMachineSize string
 param VirtualMachineUsername string
 param VirtualNetwork string
 param VirtualNetworkResourceGroup string
-param VmName string
 
 var AmdVmSize = contains(AmdVmSizes, VirtualMachineSize)
 var AmdVmSizes = [
@@ -105,7 +105,7 @@ var PooledHostPool = (split(HostPoolType, ' ')[0] == 'Pooled')
 var SentinelWorkspaceKey = Sentinel ? listKeys(SentinelWorkspaceResourceId, '2021-06-01').primarySharedKey : 'NotApplicable'
 
 resource networkInterface 'Microsoft.Network/networkInterfaces@2020-05-01' = [for i in range(0, SessionHostCount): {
-  name: 'nic${NamingStandard}${padLeft((i + SessionHostIndex), 4, '0')}'
+  name: '${NetworkInterfaceNamePrefix}${padLeft((i + SessionHostIndex), 4, '0')}'
   location: Location
   tags: TagsNetworkInterfaces
   properties: {
@@ -128,7 +128,7 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-05-01' = [fo
 }]
 
 resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-03-01' = [for i in range(0, SessionHostCount): {
-  name: '${VmName}${padLeft((i + SessionHostIndex), 4, '0')}'
+  name: '${VirtualMachineNamePrefix}${padLeft((i + SessionHostIndex), 4, '0')}'
   location: Location
   tags: TagsVirtualMachines
   zones: Availability == 'AvailabilityZones' ? [
@@ -137,7 +137,7 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-03-01' = [for i 
   identity: Identity
   properties: {
     availabilitySet: Availability == 'AvailabilitySets' ? {
-      id: resourceId('Microsoft.Compute/availabilitySets', '${AvailabilitySetsPrefix}-${(i + SessionHostIndex) / 200}')
+      id: resourceId('Microsoft.Compute/availabilitySets', '${AvailabilitySetNamePrefix}-${(i + SessionHostIndex) / 200}')
     } : null
     hardwareProfile: {
       vmSize: VirtualMachineSize
@@ -145,7 +145,7 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-03-01' = [for i 
     storageProfile: {
       imageReference: ImageReference
       osDisk: {
-        name: '${DiskName}${padLeft((i + SessionHostIndex), 4, '0')}'
+        name: '${DiskNamePrefix}${padLeft((i + SessionHostIndex), 4, '0')}'
         osType: 'Windows'
         createOption: 'FromImage'
         caching: 'ReadWrite'
@@ -160,7 +160,7 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-03-01' = [for i 
       dataDisks: []
     }
     osProfile: {
-      computerName: '${VmName}${padLeft((i + SessionHostIndex), 4, '0')}'
+      computerName: '${VirtualMachineNamePrefix}${padLeft((i + SessionHostIndex), 4, '0')}'
       adminUsername: VirtualMachineUsername
       adminPassword: VirtualMachinePassword
       windowsConfiguration: {
@@ -173,7 +173,7 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-03-01' = [for i 
     networkProfile: {
       networkInterfaces: [
         {
-          id: resourceId('Microsoft.Network/networkInterfaces', 'nic${NamingStandard}${padLeft((i + SessionHostIndex), 4, '0')}')
+          id: resourceId('Microsoft.Network/networkInterfaces', '${NetworkInterfaceNamePrefix}${padLeft((i + SessionHostIndex), 4, '0')}')
           properties: {
             deleteOption: 'Delete'
           }

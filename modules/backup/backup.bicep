@@ -6,7 +6,7 @@ param MaxResourcesPerTemplateDeployment int
 param RecoveryServicesVaultName string
 param SessionHostBatchCount int
 param SessionHostIndex int
-param StorageAccountPrefix string
+param StorageAccountNamePrefix string
 param StorageCount int
 param StorageIndex int
 param StorageResourceGroupName string
@@ -14,8 +14,8 @@ param StorageSolution string
 param Tags object
 param Timestamp string
 param TimeZone string
-param VmName string
-param VmResourceGroupName string
+param VirtualMachineNamePrefix string
+param VirtualMachineResourceGroupName string
 
 var BackupSchedulePolicy = {
   scheduleRunFrequency: 'Daily'
@@ -77,11 +77,11 @@ resource backupPolicy_Vm 'Microsoft.RecoveryServices/vaults/backupPolicies@2022-
 }
 
 resource protectionContainers 'Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers@2022-03-01' = [for i in range(0, StorageCount): if (Fslogix && StorageSolution == 'AzureStorageAccount') {
-  name: '${vault.name}/Azure/storagecontainer;Storage;${StorageResourceGroupName};${StorageAccountPrefix}${padLeft(i + StorageIndex, 2, '0')}'
+  name: '${vault.name}/Azure/storagecontainer;Storage;${StorageResourceGroupName};${StorageAccountNamePrefix}${padLeft(i + StorageIndex, 2, '0')}'
   properties: {
     backupManagementType: 'AzureStorage'
     containerType: 'StorageContainer'
-    sourceResourceId: resourceId(StorageResourceGroupName, 'Microsoft.Storage/storageAccounts', '${StorageAccountPrefix}${padLeft(i + StorageIndex, 2, '0')}')
+    sourceResourceId: resourceId(StorageResourceGroupName, 'Microsoft.Storage/storageAccounts', '${StorageAccountNamePrefix}${padLeft(i + StorageIndex, 2, '0')}')
   }
   dependsOn: [
     backupPolicy_Storage
@@ -95,7 +95,7 @@ module protectedItems_FileShares 'backup_FileShares.bicep' = [for i in range(0, 
     Location: Location
     ProtectionContainerName: protectionContainers[i].name
     PolicyId: backupPolicy_Storage.id
-    SourceResourceId: resourceId(StorageResourceGroupName, 'Microsoft.Storage/storageAccounts', '${StorageAccountPrefix}${padLeft(i + StorageIndex, 2, '0')}')
+    SourceResourceId: resourceId(StorageResourceGroupName, 'Microsoft.Storage/storageAccounts', '${StorageAccountNamePrefix}${padLeft(i + StorageIndex, 2, '0')}')
     Tags: Tags
   }
 }]
@@ -110,7 +110,7 @@ module protectedItems_Vm 'backup_VirtualMachines.bicep' = [for i in range(1, Ses
     SessionHostCount: i == SessionHostBatchCount && DivisionRemainderValue > 0 ? DivisionRemainderValue : MaxResourcesPerTemplateDeployment
     SessionHostIndex: i == 1 ? SessionHostIndex : ((i - 1) * MaxResourcesPerTemplateDeployment) + SessionHostIndex
     Tags: Tags
-    VmName: VmName
-    VmResourceGroupName: VmResourceGroupName
+    VirtualMachineNamePrefix: VirtualMachineNamePrefix
+    VirtualMachineResourceGroupName: VirtualMachineResourceGroupName
   }
 }]
