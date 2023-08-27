@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "8929301161931707747"
+      "templateHash": "17418390782981042116"
     }
   },
   "parameters": {
@@ -5356,7 +5356,7 @@
       ]
     },
     {
-      "condition": "[parameters('Monitoring')]",
+      "condition": "[variables('Sentinel')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
       "name": "[format('Sentinel_{0}', parameters('Timestamp'))]",
@@ -5368,9 +5368,6 @@
         },
         "mode": "Incremental",
         "parameters": {
-          "Sentinel": {
-            "value": "[variables('Sentinel')]"
-          },
           "SentinelLogAnalyticsWorkspaceName": {
             "value": "[variables('SentinelLogAnalyticsWorkspaceName')]"
           },
@@ -5385,13 +5382,10 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "1466688575692552395"
+              "templateHash": "18174133904363601528"
             }
           },
           "parameters": {
-            "Sentinel": {
-              "type": "bool"
-            },
             "SentinelLogAnalyticsWorkspaceName": {
               "type": "string"
             },
@@ -5403,11 +5397,11 @@
           "outputs": {
             "sentinelWorkspaceId": {
               "type": "string",
-              "value": "[if(parameters('Sentinel'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('SentinelLogAnalyticsWorkspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('SentinelLogAnalyticsWorkspaceName')), '2021-06-01').customerId, 'NotApplicable')]"
+              "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('SentinelLogAnalyticsWorkspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('SentinelLogAnalyticsWorkspaceName')), '2021-06-01').customerId]"
             },
             "sentinelWorkspaceResourceId": {
               "type": "string",
-              "value": "[if(parameters('Sentinel'), extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('SentinelLogAnalyticsWorkspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('SentinelLogAnalyticsWorkspaceName')), 'NotApplicable')]"
+              "value": "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('SentinelLogAnalyticsWorkspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('SentinelLogAnalyticsWorkspaceName'))]"
             }
           }
         }

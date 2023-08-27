@@ -581,11 +581,10 @@ module fslogix 'modules/fslogix/fslogix.bicep' = if (Fslogix) {
   ]
 }
 
-module sentinel 'modules/sentinel.bicep' = if (Monitoring) {
+module sentinel 'modules/sentinel.bicep' = if (Sentinel) {
   name: 'Sentinel_${Timestamp}'
   scope: resourceGroup(SentinelSubscriptionId, SentinelResourceGroup)
   params: {
-    Sentinel: Sentinel
     SentinelLogAnalyticsWorkspaceName: SentinelLogAnalyticsWorkspaceName
     SentinelLogAnalyticsWorkspaceResourceGroupName: SentinelResourceGroup
   }
