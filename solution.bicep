@@ -289,16 +289,6 @@ var ResourceAbbreviations = loadJsonContent('artifacts/resourceAbbreviations.jso
 var ResourceGroupControlPlane = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[ControlPlaneLocation])}-vd-controlPlane'
 var ResourceGroupHosts = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[VirtualMachineLocation])}-vd-hosts'
 var ResourceGroupManagement = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[VirtualMachineLocation])}-vd-management'
-var ResourceGroups = Fslogix ? [
-  ResourceGroupControlPlane
-  ResourceGroupHosts
-  ResourceGroupManagement
-  ResourceGroupStorage
-] : [
-  ResourceGroupControlPlane
-  ResourceGroupHosts
-  ResourceGroupManagement
-]
 var ResourceGroupStorage = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[VirtualMachineLocation])}-vd-storage'
 var StorageAccountNamePrefix = replace(replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.storageAccounts), 'location', Locations[VirtualMachineLocation]), '-', '')
 var UserAssignedIdentityName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.userAssignedIdentities), 'location', Locations[VirtualMachineLocation])
@@ -310,6 +300,16 @@ var Fslogix = FslogixStorage == 'None' || !contains(ActiveDirectorySolution, 'Do
 var Netbios = split(DomainName, '.')[0]
 var PooledHostPool = split(HostPoolType, ' ')[0] == 'Pooled' ? true : false
 var PrivateEndpoint = contains(FslogixStorage, 'PrivateEndpoint') ? true : false
+var ResourceGroups = Fslogix ? [
+  ResourceGroupControlPlane
+  ResourceGroupHosts
+  ResourceGroupManagement
+  ResourceGroupStorage
+] : [
+  ResourceGroupControlPlane
+  ResourceGroupHosts
+  ResourceGroupManagement
+]
 var RoleDefinitionResourceId = {
   DesktopVirtualizationPowerOnContributor: resourceId('Microsoft.Authorization/roleDefinitions', '489581de-a3bd-480d-9518-53dea7416b33')
   Reader: resourceId('Microsoft.Authorization/roleDefinitions', 'acdd72a7-3385-48ef-bd42-f606fba81ae7')

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "8216899200371259682"
+      "templateHash": "2698251628518970835"
     }
   },
   "parameters": {
@@ -790,7 +790,6 @@
     "ResourceGroupControlPlane": "[format('{0}-vd-controlPlane', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').resourceGroups), 'location', variables('Locations')[parameters('ControlPlaneLocation')]))]",
     "ResourceGroupHosts": "[format('{0}-vd-hosts', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').resourceGroups), 'location', variables('Locations')[parameters('VirtualMachineLocation')]))]",
     "ResourceGroupManagement": "[format('{0}-vd-management', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').resourceGroups), 'location', variables('Locations')[parameters('VirtualMachineLocation')]))]",
-    "ResourceGroups": "[if(variables('Fslogix'), createArray(variables('ResourceGroupControlPlane'), variables('ResourceGroupHosts'), variables('ResourceGroupManagement'), variables('ResourceGroupStorage')), createArray(variables('ResourceGroupControlPlane'), variables('ResourceGroupHosts'), variables('ResourceGroupManagement')))]",
     "ResourceGroupStorage": "[format('{0}-vd-storage', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').resourceGroups), 'location', variables('Locations')[parameters('VirtualMachineLocation')]))]",
     "StorageAccountNamePrefix": "[replace(replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').storageAccounts), 'location', variables('Locations')[parameters('VirtualMachineLocation')]), '-', '')]",
     "UserAssignedIdentityName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').userAssignedIdentities), 'location', variables('Locations')[parameters('VirtualMachineLocation')])]",
@@ -800,6 +799,7 @@
     "Netbios": "[split(parameters('DomainName'), '.')[0]]",
     "PooledHostPool": "[if(equals(split(parameters('HostPoolType'), ' ')[0], 'Pooled'), true(), false())]",
     "PrivateEndpoint": "[if(contains(parameters('FslogixStorage'), 'PrivateEndpoint'), true(), false())]",
+    "ResourceGroups": "[if(variables('Fslogix'), createArray(variables('ResourceGroupControlPlane'), variables('ResourceGroupHosts'), variables('ResourceGroupManagement'), variables('ResourceGroupStorage')), createArray(variables('ResourceGroupControlPlane'), variables('ResourceGroupHosts'), variables('ResourceGroupManagement')))]",
     "RoleDefinitionResourceId": {
       "DesktopVirtualizationPowerOnContributor": "[resourceId('Microsoft.Authorization/roleDefinitions', '489581de-a3bd-480d-9518-53dea7416b33')]",
       "Reader": "[resourceId('Microsoft.Authorization/roleDefinitions', 'acdd72a7-3385-48ef-bd42-f606fba81ae7')]"
