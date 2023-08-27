@@ -254,12 +254,12 @@ var EndAvSetRange = (SessionHostCount + SessionHostIndex) / MaxAvSetMembers // T
 var AvailabilitySetsCount = length(range(BeginAvSetRange, (EndAvSetRange - BeginAvSetRange) + 1))
 
 // RESOURCE NAMES
-var AvailabilitySetNamePrefix = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.availabilitySets), 'location', Locations[VirtualMachineLocation])}-'
-var AutomationAccountName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.automationAccounts), 'location', Locations[VirtualMachineLocation])
-var DeploymentScriptNamePrefix = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.deploymentScripts), 'location', Locations[VirtualMachineLocation])}-'
-var DesktopApplicationGroupName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.desktopApplicationGroups), 'location', Locations[ControlPlaneLocation])
-var DiskEncryptionSetName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.diskEncryptionSets), 'location', Locations[VirtualMachineLocation])
-var DiskNamePrefix = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.disks), 'location', Locations[VirtualMachineLocation])}-'
+var AvailabilitySetNamePrefix = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.availabilitySets), 'location', Locations[VirtualMachineLocation].abbreviation)}-'
+var AutomationAccountName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.automationAccounts), 'location', Locations[VirtualMachineLocation].abbreviation)
+var DeploymentScriptNamePrefix = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.deploymentScripts), 'location', Locations[VirtualMachineLocation].abbreviation)}-'
+var DesktopApplicationGroupName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.desktopApplicationGroups), 'location', Locations[ControlPlaneLocation].abbreviation)
+var DiskEncryptionSetName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.diskEncryptionSets), 'location', Locations[VirtualMachineLocation].abbreviation)
+var DiskNamePrefix = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.disks), 'location', Locations[VirtualMachineLocation].abbreviation)}-'
 var FileShareNames = {
   CloudCacheProfileContainer: [
     'profile-containers'
@@ -276,23 +276,23 @@ var FileShareNames = {
     'profile-containers'
   ]
 }
-var HostPoolName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.hostPools), 'location', Locations[ControlPlaneLocation])
-var KeyVaultName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.keyVaults), 'location', Locations[VirtualMachineLocation])
+var HostPoolName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.hostPools), 'location', Locations[ControlPlaneLocation].abbreviation)
+var KeyVaultName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.keyVaults), 'location', Locations[VirtualMachineLocation].abbreviation)
 var Locations = loadJsonContent('artifacts/locations.json')
-var LogAnalyticsWorkspaceName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.logAnalyticsWorkspaces), 'location', Locations[VirtualMachineLocation])
+var LogAnalyticsWorkspaceName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.logAnalyticsWorkspaces), 'location', Locations[VirtualMachineLocation].abbreviation)
 var NamingConvention = 'resourceType-${Identifier}-${Environment}-location-${StampIndex}'
-var NetAppAccountName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.netAppAccounts), 'location', Locations[VirtualMachineLocation])
-var NetAppCapacityPoolName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.netAppCapacityPools), 'location', Locations[VirtualMachineLocation])
-var NetworkInterfaceNamePrefix = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.networkInterfaces), 'location', Locations[VirtualMachineLocation])}-'
-var RecoveryServicesVaultName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.recoveryServicesVaults), 'location', Locations[VirtualMachineLocation])
+var NetAppAccountName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.netAppAccounts), 'location', Locations[VirtualMachineLocation].abbreviation)
+var NetAppCapacityPoolName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.netAppCapacityPools), 'location', Locations[VirtualMachineLocation].abbreviation)
+var NetworkInterfaceNamePrefix = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.networkInterfaces), 'location', Locations[VirtualMachineLocation].abbreviation)}-'
+var RecoveryServicesVaultName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.recoveryServicesVaults), 'location', Locations[VirtualMachineLocation].abbreviation)
 var ResourceAbbreviations = loadJsonContent('artifacts/resourceAbbreviations.json')
-var ResourceGroupControlPlane = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[ControlPlaneLocation])}-vd-controlPlane'
-var ResourceGroupHosts = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[VirtualMachineLocation])}-vd-hosts'
-var ResourceGroupManagement = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[VirtualMachineLocation])}-vd-management'
-var ResourceGroupStorage = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[VirtualMachineLocation])}-vd-storage'
-var StorageAccountNamePrefix = replace(replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.storageAccounts), 'location', Locations[VirtualMachineLocation]), '-', '')
-var UserAssignedIdentityName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.userAssignedIdentities), 'location', Locations[VirtualMachineLocation])
-var VirtualMachineNamePrefix = replace(replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.virtualMachines), 'location', Locations[VirtualMachineLocation]), '-', '')
+var ResourceGroupControlPlane = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[ControlPlaneLocation].abbreviation)}-vd-controlPlane'
+var ResourceGroupHosts = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[VirtualMachineLocation].abbreviation)}-vd-hosts'
+var ResourceGroupManagement = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[VirtualMachineLocation].abbreviation)}-vd-management'
+var ResourceGroupStorage = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[VirtualMachineLocation].abbreviation)}-vd-storage'
+var StorageAccountNamePrefix = replace(replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.storageAccounts), 'location', Locations[VirtualMachineLocation].abbreviation), '-', '')
+var UserAssignedIdentityName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.userAssignedIdentities), 'location', Locations[VirtualMachineLocation].abbreviation)
+var VirtualMachineNamePrefix = replace(replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.virtualMachines), 'location', Locations[VirtualMachineLocation].abbreviation), '-', '')
 
 // LOGIC & COMPUTED VALUES
 var FileShares = FileShareNames[FslogixSolution]
@@ -454,7 +454,7 @@ module controlPlane 'modules/controlPlane.bicep' = {
     }, contains(Tags, 'Microsoft.DesktopVirtualization/workspaces') ? Tags['Microsoft.DesktopVirtualization/workspaces'] : {})
     ValidationEnvironment: ValidationEnvironment
     VmTemplate: VmTemplate
-    WorkspaceName: replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.workspaces), 'location', Locations[ControlPlaneLocation])
+    WorkspaceName: replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.workspaces), 'location', Locations[ControlPlaneLocation].abbreviation)
   }
   dependsOn: [
     resourceGroups

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "2698251628518970835"
+      "templateHash": "7564950687743325050"
     }
   },
   "parameters": {
@@ -456,272 +456,272 @@
   "variables": {
     "$fxv#0": {
       "australiacentral": {
-        "acronym": "auc",
+        "abbreviation": "auc",
         "timeDifference": "+10:00",
         "timeZone": "AUS Eastern Standard Time"
       },
       "australiacentral2": {
-        "acronym": "auc2",
+        "abbreviation": "auc2",
         "timeDifference": "+10:00",
         "timeZone": "AUS Eastern Standard Time"
       },
       "australiaeast": {
-        "acronym": "aue",
+        "abbreviation": "aue",
         "timeDifference": "+10:00",
         "timeZone": "AUS Eastern Standard Time"
       },
       "australiasoutheast": {
-        "acronym": "ause",
+        "abbreviation": "ause",
         "timeDifference": "+10:00",
         "timeZone": "AUS Eastern Standard Time"
       },
       "brazilsouth": {
-        "acronym": "brs",
+        "abbreviation": "brs",
         "timeDifference": "-3:00",
         "timeZone": "E. South America Standard Time"
       },
       "brazilsoutheast": {
-        "acronym": "brse",
+        "abbreviation": "brse",
         "timeDifference": "-3:00",
         "timeZone": "E. South America Standard Time"
       },
       "canadacentral": {
-        "acronym": "cac",
+        "abbreviation": "cac",
         "timeDifference": "-5:00",
         "timeZone": "Eastern Standard Time"
       },
       "canadaeast": {
-        "acronym": "cae",
+        "abbreviation": "cae",
         "timeDifference": "-5:00",
         "timeZone": "Eastern Standard Time"
       },
       "centralindia": {
-        "acronym": "inc",
+        "abbreviation": "inc",
         "timeDifference": "+5:30",
         "timeZone": "India Standard Time"
       },
       "centralus": {
-        "acronym": "usc",
+        "abbreviation": "usc",
         "timeDifference": "-6:00",
         "timeZone": "Central Standard Time"
       },
       "chinaeast": {
-        "acronym": "cne",
+        "abbreviation": "cne",
         "timeDifference": "+8:00",
         "timeZone": "China Standard Time"
       },
       "chinaeast2": {
-        "acronym": "cne2",
+        "abbreviation": "cne2",
         "timeDifference": "+8:00",
         "timeZone": "China Standard Time"
       },
       "chinanorth": {
-        "acronym": "cnn",
+        "abbreviation": "cnn",
         "timeDifference": "+8:00",
         "timeZone": "China Standard Time"
       },
       "chinanorth2": {
-        "acronym": "cnn2",
+        "abbreviation": "cnn2",
         "timeDifference": "+8:00",
         "timeZone": "China Standard Time"
       },
       "eastasia": {
-        "acronym": "ase",
+        "abbreviation": "ase",
         "timeDifference": "+8:00",
         "timeZone": "China Standard Time"
       },
       "eastus": {
-        "acronym": "use",
+        "abbreviation": "use",
         "timeDifference": "-5:00",
         "timeZone": "Eastern Standard Time"
       },
       "eastus2": {
-        "acronym": "use2",
+        "abbreviation": "use2",
         "timeDifference": "-5:00",
         "timeZone": "Eastern Standard Time"
       },
       "francecentral": {
-        "acronym": "frc",
+        "abbreviation": "frc",
         "timeDifference": "+1:00",
         "timeZone": "Central Europe Standard Time"
       },
       "francesouth": {
-        "acronym": "frs",
+        "abbreviation": "frs",
         "timeDifference": "+1:00",
         "timeZone": "Central Europe Standard Time"
       },
       "germanynorth": {
-        "acronym": "den",
+        "abbreviation": "den",
         "timeDifference": "+1:00",
         "timeZone": "Central Europe Standard Time"
       },
       "germanywestcentral": {
-        "acronym": "dewc",
+        "abbreviation": "dewc",
         "timeDifference": "+1:00",
         "timeZone": "Central Europe Standard Time"
       },
       "japaneast": {
-        "acronym": "jpe",
+        "abbreviation": "jpe",
         "timeDifference": "+9:00",
         "timeZone": "Tokyo Standard Time"
       },
       "japanwest": {
-        "acronym": "jpw",
+        "abbreviation": "jpw",
         "timeDifference": "+9:00",
         "timeZone": "Tokyo Standard Time"
       },
       "jioindiacentral": {
-        "acronym": "injc",
+        "abbreviation": "injc",
         "timeDifference": "+5:30",
         "timeZone": "India Standard Time"
       },
       "jioindiawest": {
-        "acronym": "injw",
+        "abbreviation": "injw",
         "timeDifference": "+5:30",
         "timeZone": "India Standard Time"
       },
       "koreacentral": {
-        "acronym": "krc",
+        "abbreviation": "krc",
         "timeDifference": "+9:00",
         "timeZone": "Korea Standard Time"
       },
       "koreasouth": {
-        "acronym": "krs",
+        "abbreviation": "krs",
         "timeDifference": "+9:00",
         "timeZone": "Korea Standard Time"
       },
       "northcentralus": {
-        "acronym": "usnc",
+        "abbreviation": "usnc",
         "timeDifference": "-6:00",
         "timeZone": "Central Standard Time"
       },
       "northeurope": {
-        "acronym": "eun",
+        "abbreviation": "eun",
         "timeDifference": "0:00",
         "timeZone": "GMT Standard Time"
       },
       "norwayeast": {
-        "acronym": "noe",
+        "abbreviation": "noe",
         "timeDifference": "+1:00",
         "timeZone": "Central Europe Standard Time"
       },
       "norwaywest": {
-        "acronym": "now",
+        "abbreviation": "now",
         "timeDifference": "+1:00",
         "timeZone": "Central Europe Standard Time"
       },
       "southafricanorth": {
-        "acronym": "zan",
+        "abbreviation": "zan",
         "timeDifference": "+2:00",
         "timeZone": "South Africa Standard Time"
       },
       "southafricawest": {
-        "acronym": "zaw",
+        "abbreviation": "zaw",
         "timeDifference": "+2:00",
         "timeZone": "South Africa Standard Time"
       },
       "southcentralus": {
-        "acronym": "ussc",
+        "abbreviation": "ussc",
         "timeDifference": "-6:00",
         "timeZone": "Central Standard Time"
       },
       "southeastasia": {
-        "acronym": "asse",
+        "abbreviation": "asse",
         "timeDifference": "+8:00",
         "timeZone": "Singapore Standard Time"
       },
       "southindia": {
-        "acronym": "ins",
+        "abbreviation": "ins",
         "timeDifference": "+5:30",
         "timeZone": "India Standard Time"
       },
       "swedencentral": {
-        "acronym": "sec",
+        "abbreviation": "sec",
         "timeDifference": "+1:00",
         "timeZone": "Central Europe Standard Time"
       },
       "switzerlandnorth": {
-        "acronym": "chn",
+        "abbreviation": "chn",
         "timeDifference": "+1:00",
         "timeZone": "Central Europe Standard Time"
       },
       "switzerlandwest": {
-        "acronym": "chw",
+        "abbreviation": "chw",
         "timeDifference": "+1:00",
         "timeZone": "Central Europe Standard Time"
       },
       "uaecentral": {
-        "acronym": "aec",
+        "abbreviation": "aec",
         "timeDifference": "+3:00",
         "timeZone": "Arabian Standard Time"
       },
       "uaenorth": {
-        "acronym": "aen",
+        "abbreviation": "aen",
         "timeDifference": "+3:00",
         "timeZone": "Arabian Standard Time"
       },
       "uksouth": {
-        "acronym": "uks",
+        "abbreviation": "uks",
         "timeDifference": "0:00",
         "timeZone": "GMT Standard Time"
       },
       "ukwest": {
-        "acronym": "ukw",
+        "abbreviation": "ukw",
         "timeDifference": "0:00",
         "timeZone": "GMT Standard Time"
       },
       "usdodcentral": {
-        "acronym": "dodc",
+        "abbreviation": "dodc",
         "timeDifference": "-6:00",
         "timeZone": "Central Standard Time"
       },
       "usdodeast": {
-        "acronym": "dode",
+        "abbreviation": "dode",
         "timeDifference": "-5:00",
         "timeZone": "Eastern Standard Time"
       },
       "usgovarizona": {
-        "acronym": "az",
+        "abbreviation": "az",
         "timeDifference": "-7:00",
         "timeZone": "Mountain Standard Time"
       },
       "usgovtexas": {
-        "acronym": "tx",
+        "abbreviation": "tx",
         "timeDifference": "-6:00",
         "timeZone": "Central Standard Time"
       },
       "usgovvirginia": {
-        "acronym": "va",
+        "abbreviation": "va",
         "timeDifference": "-5:00",
         "timeZone": "Eastern Standard Time"
       },
       "westcentralus": {
-        "acronym": "uswc",
+        "abbreviation": "uswc",
         "timeDifference": "-7:00",
         "timeZone": "Mountain Standard Time"
       },
       "westeurope": {
-        "acronym": "euw",
+        "abbreviation": "euw",
         "timeDifference": "+1:00",
         "timeZone": "Central Europe Standard Time"
       },
       "westindia": {
-        "acronym": "inw",
+        "abbreviation": "inw",
         "timeDifference": "+5:30",
         "timeZone": "India Standard Time"
       },
       "westus": {
-        "acronym": "usw",
+        "abbreviation": "usw",
         "timeDifference": "-8:00",
         "timeZone": "Pacific Standard Time"
       },
       "westus2": {
-        "acronym": "usw2",
+        "abbreviation": "usw2",
         "timeDifference": "-8:00",
         "timeZone": "Pacific Standard Time"
       },
       "westus3": {
-        "acronym": "usw3",
+        "abbreviation": "usw3",
         "timeDifference": "-7:00",
         "timeZone": "Mountain Standard Time"
       }
@@ -755,12 +755,12 @@
     "BeginAvSetRange": "[div(parameters('SessionHostIndex'), variables('MaxAvSetMembers'))]",
     "EndAvSetRange": "[div(add(parameters('SessionHostCount'), parameters('SessionHostIndex')), variables('MaxAvSetMembers'))]",
     "AvailabilitySetsCount": "[length(range(variables('BeginAvSetRange'), add(sub(variables('EndAvSetRange'), variables('BeginAvSetRange')), 1)))]",
-    "AvailabilitySetNamePrefix": "[format('{0}-', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').availabilitySets), 'location', variables('Locations')[parameters('VirtualMachineLocation')]))]",
-    "AutomationAccountName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').automationAccounts), 'location', variables('Locations')[parameters('VirtualMachineLocation')])]",
-    "DeploymentScriptNamePrefix": "[format('{0}-', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').deploymentScripts), 'location', variables('Locations')[parameters('VirtualMachineLocation')]))]",
-    "DesktopApplicationGroupName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').desktopApplicationGroups), 'location', variables('Locations')[parameters('ControlPlaneLocation')])]",
-    "DiskEncryptionSetName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').diskEncryptionSets), 'location', variables('Locations')[parameters('VirtualMachineLocation')])]",
-    "DiskNamePrefix": "[format('{0}-', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').disks), 'location', variables('Locations')[parameters('VirtualMachineLocation')]))]",
+    "AvailabilitySetNamePrefix": "[format('{0}-', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').availabilitySets), 'location', variables('Locations')[parameters('VirtualMachineLocation')].abbreviation))]",
+    "AutomationAccountName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').automationAccounts), 'location', variables('Locations')[parameters('VirtualMachineLocation')].abbreviation)]",
+    "DeploymentScriptNamePrefix": "[format('{0}-', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').deploymentScripts), 'location', variables('Locations')[parameters('VirtualMachineLocation')].abbreviation))]",
+    "DesktopApplicationGroupName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').desktopApplicationGroups), 'location', variables('Locations')[parameters('ControlPlaneLocation')].abbreviation)]",
+    "DiskEncryptionSetName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').diskEncryptionSets), 'location', variables('Locations')[parameters('VirtualMachineLocation')].abbreviation)]",
+    "DiskNamePrefix": "[format('{0}-', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').disks), 'location', variables('Locations')[parameters('VirtualMachineLocation')].abbreviation))]",
     "FileShareNames": {
       "CloudCacheProfileContainer": [
         "profile-containers"
@@ -777,23 +777,23 @@
         "profile-containers"
       ]
     },
-    "HostPoolName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').hostPools), 'location', variables('Locations')[parameters('ControlPlaneLocation')])]",
-    "KeyVaultName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').keyVaults), 'location', variables('Locations')[parameters('VirtualMachineLocation')])]",
+    "HostPoolName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').hostPools), 'location', variables('Locations')[parameters('ControlPlaneLocation')].abbreviation)]",
+    "KeyVaultName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').keyVaults), 'location', variables('Locations')[parameters('VirtualMachineLocation')].abbreviation)]",
     "Locations": "[variables('$fxv#0')]",
-    "LogAnalyticsWorkspaceName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').logAnalyticsWorkspaces), 'location', variables('Locations')[parameters('VirtualMachineLocation')])]",
+    "LogAnalyticsWorkspaceName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').logAnalyticsWorkspaces), 'location', variables('Locations')[parameters('VirtualMachineLocation')].abbreviation)]",
     "NamingConvention": "[format('resourceType-{0}-{1}-location-{2}', parameters('Identifier'), parameters('Environment'), parameters('StampIndex'))]",
-    "NetAppAccountName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').netAppAccounts), 'location', variables('Locations')[parameters('VirtualMachineLocation')])]",
-    "NetAppCapacityPoolName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').netAppCapacityPools), 'location', variables('Locations')[parameters('VirtualMachineLocation')])]",
-    "NetworkInterfaceNamePrefix": "[format('{0}-', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').networkInterfaces), 'location', variables('Locations')[parameters('VirtualMachineLocation')]))]",
-    "RecoveryServicesVaultName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').recoveryServicesVaults), 'location', variables('Locations')[parameters('VirtualMachineLocation')])]",
+    "NetAppAccountName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').netAppAccounts), 'location', variables('Locations')[parameters('VirtualMachineLocation')].abbreviation)]",
+    "NetAppCapacityPoolName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').netAppCapacityPools), 'location', variables('Locations')[parameters('VirtualMachineLocation')].abbreviation)]",
+    "NetworkInterfaceNamePrefix": "[format('{0}-', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').networkInterfaces), 'location', variables('Locations')[parameters('VirtualMachineLocation')].abbreviation))]",
+    "RecoveryServicesVaultName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').recoveryServicesVaults), 'location', variables('Locations')[parameters('VirtualMachineLocation')].abbreviation)]",
     "ResourceAbbreviations": "[variables('$fxv#1')]",
-    "ResourceGroupControlPlane": "[format('{0}-vd-controlPlane', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').resourceGroups), 'location', variables('Locations')[parameters('ControlPlaneLocation')]))]",
-    "ResourceGroupHosts": "[format('{0}-vd-hosts', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').resourceGroups), 'location', variables('Locations')[parameters('VirtualMachineLocation')]))]",
-    "ResourceGroupManagement": "[format('{0}-vd-management', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').resourceGroups), 'location', variables('Locations')[parameters('VirtualMachineLocation')]))]",
-    "ResourceGroupStorage": "[format('{0}-vd-storage', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').resourceGroups), 'location', variables('Locations')[parameters('VirtualMachineLocation')]))]",
-    "StorageAccountNamePrefix": "[replace(replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').storageAccounts), 'location', variables('Locations')[parameters('VirtualMachineLocation')]), '-', '')]",
-    "UserAssignedIdentityName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').userAssignedIdentities), 'location', variables('Locations')[parameters('VirtualMachineLocation')])]",
-    "VirtualMachineNamePrefix": "[replace(replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').virtualMachines), 'location', variables('Locations')[parameters('VirtualMachineLocation')]), '-', '')]",
+    "ResourceGroupControlPlane": "[format('{0}-vd-controlPlane', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').resourceGroups), 'location', variables('Locations')[parameters('ControlPlaneLocation')].abbreviation))]",
+    "ResourceGroupHosts": "[format('{0}-vd-hosts', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').resourceGroups), 'location', variables('Locations')[parameters('VirtualMachineLocation')].abbreviation))]",
+    "ResourceGroupManagement": "[format('{0}-vd-management', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').resourceGroups), 'location', variables('Locations')[parameters('VirtualMachineLocation')].abbreviation))]",
+    "ResourceGroupStorage": "[format('{0}-vd-storage', replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').resourceGroups), 'location', variables('Locations')[parameters('VirtualMachineLocation')].abbreviation))]",
+    "StorageAccountNamePrefix": "[replace(replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').storageAccounts), 'location', variables('Locations')[parameters('VirtualMachineLocation')].abbreviation), '-', '')]",
+    "UserAssignedIdentityName": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').userAssignedIdentities), 'location', variables('Locations')[parameters('VirtualMachineLocation')].abbreviation)]",
+    "VirtualMachineNamePrefix": "[replace(replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').virtualMachines), 'location', variables('Locations')[parameters('VirtualMachineLocation')].abbreviation), '-', '')]",
     "FileShares": "[variables('FileShareNames')[parameters('FslogixSolution')]]",
     "Fslogix": "[if(or(equals(parameters('FslogixStorage'), 'None'), not(contains(parameters('ActiveDirectorySolution'), 'DomainServices'))), false(), true())]",
     "Netbios": "[split(parameters('DomainName'), '.')[0]]",
@@ -2374,7 +2374,7 @@
             "value": "[variables('VmTemplate')]"
           },
           "WorkspaceName": {
-            "value": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').workspaces), 'location', variables('Locations')[parameters('ControlPlaneLocation')])]"
+            "value": "[replace(replace(variables('NamingConvention'), 'resourceType', variables('ResourceAbbreviations').workspaces), 'location', variables('Locations')[parameters('ControlPlaneLocation')].abbreviation)]"
           }
         },
         "template": {
