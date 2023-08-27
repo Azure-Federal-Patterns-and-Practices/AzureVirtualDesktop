@@ -317,9 +317,9 @@ var RoleDefinitionResourceId = {
 var SecurityPrincipalIdsCount = length(SecurityPrincipalObjectIds)
 var SecurityPrincipalNamesCount = length(SecurityPrincipalNames)
 var Sentinel = empty(SentinelLogAnalyticsWorkspaceResourceId) ? false : true
-var SentinelLogAnalyticsWorkspaceName = split(SentinelLogAnalyticsWorkspaceResourceId, '/')[8]
-var SentinelResourceGroup = split(SentinelLogAnalyticsWorkspaceResourceId, '/')[4]
-var SentinelSubscriptionId = split(SentinelLogAnalyticsWorkspaceResourceId, '/')[2]
+var SentinelLogAnalyticsWorkspaceName = Sentinel ? split(SentinelLogAnalyticsWorkspaceResourceId, '/')[8] : ''
+var SentinelResourceGroup = Sentinel ? split(SentinelLogAnalyticsWorkspaceResourceId, '/')[4] : ''
+var SentinelSubscriptionId = Sentinel ? split(SentinelLogAnalyticsWorkspaceResourceId, '/')[2] : ''
 var StorageSku = FslogixStorage == 'None' ? 'None' : split(FslogixStorage, ' ')[1]
 var StorageSolution = split(FslogixStorage, ' ')[0]
 var StorageSuffix = environment().suffixes.storage

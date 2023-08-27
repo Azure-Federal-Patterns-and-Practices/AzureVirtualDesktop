@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "7564950687743325050"
+      "templateHash": "8929301161931707747"
     }
   },
   "parameters": {
@@ -807,9 +807,9 @@
     "SecurityPrincipalIdsCount": "[length(parameters('SecurityPrincipalObjectIds'))]",
     "SecurityPrincipalNamesCount": "[length(parameters('SecurityPrincipalNames'))]",
     "Sentinel": "[if(empty(parameters('SentinelLogAnalyticsWorkspaceResourceId')), false(), true())]",
-    "SentinelLogAnalyticsWorkspaceName": "[split(parameters('SentinelLogAnalyticsWorkspaceResourceId'), '/')[8]]",
-    "SentinelResourceGroup": "[split(parameters('SentinelLogAnalyticsWorkspaceResourceId'), '/')[4]]",
-    "SentinelSubscriptionId": "[split(parameters('SentinelLogAnalyticsWorkspaceResourceId'), '/')[2]]",
+    "SentinelLogAnalyticsWorkspaceName": "[if(variables('Sentinel'), split(parameters('SentinelLogAnalyticsWorkspaceResourceId'), '/')[8], '')]",
+    "SentinelResourceGroup": "[if(variables('Sentinel'), split(parameters('SentinelLogAnalyticsWorkspaceResourceId'), '/')[4], '')]",
+    "SentinelSubscriptionId": "[if(variables('Sentinel'), split(parameters('SentinelLogAnalyticsWorkspaceResourceId'), '/')[2], '')]",
     "StorageSku": "[if(equals(parameters('FslogixStorage'), 'None'), 'None', split(parameters('FslogixStorage'), ' ')[1])]",
     "StorageSolution": "[split(parameters('FslogixStorage'), ' ')[0]]",
     "StorageSuffix": "[environment().suffixes.storage]",
