@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "17418390782981042116"
+      "templateHash": "9248790460298713592"
     }
   },
   "parameters": {
@@ -5540,8 +5540,8 @@
           "Sentinel": {
             "value": "[variables('Sentinel')]"
           },
-          "SentinelWorkspaceId": "[if(parameters('Monitoring'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('SentinelSubscriptionId'), variables('SentinelResourceGroup')), 'Microsoft.Resources/deployments', format('Sentinel_{0}', parameters('Timestamp'))), '2022-09-01').outputs.sentinelWorkspaceId.value), createObject('value', ''))]",
-          "SentinelWorkspaceResourceId": "[if(parameters('Monitoring'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('SentinelSubscriptionId'), variables('SentinelResourceGroup')), 'Microsoft.Resources/deployments', format('Sentinel_{0}', parameters('Timestamp'))), '2022-09-01').outputs.sentinelWorkspaceResourceId.value), createObject('value', ''))]",
+          "SentinelWorkspaceId": "[if(variables('Sentinel'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('SentinelSubscriptionId'), variables('SentinelResourceGroup')), 'Microsoft.Resources/deployments', format('Sentinel_{0}', parameters('Timestamp'))), '2022-09-01').outputs.sentinelWorkspaceId.value), createObject('value', ''))]",
+          "SentinelWorkspaceResourceId": "[if(variables('Sentinel'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('SentinelSubscriptionId'), variables('SentinelResourceGroup')), 'Microsoft.Resources/deployments', format('Sentinel_{0}', parameters('Timestamp'))), '2022-09-01').outputs.sentinelWorkspaceResourceId.value), createObject('value', ''))]",
           "SessionHostBatchCount": {
             "value": "[variables('SessionHostBatchCount')]"
           },

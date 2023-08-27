@@ -640,8 +640,8 @@ module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
     ResourceGroupManagement: ResourceGroupManagement
     SecurityPrincipalObjectIds: SecurityPrincipalObjectIds
     Sentinel: Sentinel
-    SentinelWorkspaceId: Monitoring ? sentinel.outputs.sentinelWorkspaceId : ''
-    SentinelWorkspaceResourceId: Monitoring ? sentinel.outputs.sentinelWorkspaceResourceId : ''
+    SentinelWorkspaceId: Sentinel ? sentinel.outputs.sentinelWorkspaceId : ''
+    SentinelWorkspaceResourceId: Sentinel ? sentinel.outputs.sentinelWorkspaceResourceId : ''
     SessionHostBatchCount: SessionHostBatchCount
     SessionHostIndex: SessionHostIndex
     StorageAccountPrefix: StorageAccountNamePrefix
