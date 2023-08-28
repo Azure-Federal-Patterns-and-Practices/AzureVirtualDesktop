@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "13494742272556132825"
+      "templateHash": "9544811828824345611"
     }
   },
   "parameters": {
@@ -5561,7 +5561,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "13743909527610879461"
+              "templateHash": "13947569654959656707"
             }
           },
           "parameters": {
@@ -6014,7 +6014,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "6258254059926914374"
+                      "templateHash": "9910433951071825390"
                     }
                   },
                   "parameters": {
@@ -6400,7 +6400,7 @@
                           "timestamp": "[parameters('Timestamp')]"
                         },
                         "protectedSettings": {
-                          "commandToExecute": "[format('powershell -ExecutionPolicy Unrestricted -File Set-SessionHostConfiguration.ps1 -AmdVmSize {0} -DomainName {1} -ActiveDirectorySolution {2} -Environment {3} -FSLogix {4} -FslogixSolution {5} -HostPoolName {6} -HostPoolRegistrationToken {7} -ImageOffer {8} -ImagePublisher {9} -NetAppFileShares {10} -NvidiaVmSize {11} -PooledHostPool {12} -SecurityMonitoring {13} -SentinelWorkspaceId {14} -SecurityWorkspaceKey {15} -StorageAccountPrefix {16} -StorageCount {17} -StorageIndex {18} -StorageSolution {19} -StorageSuffix {20}', variables('AmdVmSize'), parameters('DomainName'), parameters('ActiveDirectorySolution'), environment().name, parameters('Fslogix'), parameters('FslogixSolution'), parameters('HostPoolName'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupControlPlane')), 'Microsoft.DesktopVirtualization/hostPools', parameters('HostPoolName')), '2019-12-10-preview').registrationInfo.token, parameters('ImageOffer'), parameters('ImagePublisher'), parameters('NetAppFileShares'), variables('NvidiaVmSize'), variables('PooledHostPool'), variables('SecurityMonitoring'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('SecurityLogAnalyticsWorkspaceSubscriptionId'), variables('SecurityLogAnalyticsWorkspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', variables('SecurityLogAnalyticsWorkspaceName')), '2021-06-01').customerId, if(variables('SecurityMonitoring'), listKeys(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '2021-06-01').primarySharedKey, 'NotApplicable'), parameters('StorageAccountPrefix'), parameters('StorageCount'), parameters('StorageIndex'), parameters('StorageSolution'), parameters('StorageSuffix'))]"
+                          "commandToExecute": "[format('powershell -ExecutionPolicy Unrestricted -File Set-SessionHostConfiguration.ps1 -AmdVmSize {0} -DomainName {1} -ActiveDirectorySolution {2} -Environment {3} -FSLogix {4} -FslogixSolution {5} -HostPoolName {6} -HostPoolRegistrationToken {7} -ImageOffer {8} -ImagePublisher {9} -NetAppFileShares {10} -NvidiaVmSize {11} -PooledHostPool {12} -SecurityMonitoring {13} -SentinelWorkspaceId {14} -SecurityWorkspaceKey {15} -StorageAccountPrefix {16} -StorageCount {17} -StorageIndex {18} -StorageSolution {19} -StorageSuffix {20}', variables('AmdVmSize'), parameters('DomainName'), parameters('ActiveDirectorySolution'), environment().name, parameters('Fslogix'), parameters('FslogixSolution'), parameters('HostPoolName'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupControlPlane')), 'Microsoft.DesktopVirtualization/hostPools', parameters('HostPoolName')), '2019-12-10-preview').registrationInfo.token, parameters('ImageOffer'), parameters('ImagePublisher'), parameters('NetAppFileShares'), variables('NvidiaVmSize'), variables('PooledHostPool'), variables('SecurityMonitoring'), if(variables('SecurityMonitoring'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('SecurityLogAnalyticsWorkspaceSubscriptionId'), variables('SecurityLogAnalyticsWorkspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', variables('SecurityLogAnalyticsWorkspaceName')), '2021-06-01').customerId, 'NotApplicable'), if(variables('SecurityMonitoring'), listKeys(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '2021-06-01').primarySharedKey, 'NotApplicable'), parameters('StorageAccountPrefix'), parameters('StorageCount'), parameters('StorageIndex'), parameters('StorageSolution'), parameters('StorageSuffix'))]"
                         }
                       },
                       "dependsOn": [
