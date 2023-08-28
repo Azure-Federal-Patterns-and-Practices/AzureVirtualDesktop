@@ -311,8 +311,8 @@ var ResourceGroups = Fslogix ? [
   ResourceGroupManagement
 ]
 var RoleDefinitionResourceId = {
-  DesktopVirtualizationPowerOnContributor: resourceId('Microsoft.Authorization/roleDefinitions', '489581de-a3bd-480d-9518-53dea7416b33')
-  Reader: resourceId('Microsoft.Authorization/roleDefinitions', 'acdd72a7-3385-48ef-bd42-f606fba81ae7')
+  DesktopVirtualizationPowerOnContributor: '489581de-a3bd-480d-9518-53dea7416b33'
+  Reader: 'acdd72a7-3385-48ef-bd42-f606fba81ae7'
 }
 var SecurityPrincipalIdsCount = length(SecurityPrincipalObjectIds)
 var SecurityPrincipalNamesCount = length(SecurityPrincipalNames)
@@ -353,9 +353,9 @@ module userAssignedIdentity 'modules/userAssignedManagedIdentity.bicep' = {
 // Role Assignment for Validation
 // This role assignment is required to collect validation information
 resource roleAssignment_validation 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(ResourceGroupManagement, UserAssignedIdentityName, RoleDefinitionResourceId.Reader, subscription().id)
+  name: guid(UserAssignedIdentityName, RoleDefinitionResourceId.Reader, subscription().id)
   properties: {
-    roleDefinitionId: RoleDefinitionResourceId.Reader
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', RoleDefinitionResourceId.Reader)
     principalId: userAssignedIdentity.outputs.principalId
     principalType: 'ServicePrincipal'
   }
@@ -400,7 +400,7 @@ module validations 'modules/validations.bicep' = {
 resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid(AvdObjectId, RoleDefinitionResourceId.DesktopVirtualizationPowerOnContributor, subscription().id)
   properties: {
-    roleDefinitionId: RoleDefinitionResourceId.DesktopVirtualizationPowerOnContributor
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', RoleDefinitionResourceId.DesktopVirtualizationPowerOnContributor)
     principalId: AvdObjectId
   }
 }
