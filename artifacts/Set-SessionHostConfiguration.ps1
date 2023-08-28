@@ -552,7 +552,7 @@ try
     if($Sentinel -eq 'true')
     {
         $mma = New-Object -ComObject 'AgentConfigManager.MgmtSvcCfg'
-        $mma.AddCloudWorkspace($SentinelWorkspaceId, $SentinelWorkspaceKey)
+        $mma.AddCloudWorkspace($SecurityWorkspaceId, $SecurityWorkspaceKey)
         $mma.ReloadConfiguration()
     }
 
