@@ -85,6 +85,7 @@ module roleAssignments '../roleAssignment.bicep' = [for i in range(0, length(Sec
   scope: resourceGroup(ResourceGroupHosts)
   params: {
     PrincipalId: SecurityPrincipalObjectIds[i]
+    PrincipalType: 'Group'
     RoleDefinitionId: VirtualMachineUserLoginRoleDefinitionResourceId
   }
 }]

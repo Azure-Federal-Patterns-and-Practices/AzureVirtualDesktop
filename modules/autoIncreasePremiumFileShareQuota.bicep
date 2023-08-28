@@ -65,6 +65,7 @@ module roleAssignment 'roleAssignment.bicep' = {
   scope: resourceGroup(StorageResourceGroupName)
   params: {
     PrincipalId: automationAccount.identity.principalId
+    PrincipalType: 'ServicePrincipal'
     RoleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', '17d1049b-9a84-46fb-8f53-869881c3d3ab') // Storage Account Contributor
   }
 }

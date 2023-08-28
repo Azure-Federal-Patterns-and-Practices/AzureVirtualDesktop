@@ -93,6 +93,7 @@ module roleAssignment 'roleAssignment.bicep' = [for i in range(0, length(RoleAss
   scope: resourceGroup(RoleAssignments[i])
   params: {
     PrincipalId: automationAccount.identity.principalId
+    PrincipalType: 'ServicePrincipal'
     RoleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', '40c5ff49-9181-41f8-ae61-143b0e78555e') // Desktop Virtualization Power On Off Contributor
   }
 }]

@@ -1,4 +1,5 @@
 param PrincipalId string
+param PrincipalType string
 param RoleDefinitionId string
 
 resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
@@ -6,6 +7,6 @@ resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   properties: {
     roleDefinitionId: RoleDefinitionId
     principalId: PrincipalId
-    principalType: 'ServicePrincipal'
+    principalType: PrincipalType
   }
 }
