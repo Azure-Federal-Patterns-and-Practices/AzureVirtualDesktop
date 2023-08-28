@@ -1095,7 +1095,7 @@
                 "ScalingMinimumNumberOfRdsh": "[if(steps('management').scaling.enable, steps('management').scaling.minimumHosts, '0')]",
                 "ScalingSessionThresholdPerCPU": "[if(steps('management').scaling.enable, steps('management').scaling.cpuThreshold, '1')]",
                 "ScalingTool": "[steps('management').scaling.enable]",
-                "SecurityPrincipalObjectIds": "[map(steps('controlPlane').assignment.groups, (item) => item.id)]",
+                "SecurityPrincipalObjectIds": "[map(steps('controlPlane').assignment.groups, (item) => item.objectId)]",
                 "SecurityPrincipalNames": "[map(steps('controlPlane').assignment.groups, (item) => item.name)]",
                 "SecurityLogAnalyticsWorkspaceResourceId": "[if(steps('management').monitoring.enableSecurity, steps('management').monitoring.logAnalyticsWorkspace.id, '')]",
                 "SessionHostCount": "[steps('hosts').count]",
