@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "9248790460298713592"
+      "templateHash": "3410638537242711910"
     }
   },
   "parameters": {
@@ -5356,7 +5356,6 @@
       ]
     },
     {
-      "condition": "[variables('Sentinel')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
       "name": "[format('Sentinel_{0}', parameters('Timestamp'))]",
@@ -5368,6 +5367,9 @@
         },
         "mode": "Incremental",
         "parameters": {
+          "Sentinel": {
+            "value": "[variables('Sentinel')]"
+          },
           "SentinelLogAnalyticsWorkspaceName": {
             "value": "[variables('SentinelLogAnalyticsWorkspaceName')]"
           },
@@ -5382,10 +5384,13 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "18174133904363601528"
+              "templateHash": "1466688575692552395"
             }
           },
           "parameters": {
+            "Sentinel": {
+              "type": "bool"
+            },
             "SentinelLogAnalyticsWorkspaceName": {
               "type": "string"
             },
@@ -5397,11 +5402,11 @@
           "outputs": {
             "sentinelWorkspaceId": {
               "type": "string",
-              "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('SentinelLogAnalyticsWorkspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('SentinelLogAnalyticsWorkspaceName')), '2021-06-01').customerId]"
+              "value": "[if(parameters('Sentinel'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('SentinelLogAnalyticsWorkspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('SentinelLogAnalyticsWorkspaceName')), '2021-06-01').customerId, 'NotApplicable')]"
             },
             "sentinelWorkspaceResourceId": {
               "type": "string",
-              "value": "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('SentinelLogAnalyticsWorkspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('SentinelLogAnalyticsWorkspaceName'))]"
+              "value": "[if(parameters('Sentinel'), extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('SentinelLogAnalyticsWorkspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('SentinelLogAnalyticsWorkspaceName')), 'NotApplicable')]"
             }
           }
         }
@@ -5540,8 +5545,12 @@
           "Sentinel": {
             "value": "[variables('Sentinel')]"
           },
-          "SentinelWorkspaceId": "[if(variables('Sentinel'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('SentinelSubscriptionId'), variables('SentinelResourceGroup')), 'Microsoft.Resources/deployments', format('Sentinel_{0}', parameters('Timestamp'))), '2022-09-01').outputs.sentinelWorkspaceId.value), createObject('value', ''))]",
-          "SentinelWorkspaceResourceId": "[if(variables('Sentinel'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('SentinelSubscriptionId'), variables('SentinelResourceGroup')), 'Microsoft.Resources/deployments', format('Sentinel_{0}', parameters('Timestamp'))), '2022-09-01').outputs.sentinelWorkspaceResourceId.value), createObject('value', ''))]",
+          "SentinelWorkspaceId": {
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('SentinelSubscriptionId'), variables('SentinelResourceGroup')), 'Microsoft.Resources/deployments', format('Sentinel_{0}', parameters('Timestamp'))), '2022-09-01').outputs.sentinelWorkspaceId.value]"
+          },
+          "SentinelWorkspaceResourceId": {
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('SentinelSubscriptionId'), variables('SentinelResourceGroup')), 'Microsoft.Resources/deployments', format('Sentinel_{0}', parameters('Timestamp'))), '2022-09-01').outputs.sentinelWorkspaceResourceId.value]"
+          },
           "SessionHostBatchCount": {
             "value": "[variables('SessionHostBatchCount')]"
           },
