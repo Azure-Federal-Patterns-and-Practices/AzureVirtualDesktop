@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "2690131784772415755"
+      "templateHash": "17203472105251595096"
     }
   },
   "parameters": {
@@ -5375,7 +5375,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "17287843727632897723"
+              "templateHash": "7274573825556968090"
             }
           },
           "parameters": {
@@ -5383,11 +5383,16 @@
               "type": "string"
             }
           },
+          "variables": {
+            "Name": "[if(empty(parameters('SecurityLogAnalyticsWorkspaceResourceId')), '', split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[8])]",
+            "ResourceGroupName": "[if(empty(parameters('SecurityLogAnalyticsWorkspaceResourceId')), resourceGroup().name, split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[4])]",
+            "SubscriptionId": "[if(empty(parameters('SecurityLogAnalyticsWorkspaceResourceId')), subscription().subscriptionId, split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[8])]"
+          },
           "resources": [],
           "outputs": {
             "LogAnalyticsWorkspaceCustomerId": {
               "type": "string",
-              "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[2], split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[4]), 'Microsoft.OperationalInsights/workspaces', split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[8]), '2021-06-01').customerId]"
+              "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('SubscriptionId'), variables('ResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', variables('Name')), '2021-06-01').customerId]"
             }
           }
         }
