@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "9544811828824345611"
+      "templateHash": "16970839002098469617"
     }
   },
   "parameters": {
@@ -420,17 +420,6 @@
       "defaultValue": "[deployment().location]",
       "metadata": {
         "description": "Input the desired location for the virtual machines and their associated resources."
-      }
-    },
-    "VirtualMachineMonitoringAgent": {
-      "type": "string",
-      "defaultValue": "LogAnalyticsAgent",
-      "allowedValues": [
-        "AzureMonitorAgent",
-        "LogAnalyticsAgent"
-      ],
-      "metadata": {
-        "description": "Input the desired monitoring agent to send events and performance counters to a log analytics workspace."
       }
     },
     "VirtualMachinePassword": {

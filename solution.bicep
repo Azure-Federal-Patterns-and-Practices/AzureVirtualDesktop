@@ -222,12 +222,12 @@ param ValidationEnvironment bool = false
 @description('Input the desired location for the virtual machines and their associated resources.')
 param VirtualMachineLocation string = deployment().location
 
-@allowed([
+/* @allowed([
   'AzureMonitorAgent'
   'LogAnalyticsAgent'
 ])
 @description('Input the desired monitoring agent to send events and performance counters to a log analytics workspace.')
-param VirtualMachineMonitoringAgent string = 'LogAnalyticsAgent'
+param VirtualMachineMonitoringAgent string = 'LogAnalyticsAgent' */
 
 @secure()
 @description('Local administrator password for the AVD session hosts')
