@@ -33,9 +33,7 @@ param NetworkInterfaceNamePrefix string
 param OuPath string
 param ResourceGroupControlPlane string
 param ResourceGroupManagement string
-param SecurityMonitoring bool
-param SecurityWorkspaceId string
-param SecurityWorkspaceResourceId string
+param SecurityLogAnalyticsWorkspaceResourceId string
 param SessionHostCount int
 param SessionHostIndex int
 param StorageAccountPrefix string
@@ -102,7 +100,21 @@ var NvidiaVmSizes = [
   'Standard_NV72ads_A10_v5'
 ]
 var PooledHostPool = (split(HostPoolType, ' ')[0] == 'Pooled')
-var SecurityWorkspaceKey = SecurityMonitoring ? listKeys(SecurityWorkspaceResourceId, '2021-06-01').primarySharedKey : 'NotApplicable'
+var SecurityLogAnalyticsWorkspaceName = SecurityMonitoring ? split(SecurityLogAnalyticsWorkspaceResourceId, '/')[8] : ''
+var SecurityLogAnalyticsWorkspaceResourceGroupName = SecurityMonitoring ? split(SecurityLogAnalyticsWorkspaceResourceId, '/')[4] : resourceGroup().name
+var SecurityLogAnalyticsWorkspaceSubscriptionId = SecurityMonitoring ? split(SecurityLogAnalyticsWorkspaceResourceId, '/')[2] : subscription().subscriptionId
+var SecurityMonitoring = empty(SecurityLogAnalyticsWorkspaceResourceId) ? false : true
+var SecurityWorkspaceKey = SecurityMonitoring ? listKeys(SecurityLogAnalyticsWorkspaceResourceId, '2021-06-01').primarySharedKey : 'NotApplicable'
+
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = if (SecurityMonitoring) {
+  name: SecurityLogAnalyticsWorkspaceName
+  scope: resourceGroup(SecurityLogAnalyticsWorkspaceSubscriptionId, SecurityLogAnalyticsWorkspaceResourceGroupName)
+}
+
+resource hostPool 'Microsoft.DesktopVirtualization/hostPools@2019-12-10-preview' existing = {
+  name: HostPoolName
+  scope: resourceGroup(ResourceGroupControlPlane)
+}
 
 resource networkInterface 'Microsoft.Network/networkInterfaces@2020-05-01' = [for i in range(0, SessionHostCount): {
   name: '${NetworkInterfaceNamePrefix}${padLeft((i + SessionHostIndex), 4, '0')}'
@@ -266,7 +278,7 @@ resource extension_CustomScriptExtension 'Microsoft.Compute/virtualMachines/exte
       timestamp: Timestamp
     }
     protectedSettings: {
-      commandToExecute: 'powershell -ExecutionPolicy Unrestricted -File Set-SessionHostConfiguration.ps1 -AmdVmSize ${AmdVmSize} -DomainName ${DomainName} -ActiveDirectorySolution ${ActiveDirectorySolution} -Environment ${environment().name} -FSLogix ${Fslogix} -FslogixSolution ${FslogixSolution} -HostPoolName ${HostPoolName} -HostPoolRegistrationToken ${reference(resourceId(ResourceGroupControlPlane, 'Microsoft.DesktopVirtualization/hostpools', HostPoolName), '2019-12-10-preview').registrationInfo.token} -ImageOffer ${ImageOffer} -ImagePublisher ${ImagePublisher} -NetAppFileShares ${NetAppFileShares} -NvidiaVmSize ${NvidiaVmSize} -PooledHostPool ${PooledHostPool} -SecurityMonitoring ${SecurityMonitoring} -SentinelWorkspaceId ${SecurityWorkspaceId} -SecurityWorkspaceKey ${SecurityWorkspaceKey} -StorageAccountPrefix ${StorageAccountPrefix} -StorageCount ${StorageCount} -StorageIndex ${StorageIndex} -StorageSolution ${StorageSolution} -StorageSuffix ${StorageSuffix}'
+      commandToExecute: 'powershell -ExecutionPolicy Unrestricted -File Set-SessionHostConfiguration.ps1 -AmdVmSize ${AmdVmSize} -DomainName ${DomainName} -ActiveDirectorySolution ${ActiveDirectorySolution} -Environment ${environment().name} -FSLogix ${Fslogix} -FslogixSolution ${FslogixSolution} -HostPoolName ${HostPoolName} -HostPoolRegistrationToken ${hostPool.properties.registrationInfo.token} -ImageOffer ${ImageOffer} -ImagePublisher ${ImagePublisher} -NetAppFileShares ${NetAppFileShares} -NvidiaVmSize ${NvidiaVmSize} -PooledHostPool ${PooledHostPool} -SecurityMonitoring ${SecurityMonitoring} -SentinelWorkspaceId ${logAnalyticsWorkspace.properties.customerId} -SecurityWorkspaceKey ${SecurityWorkspaceKey} -StorageAccountPrefix ${StorageAccountPrefix} -StorageCount ${StorageCount} -StorageIndex ${StorageIndex} -StorageSolution ${StorageSolution} -StorageSuffix ${StorageSuffix}'
     }
   }
   dependsOn: [

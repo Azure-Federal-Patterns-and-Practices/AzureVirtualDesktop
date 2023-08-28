@@ -316,7 +316,6 @@ var RoleDefinitionResourceId = {
 }
 var SecurityPrincipalIdsCount = length(SecurityPrincipalObjectIds)
 var SecurityPrincipalNamesCount = length(SecurityPrincipalNames)
-var SecurityMonitoring = empty(SecurityLogAnalyticsWorkspaceResourceId)
 var StorageSku = FslogixStorage == 'None' ? 'None' : split(FslogixStorage, ' ')[1]
 var StorageSolution = split(FslogixStorage, ' ')[0]
 var StorageSuffix = environment().suffixes.storage
@@ -578,17 +577,6 @@ module fslogix 'modules/fslogix/fslogix.bicep' = if (Fslogix) {
   ]
 }
 
-module securityMonitoring 'modules/security.bicep' = if (SecurityMonitoring) {
-  name: 'SecurityMonitoring_${Timestamp}'
-  scope: resourceGroup(ResourceGroupManagement)
-  params: {
-    SecurityLogAnalyticsWorkspaceResourceId: SecurityLogAnalyticsWorkspaceResourceId
-  }
-  dependsOn: [
-    resourceGroups
-  ]
-}
-
 module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
   name: 'SessionHosts_${Timestamp}'
   scope: resourceGroup(ResourceGroupHosts)
@@ -635,9 +623,7 @@ module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
     ResourceGroupHosts: ResourceGroupHosts
     ResourceGroupManagement: ResourceGroupManagement
     SecurityPrincipalObjectIds: SecurityPrincipalObjectIds
-    SecurityMonitoring: SecurityMonitoring
-    SecurityWorkspaceId: SecurityMonitoring ? securityMonitoring.outputs.LogAnalyticsWorkspaceCustomerId : 'NotApplicable'
-    SecurityWorkspaceResourceId: SecurityMonitoring ? SecurityLogAnalyticsWorkspaceResourceId : 'NotApplicable'
+    SecurityLogAnalyticsWorkspaceResourceId: SecurityLogAnalyticsWorkspaceResourceId
     SessionHostBatchCount: SessionHostBatchCount
     SessionHostIndex: SessionHostIndex
     StorageAccountPrefix: StorageAccountNamePrefix

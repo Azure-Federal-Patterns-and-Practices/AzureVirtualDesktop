@@ -40,9 +40,7 @@ param ResourceGroupControlPlane string
 param ResourceGroupHosts string
 param ResourceGroupManagement string
 param SecurityPrincipalObjectIds array
-param SecurityMonitoring bool
-param SecurityWorkspaceId string
-param SecurityWorkspaceResourceId string
+param SecurityLogAnalyticsWorkspaceResourceId string
 param SessionHostBatchCount int
 param SessionHostIndex int
 param StorageAccountPrefix string
@@ -129,9 +127,7 @@ module virtualMachines 'virtualMachines.bicep' = [for i in range(1, SessionHostB
     OuPath: OuPath
     ResourceGroupControlPlane: ResourceGroupControlPlane
     ResourceGroupManagement: ResourceGroupManagement
-    SecurityMonitoring: SecurityMonitoring
-    SecurityWorkspaceId: SecurityWorkspaceId
-    SecurityWorkspaceResourceId: SecurityWorkspaceResourceId
+    SecurityLogAnalyticsWorkspaceResourceId: SecurityLogAnalyticsWorkspaceResourceId
     SessionHostCount: i == SessionHostBatchCount && DivisionRemainderValue > 0 ? DivisionRemainderValue : MaxResourcesPerTemplateDeployment
     SessionHostIndex: i == 1 ? SessionHostIndex : ((i - 1) * MaxResourcesPerTemplateDeployment) + SessionHostIndex
     StorageAccountPrefix: StorageAccountPrefix
