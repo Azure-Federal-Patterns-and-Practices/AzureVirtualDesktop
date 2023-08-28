@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "16970839002098469617"
+      "templateHash": "6029909929188703990"
     }
   },
   "parameters": {
@@ -1101,7 +1101,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "6070387226324465663"
+              "templateHash": "7725105563075993523"
             }
           },
           "parameters": {
@@ -1375,7 +1375,6 @@
               }
             },
             {
-              "condition": "[equals(parameters('Availability'), 'AvailabilityZones')]",
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2022-09-01",
               "name": "[format('DeploymentScript_AzureNetAppFilesValidation_{0}', parameters('Timestamp'))]",

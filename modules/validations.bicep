@@ -49,7 +49,7 @@ module availabilityZones 'deploymentScript.bicep' = if (Availability == 'Availab
   }
 }
 
-module azureNetAppFiles 'deploymentScript.bicep' = if (Availability == 'AvailabilityZones') {
+module azureNetAppFiles 'deploymentScript.bicep' = {
   name: 'DeploymentScript_AzureNetAppFilesValidation_${Timestamp}'
   params: {
     Arguments: '-Location ${Location} -StorageSolution ${StorageSolution} -VnetName ${VnetName} -VnetResourceGroupName ${VnetResourceGroupName}'
