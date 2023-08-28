@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "2284561440406447745"
+      "templateHash": "15235104783316655947"
     }
   },
   "parameters": {
@@ -806,7 +806,6 @@
     },
     "SecurityPrincipalIdsCount": "[length(parameters('SecurityPrincipalObjectIds'))]",
     "SecurityPrincipalNamesCount": "[length(parameters('SecurityPrincipalNames'))]",
-    "SecurityMonitoring": "[empty(parameters('SecurityLogAnalyticsWorkspaceResourceId'))]",
     "StorageSku": "[if(equals(parameters('FslogixStorage'), 'None'), 'None', split(parameters('FslogixStorage'), ' ')[1])]",
     "StorageSolution": "[split(parameters('FslogixStorage'), ' ')[0]]",
     "StorageSuffix": "[environment().suffixes.storage]",
@@ -5353,55 +5352,6 @@
       ]
     },
     {
-      "condition": "[variables('SecurityMonitoring')]",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2022-09-01",
-      "name": "[format('SecurityMonitoring_{0}', parameters('Timestamp'))]",
-      "resourceGroup": "[variables('ResourceGroupManagement')]",
-      "properties": {
-        "expressionEvaluationOptions": {
-          "scope": "inner"
-        },
-        "mode": "Incremental",
-        "parameters": {
-          "SecurityLogAnalyticsWorkspaceResourceId": {
-            "value": "[parameters('SecurityLogAnalyticsWorkspaceResourceId')]"
-          }
-        },
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "metadata": {
-            "_generator": {
-              "name": "bicep",
-              "version": "0.20.4.51522",
-              "templateHash": "3305869820615096346"
-            }
-          },
-          "parameters": {
-            "SecurityLogAnalyticsWorkspaceResourceId": {
-              "type": "string"
-            }
-          },
-          "variables": {
-            "Name": "[if(empty(parameters('SecurityLogAnalyticsWorkspaceResourceId')), '', split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[8])]",
-            "ResourceGroupName": "[if(empty(parameters('SecurityLogAnalyticsWorkspaceResourceId')), resourceGroup().name, split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[4])]",
-            "SubscriptionId": "[if(empty(parameters('SecurityLogAnalyticsWorkspaceResourceId')), subscription().subscriptionId, split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[2])]"
-          },
-          "resources": [],
-          "outputs": {
-            "LogAnalyticsWorkspaceCustomerId": {
-              "type": "string",
-              "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('SubscriptionId'), variables('ResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', variables('Name')), '2021-06-01').customerId]"
-            }
-          }
-        }
-      },
-      "dependsOn": [
-        "resourceGroups"
-      ]
-    },
-    {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
       "name": "[format('SessionHosts_{0}', parameters('Timestamp'))]",
@@ -5528,11 +5478,9 @@
           "SecurityPrincipalObjectIds": {
             "value": "[parameters('SecurityPrincipalObjectIds')]"
           },
-          "SecurityMonitoring": {
-            "value": "[variables('SecurityMonitoring')]"
+          "SecurityLogAnalyticsWorkspaceResourceId": {
+            "value": "[parameters('SecurityLogAnalyticsWorkspaceResourceId')]"
           },
-          "SecurityWorkspaceId": "[if(variables('SecurityMonitoring'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('SecurityMonitoring_{0}', parameters('Timestamp'))), '2022-09-01').outputs.LogAnalyticsWorkspaceCustomerId.value), createObject('value', 'NotApplicable'))]",
-          "SecurityWorkspaceResourceId": "[if(variables('SecurityMonitoring'), createObject('value', parameters('SecurityLogAnalyticsWorkspaceResourceId')), createObject('value', 'NotApplicable'))]",
           "SessionHostBatchCount": {
             "value": "[variables('SessionHostBatchCount')]"
           },
@@ -5601,7 +5549,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "8086661698521229144"
+              "templateHash": "16193541504448825384"
             }
           },
           "parameters": {
@@ -5725,13 +5673,7 @@
             "SecurityPrincipalObjectIds": {
               "type": "array"
             },
-            "SecurityMonitoring": {
-              "type": "bool"
-            },
-            "SecurityWorkspaceId": {
-              "type": "string"
-            },
-            "SecurityWorkspaceResourceId": {
+            "SecurityLogAnalyticsWorkspaceResourceId": {
               "type": "string"
             },
             "SessionHostBatchCount": {
@@ -5990,14 +5932,8 @@
                   "ResourceGroupManagement": {
                     "value": "[parameters('ResourceGroupManagement')]"
                   },
-                  "SecurityMonitoring": {
-                    "value": "[parameters('SecurityMonitoring')]"
-                  },
-                  "SecurityWorkspaceId": {
-                    "value": "[parameters('SecurityWorkspaceId')]"
-                  },
-                  "SecurityWorkspaceResourceId": {
-                    "value": "[parameters('SecurityWorkspaceResourceId')]"
+                  "SecurityLogAnalyticsWorkspaceResourceId": {
+                    "value": "[parameters('SecurityLogAnalyticsWorkspaceResourceId')]"
                   },
                   "SessionHostCount": "[if(and(equals(range(1, parameters('SessionHostBatchCount'))[copyIndex()], parameters('SessionHostBatchCount')), greater(parameters('DivisionRemainderValue'), 0)), createObject('value', parameters('DivisionRemainderValue')), createObject('value', parameters('MaxResourcesPerTemplateDeployment')))]",
                   "SessionHostIndex": "[if(equals(range(1, parameters('SessionHostBatchCount'))[copyIndex()], 1), createObject('value', parameters('SessionHostIndex')), createObject('value', add(mul(sub(range(1, parameters('SessionHostBatchCount'))[copyIndex()], 1), parameters('MaxResourcesPerTemplateDeployment')), parameters('SessionHostIndex'))))]",
@@ -6060,7 +5996,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "15188327349614717529"
+                      "templateHash": "6258254059926914374"
                     }
                   },
                   "parameters": {
@@ -6163,13 +6099,7 @@
                     "ResourceGroupManagement": {
                       "type": "string"
                     },
-                    "SecurityMonitoring": {
-                      "type": "bool"
-                    },
-                    "SecurityWorkspaceId": {
-                      "type": "string"
-                    },
-                    "SecurityWorkspaceResourceId": {
+                    "SecurityLogAnalyticsWorkspaceResourceId": {
                       "type": "string"
                     },
                     "SessionHostCount": {
@@ -6266,7 +6196,11 @@
                       "Standard_NV36adms_A10_v5",
                       "Standard_NV72ads_A10_v5"
                     ],
-                    "PooledHostPool": "[equals(split(parameters('HostPoolType'), ' ')[0], 'Pooled')]"
+                    "PooledHostPool": "[equals(split(parameters('HostPoolType'), ' ')[0], 'Pooled')]",
+                    "SecurityLogAnalyticsWorkspaceName": "[if(variables('SecurityMonitoring'), split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[8], '')]",
+                    "SecurityLogAnalyticsWorkspaceResourceGroupName": "[if(variables('SecurityMonitoring'), split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[4], resourceGroup().name)]",
+                    "SecurityLogAnalyticsWorkspaceSubscriptionId": "[if(variables('SecurityMonitoring'), split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[2], subscription().subscriptionId)]",
+                    "SecurityMonitoring": "[if(empty(parameters('SecurityLogAnalyticsWorkspaceResourceId')), false(), true())]"
                   },
                   "resources": [
                     {
@@ -6448,7 +6382,7 @@
                           "timestamp": "[parameters('Timestamp')]"
                         },
                         "protectedSettings": {
-                          "commandToExecute": "[format('powershell -ExecutionPolicy Unrestricted -File Set-SessionHostConfiguration.ps1 -AmdVmSize {0} -DomainName {1} -ActiveDirectorySolution {2} -Environment {3} -FSLogix {4} -FslogixSolution {5} -HostPoolName {6} -HostPoolRegistrationToken {7} -ImageOffer {8} -ImagePublisher {9} -NetAppFileShares {10} -NvidiaVmSize {11} -PooledHostPool {12} -SecurityMonitoring {13} -SentinelWorkspaceId {14} -SecurityWorkspaceKey {15} -StorageAccountPrefix {16} -StorageCount {17} -StorageIndex {18} -StorageSolution {19} -StorageSuffix {20}', variables('AmdVmSize'), parameters('DomainName'), parameters('ActiveDirectorySolution'), environment().name, parameters('Fslogix'), parameters('FslogixSolution'), parameters('HostPoolName'), reference(resourceId(parameters('ResourceGroupControlPlane'), 'Microsoft.DesktopVirtualization/hostpools', parameters('HostPoolName')), '2019-12-10-preview').registrationInfo.token, parameters('ImageOffer'), parameters('ImagePublisher'), parameters('NetAppFileShares'), variables('NvidiaVmSize'), variables('PooledHostPool'), parameters('SecurityMonitoring'), parameters('SecurityWorkspaceId'), if(parameters('SecurityMonitoring'), listKeys(parameters('SecurityWorkspaceResourceId'), '2021-06-01').primarySharedKey, 'NotApplicable'), parameters('StorageAccountPrefix'), parameters('StorageCount'), parameters('StorageIndex'), parameters('StorageSolution'), parameters('StorageSuffix'))]"
+                          "commandToExecute": "[format('powershell -ExecutionPolicy Unrestricted -File Set-SessionHostConfiguration.ps1 -AmdVmSize {0} -DomainName {1} -ActiveDirectorySolution {2} -Environment {3} -FSLogix {4} -FslogixSolution {5} -HostPoolName {6} -HostPoolRegistrationToken {7} -ImageOffer {8} -ImagePublisher {9} -NetAppFileShares {10} -NvidiaVmSize {11} -PooledHostPool {12} -SecurityMonitoring {13} -SentinelWorkspaceId {14} -SecurityWorkspaceKey {15} -StorageAccountPrefix {16} -StorageCount {17} -StorageIndex {18} -StorageSolution {19} -StorageSuffix {20}', variables('AmdVmSize'), parameters('DomainName'), parameters('ActiveDirectorySolution'), environment().name, parameters('Fslogix'), parameters('FslogixSolution'), parameters('HostPoolName'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupControlPlane')), 'Microsoft.DesktopVirtualization/hostPools', parameters('HostPoolName')), '2019-12-10-preview').registrationInfo.token, parameters('ImageOffer'), parameters('ImagePublisher'), parameters('NetAppFileShares'), variables('NvidiaVmSize'), variables('PooledHostPool'), variables('SecurityMonitoring'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('SecurityLogAnalyticsWorkspaceSubscriptionId'), variables('SecurityLogAnalyticsWorkspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', variables('SecurityLogAnalyticsWorkspaceName')), '2021-06-01').customerId, if(variables('SecurityMonitoring'), listKeys(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '2021-06-01').primarySharedKey, 'NotApplicable'), parameters('StorageAccountPrefix'), parameters('StorageCount'), parameters('StorageIndex'), parameters('StorageSolution'), parameters('StorageSuffix'))]"
                         }
                       },
                       "dependsOn": [
@@ -6679,7 +6613,6 @@
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('FSLogix_{0}', parameters('Timestamp')))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Monitoring_{0}', parameters('Timestamp')))]",
         "resourceGroups",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('SecurityMonitoring_{0}', parameters('Timestamp')))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('UserAssignedIdentity_{0}', parameters('Timestamp')))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Validations_{0}', parameters('Timestamp')))]"
       ]
