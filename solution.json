@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "17203472105251595096"
+      "templateHash": "2284561440406447745"
     }
   },
   "parameters": {
@@ -5375,7 +5375,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "7274573825556968090"
+              "templateHash": "3305869820615096346"
             }
           },
           "parameters": {
@@ -5386,7 +5386,7 @@
           "variables": {
             "Name": "[if(empty(parameters('SecurityLogAnalyticsWorkspaceResourceId')), '', split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[8])]",
             "ResourceGroupName": "[if(empty(parameters('SecurityLogAnalyticsWorkspaceResourceId')), resourceGroup().name, split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[4])]",
-            "SubscriptionId": "[if(empty(parameters('SecurityLogAnalyticsWorkspaceResourceId')), subscription().subscriptionId, split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[8])]"
+            "SubscriptionId": "[if(empty(parameters('SecurityLogAnalyticsWorkspaceResourceId')), subscription().subscriptionId, split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[2])]"
           },
           "resources": [],
           "outputs": {
