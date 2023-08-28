@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "3410638537242711910"
+      "templateHash": "10965991504293310358"
     }
   },
   "parameters": {
@@ -806,7 +806,7 @@
     },
     "SecurityPrincipalIdsCount": "[length(parameters('SecurityPrincipalObjectIds'))]",
     "SecurityPrincipalNamesCount": "[length(parameters('SecurityPrincipalNames'))]",
-    "Sentinel": "[if(empty(parameters('SentinelLogAnalyticsWorkspaceResourceId')), false(), true())]",
+    "Sentinel": "[empty(parameters('SentinelLogAnalyticsWorkspaceResourceId'))]",
     "SentinelLogAnalyticsWorkspaceName": "[if(variables('Sentinel'), split(parameters('SentinelLogAnalyticsWorkspaceResourceId'), '/')[8], '')]",
     "SentinelResourceGroup": "[if(variables('Sentinel'), split(parameters('SentinelLogAnalyticsWorkspaceResourceId'), '/')[4], '')]",
     "SentinelSubscriptionId": "[if(variables('Sentinel'), split(parameters('SentinelLogAnalyticsWorkspaceResourceId'), '/')[2], '')]",

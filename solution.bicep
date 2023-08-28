@@ -316,7 +316,7 @@ var RoleDefinitionResourceId = {
 }
 var SecurityPrincipalIdsCount = length(SecurityPrincipalObjectIds)
 var SecurityPrincipalNamesCount = length(SecurityPrincipalNames)
-var Sentinel = empty(SentinelLogAnalyticsWorkspaceResourceId) ? false : true
+var Sentinel = empty(SentinelLogAnalyticsWorkspaceResourceId)
 var SentinelLogAnalyticsWorkspaceName = Sentinel ? split(SentinelLogAnalyticsWorkspaceResourceId, '/')[8] : ''
 var SentinelResourceGroup = Sentinel ? split(SentinelLogAnalyticsWorkspaceResourceId, '/')[4] : ''
 var SentinelSubscriptionId = Sentinel ? split(SentinelLogAnalyticsWorkspaceResourceId, '/')[2] : ''
