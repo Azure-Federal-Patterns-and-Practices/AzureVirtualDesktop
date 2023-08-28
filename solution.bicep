@@ -581,13 +581,12 @@ module fslogix 'modules/fslogix/fslogix.bicep' = if (Fslogix) {
   ]
 }
 
-module sentinel 'modules/sentinel.bicep' = {
+module sentinel 'modules/sentinel.bicep' = if (Sentinel) {
   name: 'Sentinel_${Timestamp}'
   scope: resourceGroup(SentinelSubscriptionId, SentinelResourceGroup)
   params: {
     Sentinel: Sentinel
     SentinelLogAnalyticsWorkspaceName: SentinelLogAnalyticsWorkspaceName
-    SentinelLogAnalyticsWorkspaceResourceGroupName: SentinelResourceGroup
   }
   dependsOn: [
     resourceGroups
@@ -641,8 +640,8 @@ module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
     ResourceGroupManagement: ResourceGroupManagement
     SecurityPrincipalObjectIds: SecurityPrincipalObjectIds
     Sentinel: Sentinel
-    SentinelWorkspaceId: sentinel.outputs.sentinelWorkspaceId
-    SentinelWorkspaceResourceId: sentinel.outputs.sentinelWorkspaceResourceId
+    SentinelWorkspaceId: Sentinel ? sentinel.outputs.sentinelWorkspaceId : 'NotApplicable'
+    SentinelWorkspaceResourceId: Sentinel ? SentinelLogAnalyticsWorkspaceResourceId : 'NotApplicable'
     SessionHostBatchCount: SessionHostBatchCount
     SessionHostIndex: SessionHostIndex
     StorageAccountPrefix: StorageAccountNamePrefix
