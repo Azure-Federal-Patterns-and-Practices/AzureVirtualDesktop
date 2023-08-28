@@ -317,9 +317,6 @@ var RoleDefinitionResourceId = {
 var SecurityPrincipalIdsCount = length(SecurityPrincipalObjectIds)
 var SecurityPrincipalNamesCount = length(SecurityPrincipalNames)
 var SecurityMonitoring = empty(SecurityLogAnalyticsWorkspaceResourceId)
-var SecurityLogAnalyticsWorkspaceName = SecurityMonitoring ? split(SecurityLogAnalyticsWorkspaceResourceId, '/')[8] : ''
-var SecurityResourceGroup = SecurityMonitoring ? split(SecurityLogAnalyticsWorkspaceResourceId, '/')[4] : ''
-var SecuritySubscriptionId = SecurityMonitoring ? split(SecurityLogAnalyticsWorkspaceResourceId, '/')[2] : ''
 var StorageSku = FslogixStorage == 'None' ? 'None' : split(FslogixStorage, ' ')[1]
 var StorageSolution = split(FslogixStorage, ' ')[0]
 var StorageSuffix = environment().suffixes.storage
@@ -583,9 +580,9 @@ module fslogix 'modules/fslogix/fslogix.bicep' = if (Fslogix) {
 
 module securityMonitoring 'modules/security.bicep' = if (SecurityMonitoring) {
   name: 'SecurityMonitoring_${Timestamp}'
-  scope: resourceGroup(SecuritySubscriptionId, SecurityResourceGroup)
+  scope: resourceGroup(split(SecurityLogAnalyticsWorkspaceResourceId, '/')[2], split(SecurityLogAnalyticsWorkspaceResourceId, '/')[4])
   params: {
-    SecurityLogAnalyticsWorkspaceName: SecurityLogAnalyticsWorkspaceName    
+    SecurityLogAnalyticsWorkspaceName: split(SecurityLogAnalyticsWorkspaceResourceId, '/')[8]   
   }
   dependsOn: [
     resourceGroups
