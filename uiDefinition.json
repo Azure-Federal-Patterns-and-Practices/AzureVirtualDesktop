@@ -205,25 +205,47 @@
                             "visible": true,
                             "elements": [
                                 {
-                                    "name": "groupsApi",
-                                    "type": "Microsoft.Solutions.GraphApiControl",
-                                    "request": {
-                                        "method": "GET",
-                                        "path": "/v1.0/groups?$top=999"
-                                    }
-                                },
-                                {
                                     "name": "groups",
-                                    "type": "Microsoft.Common.DropDown",
-                                    "label": "Groups",
-                                    "defaultValue": "",
-                                    "toolTip": "Select the desired group(s) to give access to this AVD stamp and if applicable, the FSLogix file share.",
-                                    "multiselect": true,
+                                    "type": "Microsoft.Common.EditableGrid",
+                                    "ariaLabel": "Enter the security groups for access to AVD and if applicable, FSLogix. If deploying FSLogix, a storage account will be deployed for each group to support sharding.",
+                                    "label": "Security Groups",
                                     "constraints": {
-                                        "allowedValues": "[map(steps('controlPlane').assignment.groupsApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\": {\"name\":\"', item.displayName, '\",\"id\":\"', item.id, '\"}}')))]",
-                                        "required": true
-                                    },
-                                    "visible": true
+                                        "width": "Full",
+                                        "rows": {
+                                            "count": {
+                                                "min": 1,
+                                                "max": 100
+                                            }
+                                        },
+                                        "columns": [
+                                            {
+                                                "id": "name",
+                                                "header": "Name",
+                                                "width": "1fr",
+                                                "element": {
+                                                    "type": "Microsoft.Common.TextBox",
+                                                    "placeholder": "Security Group Name",
+                                                    "constraints": {
+                                                        "required": true,
+                                                        "validations": []
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "id": "objectId",
+                                                "header": "Object ID",
+                                                "width": "1fr",
+                                                "element": {
+                                                    "type": "Microsoft.Common.TextBox",
+                                                    "placeholder": "Security Group Object ID",
+                                                    "constraints": {
+                                                        "required": true,
+                                                        "validations": []
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
                                 }
                             ]
                         }
@@ -736,7 +758,6 @@
                                     "name": "subscription",
                                     "visible": true,
                                     "type": "Microsoft.Common.SubscriptionSelector"
-
                                 },
                                 {
                                     "name": "api",
@@ -1003,7 +1024,7 @@
                                     "options": {}
                                 }
                             ]
-                        } 
+                        }
                     ]
                 },
                 {
@@ -1066,7 +1087,8 @@
                 "LogAnalyticsWorkspaceSku": "PerGB2018",
                 "MaxSessionLimit": "[if(equals(steps('controlPlane').hostPool.type, 'Pooled'), steps('controlPlane').hostPool.maxSessions, 1)]",
                 "Monitoring": "[steps('management').monitoring.enable]",
-                "OuPath": "[if(equals(steps('hosts').identity.solution, 'AzureActiveDirectory'), '', steps('hosts').identity.ouPath)]",                "RecoveryServices": "[steps('management').backup.recoveryServices]",
+                "OuPath": "[if(equals(steps('hosts').identity.solution, 'AzureActiveDirectory'), '', steps('hosts').identity.ouPath)]",
+                "RecoveryServices": "[steps('management').backup.recoveryServices]",
                 "ScalingBeginPeakTime": "[if(steps('management').scaling.enable, steps('management').scaling.beginPeakTime, '9:00')]",
                 "ScalingEndPeakTime": "[if(steps('management').scaling.enable, steps('management').scaling.endPeakTime, '17:00')]",
                 "ScalingLimitSecondsToForceLogOffUser": "[if(steps('management').scaling.enable, steps('management').scaling.forceLogOff, '0')]",
