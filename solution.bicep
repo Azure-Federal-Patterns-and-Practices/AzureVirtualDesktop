@@ -173,14 +173,14 @@ param ScalingSessionThresholdPerCPU string = '1'
 @description('Deploys the required resources for the Scaling Tool. https://docs.microsoft.com/en-us/azure/virtual-desktop/scaling-automation-logic-apps')
 param ScalingTool bool = true
 
+@description('The resource ID of the log analytics workspace used for Azure Sentinel and / or Defender for Cloud. When using the Microsoft Monitoring Agent, this allows you to multihome the agent to reduce unnecessary log collection and reduce cost.')
+param SecurityLogAnalyticsWorkspaceResourceId string = ''
+
 @description('An array of Security Principal object IDs to assign to the AVD Application Group and FSLogix Storage.')
 param SecurityPrincipalObjectIds array = []
 
 @description('An array of Security Principal names to assign NTFS permissions on the Azure File Share to support Fslogix. This is only required for pooled host pools using FSLogix. The names should align to the object IDs provided in the "SecurityPrincipalObjectIds" parameter.')
 param SecurityPrincipalNames array = []
-
-@description('The resource ID of the log analytics workspace used for Azure Sentinel. When using the Microsoft Monitoring Agent, this allows you to multihome the agent for Sentinel and AVD Insights.')
-param SentinelLogAnalyticsWorkspaceResourceId string = ''
 
 @maxValue(5000)
 @minValue(0)
@@ -316,10 +316,10 @@ var RoleDefinitionResourceId = {
 }
 var SecurityPrincipalIdsCount = length(SecurityPrincipalObjectIds)
 var SecurityPrincipalNamesCount = length(SecurityPrincipalNames)
-var Sentinel = empty(SentinelLogAnalyticsWorkspaceResourceId)
-var SentinelLogAnalyticsWorkspaceName = Sentinel ? split(SentinelLogAnalyticsWorkspaceResourceId, '/')[8] : ''
-var SentinelResourceGroup = Sentinel ? split(SentinelLogAnalyticsWorkspaceResourceId, '/')[4] : ''
-var SentinelSubscriptionId = Sentinel ? split(SentinelLogAnalyticsWorkspaceResourceId, '/')[2] : ''
+var SecurityMonitoring = empty(SecurityLogAnalyticsWorkspaceResourceId)
+var SecurityLogAnalyticsWorkspaceName = SecurityMonitoring ? split(SecurityLogAnalyticsWorkspaceResourceId, '/')[8] : ''
+var SecurityResourceGroup = SecurityMonitoring ? split(SecurityLogAnalyticsWorkspaceResourceId, '/')[4] : ''
+var SecuritySubscriptionId = SecurityMonitoring ? split(SecurityLogAnalyticsWorkspaceResourceId, '/')[2] : ''
 var StorageSku = FslogixStorage == 'None' ? 'None' : split(FslogixStorage, ' ')[1]
 var StorageSolution = split(FslogixStorage, ' ')[0]
 var StorageSuffix = environment().suffixes.storage
@@ -581,12 +581,11 @@ module fslogix 'modules/fslogix/fslogix.bicep' = if (Fslogix) {
   ]
 }
 
-module sentinel 'modules/sentinel.bicep' = if (Sentinel) {
-  name: 'Sentinel_${Timestamp}'
-  scope: resourceGroup(SentinelSubscriptionId, SentinelResourceGroup)
+module securityMonitoring 'modules/security.bicep' = if (SecurityMonitoring) {
+  name: 'SecurityMonitoring_${Timestamp}'
+  scope: resourceGroup(SecuritySubscriptionId, SecurityResourceGroup)
   params: {
-    Sentinel: Sentinel
-    SentinelLogAnalyticsWorkspaceName: SentinelLogAnalyticsWorkspaceName
+    SecurityLogAnalyticsWorkspaceName: SecurityLogAnalyticsWorkspaceName    
   }
   dependsOn: [
     resourceGroups
@@ -639,9 +638,9 @@ module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
     ResourceGroupHosts: ResourceGroupHosts
     ResourceGroupManagement: ResourceGroupManagement
     SecurityPrincipalObjectIds: SecurityPrincipalObjectIds
-    Sentinel: Sentinel
-    SentinelWorkspaceId: Sentinel ? sentinel.outputs.sentinelWorkspaceId : 'NotApplicable'
-    SentinelWorkspaceResourceId: Sentinel ? SentinelLogAnalyticsWorkspaceResourceId : 'NotApplicable'
+    SecurityMonitoring: SecurityMonitoring
+    SecurityWorkspaceId: SecurityMonitoring ? securityMonitoring.outputs.LogAnalyticsWorkspaceCustomerId : 'NotApplicable'
+    SecurityWorkspaceResourceId: SecurityMonitoring ? SecurityLogAnalyticsWorkspaceResourceId : 'NotApplicable'
     SessionHostBatchCount: SessionHostBatchCount
     SessionHostIndex: SessionHostIndex
     StorageAccountPrefix: StorageAccountNamePrefix
@@ -672,7 +671,6 @@ module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
     VirtualNetworkResourceGroup: split(SubnetResourceId, '/')[4]
   }
   dependsOn: [
-    diskEncryption
     logAnalyticsWorkspace
     resourceGroups
   ]

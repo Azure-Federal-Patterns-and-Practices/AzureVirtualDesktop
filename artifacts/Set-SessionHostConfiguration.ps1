@@ -54,15 +54,15 @@ Param(
 
     [parameter(Mandatory)]
     [string]
-    $Sentinel,
+    $SecurityMonitoring,
 
     [parameter(Mandatory)]
     [string]
-    $SentinelWorkspaceId,
+    $SecurityWorkspaceId,
 
     [parameter(Mandatory)]
     [string]
-    $SentinelWorkspaceKey,
+    $SecurityWorkspaceKey,
 
     [parameter(Mandatory)]
     [string]

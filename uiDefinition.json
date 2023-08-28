@@ -981,7 +981,15 @@
                                     "name": "enable",
                                     "type": "Microsoft.Common.CheckBox",
                                     "visible": true,
-                                    "label": "Enable Monitoring",
+                                    "label": "Enable Monitoring for AVD Insights",
+                                    "defaultValue": false,
+                                    "toolTip": "Deploy the required resources to enable AVD Insights."
+                                },
+                                {
+                                    "name": "enableSecurity",
+                                    "type": "Microsoft.Common.CheckBox",
+                                    "visible": true,
+                                    "label": "Enable Security Monitoring for AVD Insights",
                                     "defaultValue": false,
                                     "toolTip": "Deploy the required resources to enable AVD Insights."
                                 },
