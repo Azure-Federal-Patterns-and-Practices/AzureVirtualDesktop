@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "14956524087172541351"
+      "templateHash": "2690131784772415755"
     }
   },
   "parameters": {
@@ -5357,16 +5357,15 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
       "name": "[format('SecurityMonitoring_{0}', parameters('Timestamp'))]",
-      "subscriptionId": "[split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[2]]",
-      "resourceGroup": "[split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[4]]",
+      "resourceGroup": "[variables('ResourceGroupManagement')]",
       "properties": {
         "expressionEvaluationOptions": {
           "scope": "inner"
         },
         "mode": "Incremental",
         "parameters": {
-          "SecurityLogAnalyticsWorkspaceName": {
-            "value": "[split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[8]]"
+          "SecurityLogAnalyticsWorkspaceResourceId": {
+            "value": "[parameters('SecurityLogAnalyticsWorkspaceResourceId')]"
           }
         },
         "template": {
@@ -5376,11 +5375,11 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "4966242659137701799"
+              "templateHash": "17287843727632897723"
             }
           },
           "parameters": {
-            "SecurityLogAnalyticsWorkspaceName": {
+            "SecurityLogAnalyticsWorkspaceResourceId": {
               "type": "string"
             }
           },
@@ -5388,7 +5387,7 @@
           "outputs": {
             "LogAnalyticsWorkspaceCustomerId": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', parameters('SecurityLogAnalyticsWorkspaceName')), '2021-06-01').customerId]"
+              "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[2], split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[4]), 'Microsoft.OperationalInsights/workspaces', split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[8]), '2021-06-01').customerId]"
             }
           }
         }
@@ -5527,7 +5526,7 @@
           "SecurityMonitoring": {
             "value": "[variables('SecurityMonitoring')]"
           },
-          "SecurityWorkspaceId": "[if(variables('SecurityMonitoring'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[2], split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[4]), 'Microsoft.Resources/deployments', format('SecurityMonitoring_{0}', parameters('Timestamp'))), '2022-09-01').outputs.LogAnalyticsWorkspaceCustomerId.value), createObject('value', 'NotApplicable'))]",
+          "SecurityWorkspaceId": "[if(variables('SecurityMonitoring'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('SecurityMonitoring_{0}', parameters('Timestamp'))), '2022-09-01').outputs.LogAnalyticsWorkspaceCustomerId.value), createObject('value', 'NotApplicable'))]",
           "SecurityWorkspaceResourceId": "[if(variables('SecurityMonitoring'), createObject('value', parameters('SecurityLogAnalyticsWorkspaceResourceId')), createObject('value', 'NotApplicable'))]",
           "SessionHostBatchCount": {
             "value": "[variables('SessionHostBatchCount')]"
@@ -6675,7 +6674,7 @@
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('FSLogix_{0}', parameters('Timestamp')))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Monitoring_{0}', parameters('Timestamp')))]",
         "resourceGroups",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[2], split(parameters('SecurityLogAnalyticsWorkspaceResourceId'), '/')[4]), 'Microsoft.Resources/deployments', format('SecurityMonitoring_{0}', parameters('Timestamp')))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('SecurityMonitoring_{0}', parameters('Timestamp')))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('UserAssignedIdentity_{0}', parameters('Timestamp')))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Validations_{0}', parameters('Timestamp')))]"
       ]

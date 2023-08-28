@@ -580,9 +580,9 @@ module fslogix 'modules/fslogix/fslogix.bicep' = if (Fslogix) {
 
 module securityMonitoring 'modules/security.bicep' = if (SecurityMonitoring) {
   name: 'SecurityMonitoring_${Timestamp}'
-  scope: resourceGroup(split(SecurityLogAnalyticsWorkspaceResourceId, '/')[2], split(SecurityLogAnalyticsWorkspaceResourceId, '/')[4])
+  scope: resourceGroup(ResourceGroupManagement)
   params: {
-    SecurityLogAnalyticsWorkspaceName: split(SecurityLogAnalyticsWorkspaceResourceId, '/')[8]   
+    SecurityLogAnalyticsWorkspaceResourceId: SecurityLogAnalyticsWorkspaceResourceId
   }
   dependsOn: [
     resourceGroups
