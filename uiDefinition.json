@@ -988,7 +988,7 @@
                                 {
                                     "name": "enableSecurity",
                                     "type": "Microsoft.Common.CheckBox",
-                                    "visible": true,
+                                    "visible": "[steps('management').monitoring.enable]",
                                     "label": "Multi-home for Security Monitoring",
                                     "defaultValue": false,
                                     "toolTip": "Deploy the required configuration to multi-home the Microsoft Monitoring Agent for security monitoring."
