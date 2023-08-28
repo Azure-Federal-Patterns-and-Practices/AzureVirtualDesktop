@@ -989,15 +989,15 @@
                                     "name": "enableSecurity",
                                     "type": "Microsoft.Common.CheckBox",
                                     "visible": true,
-                                    "label": "Enable Security Monitoring for AVD Insights",
+                                    "label": "Multi-home for Security Monitoring",
                                     "defaultValue": false,
-                                    "toolTip": "Deploy the required resources to enable AVD Insights."
+                                    "toolTip": "Deploy the required configuration to multi-home the Microsoft Monitoring Agent for security monitoring."
                                 },
                                 {
                                     "name": "logAnalyticsWorkspace",
                                     "type": "Microsoft.Solutions.ResourceSelector",
                                     "label": "Existing Log Analytics Workspace for Security",
-                                    "visible": "[steps('management').monitoring.enable]",
+                                    "visible": "[steps('management').monitoring.enableSecurity]",
                                     "resourceType": "Microsoft.OperationalInsights/workspaces",
                                     "toolTip": "Select the log analytics workspace used for collecting security data for Sentinel or Defender for Cloud. This is required to multihome the Microsoft Monitoring Agent.",
                                     "options": {}
@@ -1075,7 +1075,7 @@
                 "ScalingTool": "[steps('management').scaling.enable]",
                 "SecurityPrincipalObjectIds": "[map(steps('controlPlane').assignment.groups, (item) => item.id)]",
                 "SecurityPrincipalNames": "[map(steps('controlPlane').assignment.groups, (item) => item.name)]",
-                "SentinelLogAnalyticsWorkspaceResourceId": "[steps('management').monitoring.logAnalyticsWorkspace.id]",
+                "SecurityLogAnalyticsWorkspaceResourceId": "[if(steps('management').monitoring.enableSecurity, steps('management').monitoring.logAnalyticsWorkspace.id, '')]",
                 "SessionHostCount": "[steps('hosts').count]",
                 "SessionHostIndex": 0,
                 "StampIndex": "[steps('basics').naming.stampIndex]",
