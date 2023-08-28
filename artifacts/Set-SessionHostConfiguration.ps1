@@ -6,10 +6,6 @@ Param(
 
     [parameter(Mandatory)]
     [string]
-    $DomainName,
-
-    [parameter(Mandatory)]
-    [string]
     $ActiveDirectorySolution,
 
     [parameter(Mandatory)]
