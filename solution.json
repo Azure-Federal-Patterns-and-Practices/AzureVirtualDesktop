@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "16623540889019293587"
+      "templateHash": "7719210587527199113"
     }
   },
   "parameters": {
@@ -823,7 +823,7 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
-      "name": "[format('ShareServices_{0}', parameters('Timestamp'))]",
+      "name": "[format('Management_{0}', parameters('Timestamp'))]",
       "location": "[deployment().location]",
       "properties": {
         "expressionEvaluationOptions": {
@@ -3958,7 +3958,7 @@
           "Location": {
             "value": "[parameters('ControlPlaneLocation')]"
           },
-          "LogAnalyticsWorkspaceResourceId": "[if(parameters('Monitoring'), createObject('value', reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ShareServices_{0}', parameters('Timestamp'))), '2022-09-01').outputs.LogAnalyticsWorkspaceResourceId.value), createObject('value', ''))]",
+          "LogAnalyticsWorkspaceResourceId": "[if(parameters('Monitoring'), createObject('value', reference(subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp'))), '2022-09-01').outputs.LogAnalyticsWorkspaceResourceId.value), createObject('value', ''))]",
           "MaxSessionLimit": {
             "value": "[parameters('MaxSessionLimit')]"
           },
@@ -4435,7 +4435,7 @@
         }
       },
       "dependsOn": [
-        "[subscriptionResourceId('Microsoft.Resources/deployments', format('ShareServices_{0}', parameters('Timestamp')))]",
+        "[subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp')))]",
         "resourceGroups"
       ]
     },
@@ -4458,7 +4458,7 @@
             "value": "[parameters('_artifactsLocationSasToken')]"
           },
           "ActiveDirectoryConnection": {
-            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ShareServices_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ValidateANFfActiveDirectory.value]"
+            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ValidateANFfActiveDirectory.value]"
           },
           "ActiveDirectorySolution": {
             "value": "[parameters('ActiveDirectorySolution')]"
@@ -4473,10 +4473,10 @@
             "value": "[parameters('AzureFilesPrivateDnsZoneResourceId')]"
           },
           "ClientId": {
-            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ShareServices_{0}', parameters('Timestamp'))), '2022-09-01').outputs.UserAssignedIdentityClientId.value]"
+            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp'))), '2022-09-01').outputs.UserAssignedIdentityClientId.value]"
           },
           "DelegatedSubnetId": {
-            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ShareServices_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ValidateANFSubnetId.value]"
+            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ValidateANFSubnetId.value]"
           },
           "DeploymentScriptNamePrefix": {
             "value": "[variables('DeploymentScriptNamePrefix')]"
@@ -4484,7 +4484,7 @@
           "DiskEncryption": {
             "value": "[parameters('DiskEncryption')]"
           },
-          "DiskEncryptionSetResourceId": "[if(parameters('DiskEncryption'), createObject('value', reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ShareServices_{0}', parameters('Timestamp'))), '2022-09-01').outputs.DiskEncryptionSetResourceId.value), createObject('value', ''))]",
+          "DiskEncryptionSetResourceId": "[if(parameters('DiskEncryption'), createObject('value', reference(subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp'))), '2022-09-01').outputs.DiskEncryptionSetResourceId.value), createObject('value', ''))]",
           "DiskNamePrefix": {
             "value": "[variables('DiskNamePrefix')]"
           },
@@ -4492,7 +4492,7 @@
             "value": "[parameters('DiskSku')]"
           },
           "DnsServers": {
-            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ShareServices_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ValidateANFDnsServers.value]"
+            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ValidateANFDnsServers.value]"
           },
           "DomainJoinPassword": {
             "value": "[parameters('DomainJoinPassword')]"
@@ -4609,10 +4609,10 @@
             "value": "[variables('Locations')[parameters('VirtualMachineLocation')].timeZone]"
           },
           "TrustedLaunch": {
-            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ShareServices_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ValidateTrustedLaunch.value]"
+            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ValidateTrustedLaunch.value]"
           },
           "UserAssignedIdentityResourceId": {
-            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ShareServices_{0}', parameters('Timestamp'))), '2022-09-01').outputs.UserAssignedIdentityResourceId.value]"
+            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp'))), '2022-09-01').outputs.UserAssignedIdentityResourceId.value]"
           },
           "VirtualNetwork": {
             "value": "[split(parameters('SubnetResourceId'), '/')[8]]"
@@ -6836,7 +6836,7 @@
         }
       },
       "dependsOn": [
-        "[subscriptionResourceId('Microsoft.Resources/deployments', format('ShareServices_{0}', parameters('Timestamp')))]"
+        "[subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp')))]"
       ]
     },
     {
@@ -6857,7 +6857,7 @@
             "value": "[parameters('_artifactsLocationSasToken')]"
           },
           "AcceleratedNetworking": {
-            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ShareServices_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ValidateAcceleratedNetworking.value]"
+            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ValidateAcceleratedNetworking.value]"
           },
           "AutomationAccountName": {
             "value": "[variables('AutomationAccountName')]"
@@ -6875,7 +6875,7 @@
             "value": "[variables('BeginAvSetRange')]"
           },
           "AvailabilityZones": {
-            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ShareServices_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ValidateAvailabilityZones.value]"
+            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ValidateAvailabilityZones.value]"
           },
           "DeploymentScriptNamePrefix": {
             "value": "[variables('DeploymentScriptNamePrefix')]"
@@ -6883,7 +6883,7 @@
           "DiskEncryption": {
             "value": "[parameters('DiskEncryption')]"
           },
-          "DiskEncryptionSetResourceId": "[if(parameters('DiskEncryption'), createObject('value', reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ShareServices_{0}', parameters('Timestamp'))), '2022-09-01').outputs.DiskEncryptionSetResourceId.value), createObject('value', ''))]",
+          "DiskEncryptionSetResourceId": "[if(parameters('DiskEncryption'), createObject('value', reference(subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp'))), '2022-09-01').outputs.DiskEncryptionSetResourceId.value), createObject('value', ''))]",
           "DiskNamePrefix": {
             "value": "[variables('DiskNamePrefix')]"
           },
@@ -6939,7 +6939,7 @@
             "value": "[variables('LogAnalyticsWorkspaceName')]"
           },
           "ManagedIdentityResourceId": {
-            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ShareServices_{0}', parameters('Timestamp'))), '2022-09-01').outputs.UserAssignedIdentityResourceId.value]"
+            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp'))), '2022-09-01').outputs.UserAssignedIdentityResourceId.value]"
           },
           "MaxResourcesPerTemplateDeployment": {
             "value": "[variables('MaxResourcesPerTemplateDeployment')]"
@@ -7048,7 +7048,7 @@
             "value": "[variables('Locations')[parameters('VirtualMachineLocation')].timeZone]"
           },
           "TrustedLaunch": {
-            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ShareServices_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ValidateTrustedLaunch.value]"
+            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ValidateTrustedLaunch.value]"
           },
           "VirtualMachineLocation": {
             "value": "[parameters('VirtualMachineLocation')]"
@@ -8561,7 +8561,7 @@
       },
       "dependsOn": [
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, variables('ResourceGroupStorage')), 'Microsoft.Resources/deployments', format('FSLogix_{0}', parameters('Timestamp')))]",
-        "[subscriptionResourceId('Microsoft.Resources/deployments', format('ShareServices_{0}', parameters('Timestamp')))]",
+        "[subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp')))]",
         "resourceGroups"
       ]
     }

@@ -337,7 +337,7 @@ resource resourceGroups 'Microsoft.Resources/resourceGroups@2020-10-01' = [for i
 
 // Management Services: Logging, Automation, Keys, Encryption
 module management 'modules/management.bicep' = {
-  name: 'ShareServices_${Timestamp}'
+  name: 'Management_${Timestamp}'
   params: {
     ActiveDirectorySolution: ActiveDirectorySolution
     AutomationAccountName: AutomationAccountName
