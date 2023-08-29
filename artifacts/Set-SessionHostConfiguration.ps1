@@ -547,9 +547,9 @@ try
 
 
     ##############################################################
-    #  Dual-home Microsoft Monitoring Agent for Azure Sentinel
+    #  Dual-home Microsoft Monitoring Agent for Azure Sentinel or Defender for Cloud
     ##############################################################
-    if($Sentinel -eq 'true')
+    if($SecurityMonitoring -eq 'true')
     {
         $mma = New-Object -ComObject 'AgentConfigManager.MgmtSvcCfg'
         $mma.AddCloudWorkspace($SecurityWorkspaceId, $SecurityWorkspaceKey)
