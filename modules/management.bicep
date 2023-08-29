@@ -176,7 +176,7 @@ module workspace 'workspace.bicep' = {
     Existing: validations.outputs.existingWorkspace == 'true' ? true : false
     FriendlyName: WorkspaceFriendlyName
     Location: VirtualMachineLocation
-    LogAnalyticsWorkspaceResourceId: logAnalyticsWorkspace.outputs.ResourceId
+    LogAnalyticsWorkspaceResourceId: Monitoring ? logAnalyticsWorkspace.outputs.ResourceId : ''
     Monitoring: Monitoring
     Tags: contains(Tags, 'Microsoft.DesktopVirtualization/workspaces') ? Tags['Microsoft.DesktopVirtualization/workspaces'] : {}
     WorkspaceName: WorkspaceName
