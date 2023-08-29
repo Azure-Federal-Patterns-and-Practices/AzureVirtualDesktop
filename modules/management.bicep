@@ -4,6 +4,7 @@ param ActiveDirectorySolution string
 param AutomationAccountName string
 param Availability string
 param AvdObjectId string
+param ControlPlaneLocation string
 param DeploymentScriptNamePrefix string
 param DiskEncryption bool
 param DiskEncryptionSetName string
@@ -175,7 +176,7 @@ module workspace 'workspace.bicep' = {
     ApplicationGroupReferences: []
     Existing: validations.outputs.existingWorkspace == 'true' ? true : false
     FriendlyName: WorkspaceFriendlyName
-    Location: VirtualMachineLocation
+    Location: ControlPlaneLocation
     LogAnalyticsWorkspaceResourceId: Monitoring ? logAnalyticsWorkspace.outputs.ResourceId : ''
     Monitoring: Monitoring
     Tags: contains(Tags, 'Microsoft.DesktopVirtualization/workspaces') ? Tags['Microsoft.DesktopVirtualization/workspaces'] : {}

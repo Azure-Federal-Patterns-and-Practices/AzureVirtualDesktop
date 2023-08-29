@@ -105,9 +105,6 @@ module existingWorkspace 'workspace.bicep' = {
     Existing: true
     FriendlyName: WorkspaceFriendlyName
     Location: Location
-    LogAnalyticsWorkspaceResourceId: ''
-    Monitoring: false
-    Tags: {}
     WorkspaceName: WorkspaceName
   }
 }
@@ -120,8 +117,6 @@ module updateWorkspace 'workspace.bicep' = {
     Existing: false
     FriendlyName: WorkspaceFriendlyName
     Location: Location
-    LogAnalyticsWorkspaceResourceId: ''
-    Monitoring: false
     Tags: existingWorkspace.outputs.tags
     WorkspaceName: WorkspaceName
   }

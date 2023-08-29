@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "11499866915398111499"
+      "templateHash": "8572883177650784378"
     }
   },
   "parameters": {
@@ -843,6 +843,9 @@
           "AvdObjectId": {
             "value": "[parameters('AvdObjectId')]"
           },
+          "ControlPlaneLocation": {
+            "value": "[parameters('ControlPlaneLocation')]"
+          },
           "DeploymentScriptNamePrefix": {
             "value": "[variables('DeploymentScriptNamePrefix')]"
           },
@@ -962,7 +965,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "7754018085326892084"
+              "templateHash": "14564000712359477974"
             }
           },
           "parameters": {
@@ -976,6 +979,9 @@
               "type": "string"
             },
             "AvdObjectId": {
+              "type": "string"
+            },
+            "ControlPlaneLocation": {
               "type": "string"
             },
             "DeploymentScriptNamePrefix": {
@@ -3763,7 +3769,7 @@
                     "value": "[parameters('WorkspaceFriendlyName')]"
                   },
                   "Location": {
-                    "value": "[parameters('VirtualMachineLocation')]"
+                    "value": "[parameters('ControlPlaneLocation')]"
                   },
                   "LogAnalyticsWorkspaceResourceId": "[if(parameters('Monitoring'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Monitoring_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ResourceId.value), createObject('value', ''))]",
                   "Monitoring": {
@@ -3781,7 +3787,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "12593685493762854017"
+                      "templateHash": "9749000303793370180"
                     }
                   },
                   "parameters": {
@@ -3798,13 +3804,16 @@
                       "type": "string"
                     },
                     "LogAnalyticsWorkspaceResourceId": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "Monitoring": {
-                      "type": "bool"
+                      "type": "bool",
+                      "defaultValue": false
                     },
                     "Tags": {
-                      "type": "object"
+                      "type": "object",
+                      "defaultValue": {}
                     },
                     "WorkspaceName": {
                       "type": "string"
@@ -3998,7 +4007,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "5725110492175614770"
+              "templateHash": "1564871906523501908"
             }
           },
           "parameters": {
@@ -4182,15 +4191,6 @@
                   "Location": {
                     "value": "[parameters('Location')]"
                   },
-                  "LogAnalyticsWorkspaceResourceId": {
-                    "value": ""
-                  },
-                  "Monitoring": {
-                    "value": false
-                  },
-                  "Tags": {
-                    "value": {}
-                  },
                   "WorkspaceName": {
                     "value": "[parameters('WorkspaceName')]"
                   }
@@ -4202,7 +4202,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "12593685493762854017"
+                      "templateHash": "9749000303793370180"
                     }
                   },
                   "parameters": {
@@ -4219,13 +4219,16 @@
                       "type": "string"
                     },
                     "LogAnalyticsWorkspaceResourceId": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "Monitoring": {
-                      "type": "bool"
+                      "type": "bool",
+                      "defaultValue": false
                     },
                     "Tags": {
-                      "type": "object"
+                      "type": "object",
+                      "defaultValue": {}
                     },
                     "WorkspaceName": {
                       "type": "string"
@@ -4318,12 +4321,6 @@
                   "Location": {
                     "value": "[parameters('Location')]"
                   },
-                  "LogAnalyticsWorkspaceResourceId": {
-                    "value": ""
-                  },
-                  "Monitoring": {
-                    "value": false
-                  },
                   "Tags": {
                     "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Workspace_Existing_{0}', parameters('Timestamp'))), '2022-09-01').outputs.tags.value]"
                   },
@@ -4338,7 +4335,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "12593685493762854017"
+                      "templateHash": "9749000303793370180"
                     }
                   },
                   "parameters": {
@@ -4355,13 +4352,16 @@
                       "type": "string"
                     },
                     "LogAnalyticsWorkspaceResourceId": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     },
                     "Monitoring": {
-                      "type": "bool"
+                      "type": "bool",
+                      "defaultValue": false
                     },
                     "Tags": {
-                      "type": "object"
+                      "type": "object",
+                      "defaultValue": {}
                     },
                     "WorkspaceName": {
                       "type": "string"

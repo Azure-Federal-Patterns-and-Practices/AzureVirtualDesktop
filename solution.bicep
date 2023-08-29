@@ -343,6 +343,7 @@ module management 'modules/management.bicep' = {
     AutomationAccountName: AutomationAccountName
     Availability: Availability
     AvdObjectId: AvdObjectId
+    ControlPlaneLocation: ControlPlaneLocation
     DeploymentScriptNamePrefix: DeploymentScriptNamePrefix
     DiskEncryption: DiskEncryption
     DiskEncryptionSetName: DiskEncryptionSetName

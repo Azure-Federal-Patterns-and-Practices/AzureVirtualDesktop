@@ -2,9 +2,9 @@ param ApplicationGroupReferences array
 param Existing bool
 param FriendlyName string
 param Location string
-param LogAnalyticsWorkspaceResourceId string
-param Monitoring bool
-param Tags object
+param LogAnalyticsWorkspaceResourceId string = ''
+param Monitoring bool = false
+param Tags object = {}
 param WorkspaceName string
 
 resource existingWorkspace 'Microsoft.DesktopVirtualization/workspaces@2021-03-09-preview' = if (Existing) {
