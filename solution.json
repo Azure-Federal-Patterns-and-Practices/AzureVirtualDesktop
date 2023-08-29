@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "8572883177650784378"
+      "templateHash": "1202729232475197794"
     }
   },
   "parameters": {
@@ -965,7 +965,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "14564000712359477974"
+              "templateHash": "11016364567122448743"
             }
           },
           "parameters": {
@@ -3787,7 +3787,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "9749000303793370180"
+                      "templateHash": "17682831320324994139"
                     }
                   },
                   "parameters": {
@@ -3820,12 +3820,6 @@
                     }
                   },
                   "resources": [
-                    {
-                      "condition": "[parameters('Existing')]",
-                      "type": "Microsoft.DesktopVirtualization/workspaces",
-                      "apiVersion": "2021-03-09-preview",
-                      "name": "[parameters('WorkspaceName')]"
-                    },
                     {
                       "condition": "[not(parameters('Existing'))]",
                       "type": "Microsoft.DesktopVirtualization/workspaces",
@@ -3865,7 +3859,6 @@
                         "workspaceId": "[parameters('LogAnalyticsWorkspaceResourceId')]"
                       },
                       "dependsOn": [
-                        "[resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName'))]",
                         "[resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName'))]"
                       ]
                     }
@@ -4007,7 +4000,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "1564871906523501908"
+              "templateHash": "15169779418141752579"
             }
           },
           "parameters": {
@@ -4202,7 +4195,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "9749000303793370180"
+                      "templateHash": "17682831320324994139"
                     }
                   },
                   "parameters": {
@@ -4235,12 +4228,6 @@
                     }
                   },
                   "resources": [
-                    {
-                      "condition": "[parameters('Existing')]",
-                      "type": "Microsoft.DesktopVirtualization/workspaces",
-                      "apiVersion": "2021-03-09-preview",
-                      "name": "[parameters('WorkspaceName')]"
-                    },
                     {
                       "condition": "[not(parameters('Existing'))]",
                       "type": "Microsoft.DesktopVirtualization/workspaces",
@@ -4280,7 +4267,6 @@
                         "workspaceId": "[parameters('LogAnalyticsWorkspaceResourceId')]"
                       },
                       "dependsOn": [
-                        "[resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName'))]",
                         "[resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName'))]"
                       ]
                     }
@@ -4335,7 +4321,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "9749000303793370180"
+                      "templateHash": "17682831320324994139"
                     }
                   },
                   "parameters": {
@@ -4368,12 +4354,6 @@
                     }
                   },
                   "resources": [
-                    {
-                      "condition": "[parameters('Existing')]",
-                      "type": "Microsoft.DesktopVirtualization/workspaces",
-                      "apiVersion": "2021-03-09-preview",
-                      "name": "[parameters('WorkspaceName')]"
-                    },
                     {
                       "condition": "[not(parameters('Existing'))]",
                       "type": "Microsoft.DesktopVirtualization/workspaces",
@@ -4413,7 +4393,6 @@
                         "workspaceId": "[parameters('LogAnalyticsWorkspaceResourceId')]"
                       },
                       "dependsOn": [
-                        "[resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName'))]",
                         "[resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName'))]"
                       ]
                     }

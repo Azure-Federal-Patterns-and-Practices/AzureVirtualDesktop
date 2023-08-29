@@ -7,7 +7,7 @@ param Monitoring bool = false
 param Tags object = {}
 param WorkspaceName string
 
-resource existingWorkspace 'Microsoft.DesktopVirtualization/workspaces@2021-03-09-preview' = if (Existing) {
+resource existingWorkspace 'Microsoft.DesktopVirtualization/workspaces@2021-03-09-preview' existing = if (Existing) {
   name: WorkspaceName
 }
 
