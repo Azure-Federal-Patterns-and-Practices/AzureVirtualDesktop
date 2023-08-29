@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "7719210587527199113"
+      "templateHash": "3056711536609246206"
     }
   },
   "parameters": {
@@ -962,7 +962,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "12389261997263950050"
+              "templateHash": "4559730485533333819"
             }
           },
           "parameters": {
@@ -3884,11 +3884,11 @@
           "outputs": {
             "DiskEncryptionSetResourceId": {
               "type": "string",
-              "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('DiskEncryption_{0}', parameters('Timestamp'))), '2022-09-01').outputs.diskEncryptionSetResourceId.value]"
+              "value": "[if(parameters('DiskEncryption'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('DiskEncryption_{0}', parameters('Timestamp'))), '2022-09-01').outputs.diskEncryptionSetResourceId.value, '')]"
             },
             "LogAnalyticsWorkspaceResourceId": {
               "type": "string",
-              "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Monitoring_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ResourceId.value]"
+              "value": "[if(parameters('Monitoring'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Monitoring_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ResourceId.value, '')]"
             },
             "UserAssignedIdentityClientId": {
               "type": "string",

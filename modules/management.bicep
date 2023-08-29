@@ -183,8 +183,8 @@ module workspace 'workspace.bicep' = {
   }
 }
 
-output DiskEncryptionSetResourceId string = diskEncryption.outputs.diskEncryptionSetResourceId
-output LogAnalyticsWorkspaceResourceId string = logAnalyticsWorkspace.outputs.ResourceId
+output DiskEncryptionSetResourceId string = DiskEncryption ? diskEncryption.outputs.diskEncryptionSetResourceId : ''
+output LogAnalyticsWorkspaceResourceId string = Monitoring ? logAnalyticsWorkspace.outputs.ResourceId : ''
 output UserAssignedIdentityClientId string = userAssignedIdentity.outputs.clientId
 output UserAssignedIdentityResourceId string = userAssignedIdentity.outputs.id
 output ValidateAcceleratedNetworking string = validations.outputs.acceleratedNetworking
