@@ -409,6 +409,7 @@ module controlPlane 'modules/controlPlane.bicep' = {
     TagsHostPool: union({
       'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
     }, contains(Tags, 'Microsoft.DesktopVirtualization/hostPools') ? Tags['Microsoft.DesktopVirtualization/hostPools'] : {})
+    Timestamp: Timestamp
     ValidationEnvironment: ValidationEnvironment
     VmTemplate: VmTemplate
     WorkspaceFriendlyName: WorkspaceFriendlyName

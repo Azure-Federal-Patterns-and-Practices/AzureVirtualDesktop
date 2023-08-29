@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "134433265295190813"
+      "templateHash": "3767351925255343810"
     }
   },
   "parameters": {
@@ -3975,6 +3975,9 @@
           "TagsHostPool": {
             "value": "[union(createObject('cm-resource-parent', format('{0}}}/resourceGroups/{1}/providers/Microsoft.DesktopVirtualization/hostpools/{2}', subscription().id, variables('ResourceGroupManagement'), variables('HostPoolName'))), if(contains(parameters('Tags'), 'Microsoft.DesktopVirtualization/hostPools'), parameters('Tags')['Microsoft.DesktopVirtualization/hostPools'], createObject()))]"
           },
+          "Timestamp": {
+            "value": "[parameters('Timestamp')]"
+          },
           "ValidationEnvironment": {
             "value": "[parameters('ValidationEnvironment')]"
           },
@@ -3995,7 +3998,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "2287933567301310448"
+              "templateHash": "5725110492175614770"
             }
           },
           "parameters": {
@@ -4038,9 +4041,12 @@
             "TagsHostPool": {
               "type": "object"
             },
-            "Timestamp": {
+            "Time": {
               "type": "string",
               "defaultValue": "[utcNow('u')]"
+            },
+            "Timestamp": {
+              "type": "string"
             },
             "ValidationEnvironment": {
               "type": "bool"
@@ -4098,7 +4104,7 @@
                 "loadBalancerType": "[if(contains(parameters('HostPoolType'), 'Pooled'), split(parameters('HostPoolType'), ' ')[1], 'Persistent')]",
                 "validationEnvironment": "[parameters('ValidationEnvironment')]",
                 "registrationInfo": {
-                  "expirationTime": "[dateTimeAdd(parameters('Timestamp'), 'PT2H')]",
+                  "expirationTime": "[dateTimeAdd(parameters('Time'), 'PT2H')]",
                   "registrationTokenOperation": "Update"
                 },
                 "preferredAppGroupType": "Desktop",

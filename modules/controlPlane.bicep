@@ -11,7 +11,8 @@ param ResourceGroupManagement string
 param SecurityPrincipalIds array
 param TagsApplicationGroup object
 param TagsHostPool object
-param Timestamp string = utcNow('u')
+param Time string = utcNow('u')
+param Timestamp string
 param ValidationEnvironment bool
 param VmTemplate string
 param WorkspaceFriendlyName string
@@ -56,7 +57,7 @@ resource hostPool 'Microsoft.DesktopVirtualization/hostPools@2021-03-09-preview'
     loadBalancerType: contains(HostPoolType, 'Pooled') ? split(HostPoolType, ' ')[1] : 'Persistent'
     validationEnvironment: ValidationEnvironment
     registrationInfo: {
-      expirationTime: dateTimeAdd(Timestamp, 'PT2H')
+      expirationTime: dateTimeAdd(Time, 'PT2H')
       registrationTokenOperation: 'Update'
     }
     preferredAppGroupType: 'Desktop'
