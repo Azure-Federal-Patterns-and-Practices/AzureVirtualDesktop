@@ -3,6 +3,7 @@ param _artifactsLocation string
 param _artifactsLocationSasToken string
 param ActiveDirectoryConnection string
 param ActiveDirectorySolution string
+param AutomationAccountName string
 param Availability string
 param AzureFilesPrivateDnsZoneResourceId string
 param ClientId string
@@ -29,6 +30,8 @@ param Netbios string
 param NetworkInterfaceNamePrefix string
 param OuPath string
 param PrivateEndpoint bool
+param RecoveryServices bool
+param RecoveryServicesVaultName string
 param ResourceGroupManagement string
 param ResourceGroupStorage string
 param SecurityPrincipalIds array
@@ -40,13 +43,16 @@ param StorageIndex int
 param StorageSku string
 param StorageSolution string
 param Subnet string
+param TagsAutomationAccounts object
 param TagsDeploymentScripts object
 param TagsNetAppAccount object
 param TagsNetworkInterfaces object
 param TagsPrivateEndpoints object
+param TagsRecoveryServicesVault object
 param TagsStorageAccounts object
 param TagsVirtualMachines object
 param Timestamp string
+param TimeZone string
 param TrustedLaunch string
 param UserAssignedIdentityResourceId string
 param VirtualNetwork string
@@ -127,6 +133,7 @@ module azureFiles 'azureFiles/azureFiles.bicep' = if (StorageSolution == 'AzureS
     _artifactsLocation: _artifactsLocation
     _artifactsLocationSasToken: _artifactsLocationSasToken
     ActiveDirectorySolution: ActiveDirectorySolution
+    AutomationAccountName: AutomationAccountName
     Availability: Availability
     AzureFilesPrivateDnsZoneResourceId: AzureFilesPrivateDnsZoneResourceId
     ClientId: ClientId
@@ -143,6 +150,8 @@ module azureFiles 'azureFiles/azureFiles.bicep' = if (StorageSolution == 'AzureS
     Netbios: Netbios
     OuPath: OuPath
     PrivateEndpoint: PrivateEndpoint
+    RecoveryServices: RecoveryServices
+    RecoveryServicesVaultName: RecoveryServicesVaultName
     ResourceGroupManagement: ResourceGroupManagement
     ResourceGroupStorage: ResourceGroupStorage
     SecurityPrincipalIds: SecurityPrincipalIds
@@ -153,11 +162,14 @@ module azureFiles 'azureFiles/azureFiles.bicep' = if (StorageSolution == 'AzureS
     StorageSku: StorageSku
     StorageSolution: StorageSolution
     Subnet: Subnet
+    TagsAutomationAccounts: TagsAutomationAccounts
     TagsDeploymentScripts: TagsDeploymentScripts
     TagsPrivateEndpoints: TagsPrivateEndpoints
+    TagsRecoveryServicesVault: TagsRecoveryServicesVault
     TagsStorageAccounts: TagsStorageAccounts
     TagsVirtualMachines: TagsVirtualMachines
     Timestamp: Timestamp
+    TimeZone: TimeZone
     UserAssignedIdentityResourceId: UserAssignedIdentityResourceId
     VirtualNetwork: VirtualNetwork
     VirtualNetworkResourceGroup: VirtualNetworkResourceGroup

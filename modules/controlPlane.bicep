@@ -7,13 +7,14 @@ param Location string
 param LogAnalyticsWorkspaceResourceId string
 param MaxSessionLimit int
 param Monitoring bool
+param ResourceGroupManagement string
 param SecurityPrincipalIds array
 param TagsApplicationGroup object
 param TagsHostPool object
-param TagsWorkspace object
 param Timestamp string = utcNow('u')
 param ValidationEnvironment bool
 param VmTemplate string
+param WorkspaceFriendlyName string
 param WorkspaceName string
 
 var CustomRdpProperty_Complete = ActiveDirectorySolution == 'AzureActiveDirectory' || ActiveDirectorySolution == 'AzureActiveDirectoryIntuneEnrollment' ? '${CustomRdpProperty}targetisaadjoined:i:1' : CustomRdpProperty
@@ -95,39 +96,32 @@ resource appGroupAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01'
   }
 }]
 
-resource workspace 'Microsoft.DesktopVirtualization/workspaces@2021-03-09-preview' = {
-  name: WorkspaceName
-  location: Location
-  tags: TagsWorkspace
-  properties: {
-    applicationGroupReferences: [
-      appGroup.id
-    ]
+module existingWorkspace 'workspace.bicep' = {
+  name: 'Workspace_Existing_${Timestamp}'
+  scope: resourceGroup(ResourceGroupManagement)
+  params: {
+    ApplicationGroupReferences: []
+    Existing: true
+    FriendlyName: WorkspaceFriendlyName
+    Location: Location
+    LogAnalyticsWorkspaceResourceId: ''
+    Monitoring: false
+    Tags: {}
+    WorkspaceName: WorkspaceName
   }
 }
 
-resource workspaceDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = if (Monitoring) {
-  name: 'diag-${WorkspaceName}'
-  scope: workspace
-  properties: {
-    logs: [
-      {
-        category: 'Checkpoint'
-        enabled: true
-      }
-      {
-        category: 'Error'
-        enabled: true
-      }
-      {
-        category: 'Management'
-        enabled: true
-      }
-      {
-        category: 'Feed'
-        enabled: true
-      }
-    ]
-    workspaceId: LogAnalyticsWorkspaceResourceId
+module updateWorkspace 'workspace.bicep' = {
+  name: 'Workspace_Update_${Timestamp}'
+  scope: resourceGroup(ResourceGroupManagement)
+  params: {
+    ApplicationGroupReferences: union(existingWorkspace.outputs.applicationGroupReferences, [appGroup.id])
+    Existing: false
+    FriendlyName: WorkspaceFriendlyName
+    Location: Location
+    LogAnalyticsWorkspaceResourceId: ''
+    Monitoring: false
+    Tags: existingWorkspace.outputs.tags
+    WorkspaceName: WorkspaceName
   }
 }

@@ -3,6 +3,7 @@ param _artifactsLocation string
 param _artifactsLocationSasToken string
 param AcceleratedNetworking string
 param ActiveDirectorySolution string
+param AutomationAccountName string
 param Availability string
 param AvailabilitySetNamePrefix string
 param AvailabilitySetsCount int
@@ -36,9 +37,17 @@ param NetAppFileShares array
 param NetworkInterfaceNamePrefix string
 param OuPath string
 param PooledHostPool bool
+param RecoveryServices bool
+param RecoveryServicesVaultName string
 param ResourceGroupControlPlane string
 param ResourceGroupHosts string
 param ResourceGroupManagement string
+param ScalingBeginPeakTime string
+param ScalingEndPeakTime string
+param ScalingLimitSecondsToForceLogOffUser string
+param ScalingMinimumNumberOfRdsh string
+param ScalingSessionThresholdPerCPU string
+param ScalingTool bool
 param SecurityPrincipalObjectIds array
 param SecurityLogAnalyticsWorkspaceResourceId string
 param SessionHostBatchCount int
@@ -49,12 +58,17 @@ param StorageIndex int
 param StorageSolution string
 param StorageSuffix string
 param Subnet string
+param TagsAutomationAccounts object
 param TagsAvailabilitySets object
 param TagsDeploymentScripts object
 param TagsNetworkInterfaces object
+param TagsRecoveryServicesVault object
 param TagsVirtualMachines object
+param TimeDifference string
 param Timestamp string
+param TimeZone string
 param TrustedLaunch string
+param VirtualMachineLocation string
 param VirtualMachineNamePrefix string
 @secure()
 param VirtualMachinePassword string
@@ -153,3 +167,57 @@ module virtualMachines 'virtualMachines.bicep' = [for i in range(1, SessionHostB
     availabilitySets
   ]
 }]
+
+resource vault 'Microsoft.RecoveryServices/vaults@2022-03-01' existing = if (RecoveryServices) {
+  name: RecoveryServicesVaultName
+  scope: resourceGroup(ResourceGroupManagement)
+}
+
+resource backupPolicy_Vm 'Microsoft.RecoveryServices/vaults/backupPolicies@2022-03-01' existing = if (RecoveryServices) {
+  parent: vault
+  name: 'AvdPolicyVm'
+}
+
+module protectedItems_Vm '../protectedItems/virtualMachines.bicep' = [for i in range(1, SessionHostBatchCount): if (RecoveryServices && !Fslogix) {
+  name: 'BackupProtectedItems_VirtualMachines_${i - 1}_${Timestamp}'
+  scope: resourceGroup(resourceGroup().name) // Management Resource Group
+  params: {
+    Location: Location
+    PolicyId: backupPolicy_Vm.id
+    RecoveryServicesVaultName: vault.name
+    SessionHostCount: i == SessionHostBatchCount && DivisionRemainderValue > 0 ? DivisionRemainderValue : MaxResourcesPerTemplateDeployment
+    SessionHostIndex: i == 1 ? SessionHostIndex : ((i - 1) * MaxResourcesPerTemplateDeployment) + SessionHostIndex
+    Tags: TagsRecoveryServicesVault
+    VirtualMachineNamePrefix: VirtualMachineNamePrefix
+    VirtualMachineResourceGroupName: ResourceGroupHosts
+  }
+  dependsOn: [
+    virtualMachines
+  ]
+}]
+
+module scalingTool '../scalingTool.bicep' = if (ScalingTool && PooledHostPool) {
+  name: 'ScalingTool_${Timestamp}'
+  scope: resourceGroup(ResourceGroupManagement)
+  params: {
+    _artifactsLocation: _artifactsLocation
+    _artifactsLocationSasToken: _artifactsLocationSasToken
+    AutomationAccountName: AutomationAccountName
+    BeginPeakTime: ScalingBeginPeakTime
+    EndPeakTime: ScalingEndPeakTime
+    HostPoolName: HostPoolName
+    HostPoolResourceGroupName: ResourceGroupManagement
+    LimitSecondsToForceLogOffUser: ScalingLimitSecondsToForceLogOffUser
+    Location: VirtualMachineLocation
+    MinimumNumberOfRdsh: ScalingMinimumNumberOfRdsh
+    ResourceGroupHosts: ResourceGroupHosts
+    ResourceGroupManagement: ResourceGroupManagement
+    SessionThresholdPerCPU: ScalingSessionThresholdPerCPU
+    Tags: TagsAutomationAccounts
+    TimeDifference: TimeDifference
+    TimeZone: TimeZone
+  }
+  dependsOn: [
+    protectedItems_Vm
+  ]
+}

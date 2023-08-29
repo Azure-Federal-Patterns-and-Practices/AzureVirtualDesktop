@@ -19,6 +19,7 @@ param UserAssignedIdentityResourceId string
 param VirtualMachineSize string
 param VnetName string
 param VnetResourceGroupName string
+param WorkspaceName string
 
 var CpuCountMax = contains(HostPoolType, 'Pooled') ? 32 : 128
 var CpuCountMin = contains(HostPoolType, 'Pooled') ? 4 : 2
@@ -159,9 +160,23 @@ module cpuQuota 'deploymentScript.bicep' = {
   }
 }
 
+module workspace 'deploymentScript.bicep' = {
+  name: 'DeploymentScript_Workspace_${Timestamp}'
+  params: {
+    Arguments: '-ResourceGroupName ${resourceGroup().name} -ResourceName ${WorkspaceName}'
+    Location: Location
+    Name: '${DeploymentScriptNamePrefix}existingWorkspace'
+    Script: 'param([string]$ResourceGroupName,[string]$ResourceName); $ErrorActionPreference = "Stop"; $Value = Get-AzResource -ResourceGroupName $ResourceGroupName -ResourceName $ResourceName; $Output = if($Value){"true"}else{"false"}; $DeploymentScriptOutputs = @{}; $DeploymentScriptOutputs["existing"] = $Output'
+    Tags: Tags
+    Timestamp: Timestamp
+    UserAssignedIdentityResourceId: UserAssignedIdentityResourceId
+  }
+}
+
 output acceleratedNetworking string = acceleratedNetworking.outputs.properties.enabled
 output anfActiveDirectory string = azureNetAppFiles.outputs.properties.anfActiveDirectory
 output anfDnsServers string = azureNetAppFiles.outputs.properties.anfDnsServers
 output anfSubnetId string = azureNetAppFiles.outputs.properties.anfSubnetId
 output availabilityZones array = Availability == 'AvailabilityZones' ? json(availabilityZones.outputs.properties.zones) : [ '1' ]
+output existingWorkspace string = workspace.outputs.properties.existing
 output trustedLaunch string = trustedLaunch.outputs.properties.enabled

@@ -868,6 +868,19 @@
                     "visible": true,
                     "elements": [
                         {
+                            "name": "workspaceFriendlyName",
+                            "type": "Microsoft.Common.TextBox",
+                            "label": "AVD Workspace Friendly Name",
+                            "defaultValue": "",
+                            "toolTip": "Input the friendly name for the AVD workspace that will be displayed in the end user's client.",
+                            "constraints": {
+                                "required": true,
+                                "regex": "^.{1,64}$",
+                                "validationMessage": "The value must be between 1 and 64 characters in length."
+                            },
+                            "visible": true
+                        },
+                        {
                             "name": "scaling",
                             "type": "Microsoft.Common.Section",
                             "label": "Scaling",
@@ -1109,7 +1122,8 @@
                 "VirtualMachineLocation": "[steps('hosts').location.name]",
                 "VirtualMachinePassword": "[steps('hosts').localAdminCredentials.password]",
                 "VirtualMachineSize": "[steps('hosts').size]",
-                "VirtualMachineUsername": "[steps('hosts').localAdminCredentials.username]"
+                "VirtualMachineUsername": "[steps('hosts').localAdminCredentials.username]",
+                "WorkspaceFriendlyName": "[steps('management').workspaceFriendlyName]"
             },
             "kind": "Subscription",
             "location": "[steps('basics').scope.location.name]",

@@ -1,6 +1,7 @@
 param _artifactsLocation string
 @secure()
 param _artifactsLocationSasToken string
+param AutomationAccountName string
 param Availability string
 param AzureFilesPrivateDnsZoneResourceId string
 param ClientId string
@@ -19,6 +20,8 @@ param ManagementVmName string
 param Netbios string
 param OuPath string
 param PrivateEndpoint bool
+param RecoveryServices bool
+param RecoveryServicesVaultName string
 param ResourceGroupManagement string
 param ResourceGroupStorage string
 param SecurityPrincipalIds array
@@ -29,11 +32,14 @@ param StorageIndex int
 param StorageSku string
 param StorageSolution string
 param Subnet string
+param TagsAutomationAccounts object
 param TagsDeploymentScripts object
 param TagsPrivateEndpoints object
+param TagsRecoveryServicesVault object
 param TagsStorageAccounts object
 param TagsVirtualMachines object
 param Timestamp string
+param TimeZone string
 param UserAssignedIdentityResourceId string
 param VirtualNetwork string
 param VirtualNetworkResourceGroup string
@@ -194,4 +200,53 @@ module ntfsPermissions '../ntfsPermissions.bicep' = if (contains(ActiveDirectory
     privateEndpoints
     shares
   ]
+}
+
+resource vault 'Microsoft.RecoveryServices/vaults@2022-03-01' existing = if (RecoveryServices) {
+  name: RecoveryServicesVaultName
+  scope: resourceGroup(ResourceGroupManagement)
+}
+
+resource protectionContainers 'Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers@2022-03-01' = [for i in range(0, StorageCount): if (RecoveryServices) {
+  name: '${vault.name}/Azure/storagecontainer;Storage;${ResourceGroupStorage};${StorageAccountNamePrefix}${padLeft(i + StorageIndex, 2, '0')}'
+  properties: {
+    backupManagementType: 'AzureStorage'
+    containerType: 'StorageContainer'
+    sourceResourceId: storageAccounts[i].id
+  }
+}]
+
+resource backupPolicy_Storage 'Microsoft.RecoveryServices/vaults/backupPolicies@2022-03-01' existing = if (RecoveryServices) {
+  parent: vault
+  name: 'AvdPolicyStorage'
+}
+
+module protectedItems_FileShares '../../protectedItems/fileShares.bicep' = [for i in range(0, StorageCount): if (RecoveryServices) {
+  name: 'BackupProtectedItems_FileShares_${i + StorageIndex}_${Timestamp}'
+  params: {
+    FileShares: FileShares
+    Location: Location
+    ProtectionContainerName: protectionContainers[i].name
+    PolicyId: backupPolicy_Storage.id
+    SourceResourceId: storageAccounts[i].id
+    Tags: TagsRecoveryServicesVault
+  }
+}]
+
+module autoIncreasePremiumFileShareQuota '../../autoIncreasePremiumFileShareQuota.bicep' = if (contains(FslogixStorage, 'AzureStorageAccount Premium') && StorageCount > 0) {
+  name: 'AutoIncreasePremiumFileShareQuota_${Timestamp}'
+  scope: resourceGroup(ResourceGroupManagement)
+  params: {
+    _artifactsLocation: _artifactsLocation
+    _artifactsLocationSasToken: _artifactsLocationSasToken
+    AutomationAccountName: AutomationAccountName
+    Location: Location
+    StorageAccountNamePrefix: StorageAccountNamePrefix
+    StorageCount: StorageCount
+    StorageIndex: StorageIndex
+    StorageResourceGroupName: ResourceGroupStorage
+    Tags: TagsAutomationAccounts
+    Timestamp: Timestamp
+    TimeZone: TimeZone
+  }
 }
