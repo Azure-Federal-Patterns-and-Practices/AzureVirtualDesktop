@@ -363,6 +363,7 @@ module management 'modules/management.bicep' = {
     LogAnalyticsWorkspaceSku: LogAnalyticsWorkspaceSku
     Monitoring: Monitoring
     PooledHostPool: PooledHostPool
+    RecoveryServices: RecoveryServices
     RecoveryServicesVaultName: RecoveryServicesVaultName
     ResourceGroupManagement: ResourceGroupManagement
     ResourceGroupStorage: ResourceGroupStorage

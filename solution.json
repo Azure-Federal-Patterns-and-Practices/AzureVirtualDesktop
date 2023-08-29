@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "1202729232475197794"
+      "templateHash": "9383448768539534187"
     }
   },
   "parameters": {
@@ -903,6 +903,9 @@
           "PooledHostPool": {
             "value": "[variables('PooledHostPool')]"
           },
+          "RecoveryServices": {
+            "value": "[parameters('RecoveryServices')]"
+          },
           "RecoveryServicesVaultName": {
             "value": "[variables('RecoveryServicesVaultName')]"
           },
@@ -965,7 +968,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "11016364567122448743"
+              "templateHash": "9277027041207717631"
             }
           },
           "parameters": {
@@ -1039,6 +1042,9 @@
               "type": "bool"
             },
             "PooledHostPool": {
+              "type": "bool"
+            },
+            "RecoveryServices": {
               "type": "bool"
             },
             "RecoveryServicesVaultName": {
@@ -3619,6 +3625,7 @@
               ]
             },
             {
+              "condition": "[parameters('RecoveryServices')]",
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2022-09-01",
               "name": "[format('RecoveryServicesVault_{0}', parameters('Timestamp'))]",

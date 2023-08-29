@@ -24,6 +24,7 @@ param LogAnalyticsWorkspaceRetention int
 param LogAnalyticsWorkspaceSku string
 param Monitoring bool
 param PooledHostPool bool
+param RecoveryServices bool
 param RecoveryServicesVaultName string
 param ResourceGroupManagement string
 param ResourceGroupStorage string
@@ -156,7 +157,7 @@ module diskEncryption 'diskEncryption.bicep' = if (DiskEncryption) {
   }
 }
 
-module recoveryServicesVault 'recoveryServicesVault.bicep' = {
+module recoveryServicesVault 'recoveryServicesVault.bicep' = if (RecoveryServices) {
   name: 'RecoveryServicesVault_${Timestamp}'
   scope: resourceGroup(ResourceGroupManagement)
   params: {
