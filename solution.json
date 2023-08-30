@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "6589836532925966324"
+      "templateHash": "5185147770019469819"
     }
   },
   "parameters": {
@@ -5274,7 +5274,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "2671700837472963336"
+              "templateHash": "13111711374451884841"
             }
           },
           "parameters": {
@@ -6368,7 +6368,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "15969336275971246089"
+                      "templateHash": "11803900623644243682"
                     }
                   },
                   "parameters": {
@@ -6666,24 +6666,6 @@
                     },
                     {
                       "copy": {
-                        "name": "protectionContainers",
-                        "count": "[length(range(0, parameters('StorageCount')))]"
-                      },
-                      "condition": "[parameters('RecoveryServices')]",
-                      "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers",
-                      "apiVersion": "2022-03-01",
-                      "name": "[format('{0}/Azure/storagecontainer;Storage;{1};{2}{3}', parameters('RecoveryServicesVaultName'), parameters('ResourceGroupStorage'), parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[copyIndex()], parameters('StorageIndex')), 2, '0'))]",
-                      "properties": {
-                        "backupManagementType": "AzureStorage",
-                        "containerType": "StorageContainer",
-                        "sourceResourceId": "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[range(0, parameters('StorageCount'))[copyIndex()]], parameters('StorageIndex')), 2, '0')))]"
-                      },
-                      "dependsOn": [
-                        "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[range(0, parameters('StorageCount'))[copyIndex()]], parameters('StorageIndex')), 2, '0')))]"
-                      ]
-                    },
-                    {
-                      "copy": {
                         "name": "shares",
                         "count": "[length(range(0, parameters('StorageCount')))]"
                       },
@@ -6976,14 +6958,11 @@
                       ]
                     },
                     {
-                      "copy": {
-                        "name": "protectedItems_FileShares",
-                        "count": "[length(range(0, parameters('StorageCount')))]"
-                      },
                       "condition": "[parameters('RecoveryServices')]",
                       "type": "Microsoft.Resources/deployments",
                       "apiVersion": "2022-09-01",
-                      "name": "[format('BackupProtectedItems_FileShares_{0}_{1}', add(range(0, parameters('StorageCount'))[copyIndex()], parameters('StorageIndex')), parameters('Timestamp'))]",
+                      "name": "[format('RecoveryServices_AzureFiles_{0}', parameters('Timestamp'))]",
+                      "resourceGroup": "[parameters('ResourceGroupManagement')]",
                       "properties": {
                         "expressionEvaluationOptions": {
                           "scope": "inner"
@@ -6996,17 +6975,26 @@
                           "Location": {
                             "value": "[parameters('Location')]"
                           },
-                          "ProtectionContainerName": {
-                            "value": "[format('{0}/Azure/storagecontainer;Storage;{1};{2}{3}', parameters('RecoveryServicesVaultName'), parameters('ResourceGroupStorage'), parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[range(0, parameters('StorageCount'))[copyIndex()]], parameters('StorageIndex')), 2, '0'))]"
+                          "RecoveryServicesVaultName": {
+                            "value": "[parameters('RecoveryServicesVaultName')]"
                           },
-                          "PolicyId": {
-                            "value": "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.RecoveryServices/vaults/backupPolicies', parameters('RecoveryServicesVaultName'), 'AvdPolicyStorage')]"
+                          "ResourceGroupStorage": {
+                            "value": "[parameters('ResourceGroupStorage')]"
                           },
-                          "SourceResourceId": {
-                            "value": "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[range(0, parameters('StorageCount'))[copyIndex()]], parameters('StorageIndex')), 2, '0')))]"
+                          "StorageAccountNamePrefix": {
+                            "value": "[parameters('StorageAccountNamePrefix')]"
                           },
-                          "Tags": {
+                          "StorageCount": {
+                            "value": "[parameters('StorageCount')]"
+                          },
+                          "StorageIndex": {
+                            "value": "[parameters('StorageIndex')]"
+                          },
+                          "TagsRecoveryServicesVault": {
                             "value": "[parameters('TagsRecoveryServicesVault')]"
+                          },
+                          "Timestamp": {
+                            "value": "[parameters('Timestamp')]"
                           }
                         },
                         "template": {
@@ -7016,7 +7004,7 @@
                             "_generator": {
                               "name": "bicep",
                               "version": "0.20.4.51522",
-                              "templateHash": "1224541537206597376"
+                              "templateHash": "13414614270721632788"
                             }
                           },
                           "parameters": {
@@ -7026,44 +7014,134 @@
                             "Location": {
                               "type": "string"
                             },
-                            "PolicyId": {
+                            "RecoveryServicesVaultName": {
                               "type": "string"
                             },
-                            "ProtectionContainerName": {
+                            "ResourceGroupStorage": {
                               "type": "string"
                             },
-                            "SourceResourceId": {
+                            "StorageAccountNamePrefix": {
                               "type": "string"
                             },
-                            "Tags": {
+                            "StorageCount": {
+                              "type": "int"
+                            },
+                            "StorageIndex": {
+                              "type": "int"
+                            },
+                            "TagsRecoveryServicesVault": {
                               "type": "object"
+                            },
+                            "Timestamp": {
+                              "type": "string"
                             }
                           },
                           "resources": [
                             {
                               "copy": {
-                                "name": "protectedItems_FileShare",
-                                "count": "[length(parameters('FileShares'))]"
+                                "name": "protectionContainers",
+                                "count": "[length(range(0, parameters('StorageCount')))]"
                               },
-                              "condition": "[contains(parameters('FileShares')[copyIndex()], 'profile')]",
-                              "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
+                              "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers",
                               "apiVersion": "2022-03-01",
-                              "name": "[format('{0}/AzureFileShare;{1}', parameters('ProtectionContainerName'), parameters('FileShares')[copyIndex()])]",
-                              "location": "[parameters('Location')]",
-                              "tags": "[parameters('Tags')]",
+                              "name": "[format('{0}/Azure/storagecontainer;Storage;{1};{2}{3}', parameters('RecoveryServicesVaultName'), parameters('ResourceGroupStorage'), parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[copyIndex()], parameters('StorageIndex')), 2, '0'))]",
                               "properties": {
-                                "protectedItemType": "AzureFileShareProtectedItem",
-                                "policyId": "[parameters('PolicyId')]",
-                                "sourceResourceId": "[parameters('SourceResourceId')]"
+                                "backupManagementType": "AzureStorage",
+                                "containerType": "StorageContainer",
+                                "sourceResourceId": "[resourceId(parameters('ResourceGroupStorage'), 'Microsoft.Storage/storageAccounts', format('{0}{1}', parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[copyIndex()], parameters('StorageIndex')), 2, '0')))]"
                               }
+                            },
+                            {
+                              "copy": {
+                                "name": "protectedItems_FileShares",
+                                "count": "[length(range(0, parameters('StorageCount')))]"
+                              },
+                              "type": "Microsoft.Resources/deployments",
+                              "apiVersion": "2022-09-01",
+                              "name": "[format('BackupProtectedItems_FileShares_{0}_{1}', add(range(0, parameters('StorageCount'))[copyIndex()], parameters('StorageIndex')), parameters('Timestamp'))]",
+                              "properties": {
+                                "expressionEvaluationOptions": {
+                                  "scope": "inner"
+                                },
+                                "mode": "Incremental",
+                                "parameters": {
+                                  "FileShares": {
+                                    "value": "[parameters('FileShares')]"
+                                  },
+                                  "Location": {
+                                    "value": "[parameters('Location')]"
+                                  },
+                                  "ProtectionContainerName": {
+                                    "value": "[format('{0}/Azure/storagecontainer;Storage;{1};{2}{3}', parameters('RecoveryServicesVaultName'), parameters('ResourceGroupStorage'), parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[range(0, parameters('StorageCount'))[copyIndex()]], parameters('StorageIndex')), 2, '0'))]"
+                                  },
+                                  "PolicyId": {
+                                    "value": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies', parameters('RecoveryServicesVaultName'), 'AvdPolicyStorage')]"
+                                  },
+                                  "SourceResourceId": {
+                                    "value": "[resourceId(parameters('ResourceGroupStorage'), 'Microsoft.Storage/storageAccounts', format('{0}{1}', parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[copyIndex()], parameters('StorageIndex')), 2, '0')))]"
+                                  },
+                                  "Tags": {
+                                    "value": "[parameters('TagsRecoveryServicesVault')]"
+                                  }
+                                },
+                                "template": {
+                                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                                  "contentVersion": "1.0.0.0",
+                                  "metadata": {
+                                    "_generator": {
+                                      "name": "bicep",
+                                      "version": "0.20.4.51522",
+                                      "templateHash": "1224541537206597376"
+                                    }
+                                  },
+                                  "parameters": {
+                                    "FileShares": {
+                                      "type": "array"
+                                    },
+                                    "Location": {
+                                      "type": "string"
+                                    },
+                                    "PolicyId": {
+                                      "type": "string"
+                                    },
+                                    "ProtectionContainerName": {
+                                      "type": "string"
+                                    },
+                                    "SourceResourceId": {
+                                      "type": "string"
+                                    },
+                                    "Tags": {
+                                      "type": "object"
+                                    }
+                                  },
+                                  "resources": [
+                                    {
+                                      "copy": {
+                                        "name": "protectedItems_FileShare",
+                                        "count": "[length(parameters('FileShares'))]"
+                                      },
+                                      "condition": "[contains(parameters('FileShares')[copyIndex()], 'profile')]",
+                                      "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
+                                      "apiVersion": "2022-03-01",
+                                      "name": "[format('{0}/AzureFileShare;{1}', parameters('ProtectionContainerName'), parameters('FileShares')[copyIndex()])]",
+                                      "location": "[parameters('Location')]",
+                                      "tags": "[parameters('Tags')]",
+                                      "properties": {
+                                        "protectedItemType": "AzureFileShareProtectedItem",
+                                        "policyId": "[parameters('PolicyId')]",
+                                        "sourceResourceId": "[parameters('SourceResourceId')]"
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              "dependsOn": [
+                                "[resourceId('Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers', split(format('{0}/Azure/storagecontainer;Storage;{1};{2}{3}', parameters('RecoveryServicesVaultName'), parameters('ResourceGroupStorage'), parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[range(0, parameters('StorageCount'))[copyIndex()]], parameters('StorageIndex')), 2, '0')), '/')[0], split(format('{0}/Azure/storagecontainer;Storage;{1};{2}{3}', parameters('RecoveryServicesVaultName'), parameters('ResourceGroupStorage'), parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[range(0, parameters('StorageCount'))[copyIndex()]], parameters('StorageIndex')), 2, '0')), '/')[1], split(format('{0}/Azure/storagecontainer;Storage;{1};{2}{3}', parameters('RecoveryServicesVaultName'), parameters('ResourceGroupStorage'), parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[range(0, parameters('StorageCount'))[copyIndex()]], parameters('StorageIndex')), 2, '0')), '/')[2])]"
+                              ]
                             }
                           ]
                         }
-                      },
-                      "dependsOn": [
-                        "[resourceId('Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers', split(format('{0}/Azure/storagecontainer;Storage;{1};{2}{3}', parameters('RecoveryServicesVaultName'), parameters('ResourceGroupStorage'), parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[range(0, parameters('StorageCount'))[copyIndex()]], parameters('StorageIndex')), 2, '0')), '/')[0], split(format('{0}/Azure/storagecontainer;Storage;{1};{2}{3}', parameters('RecoveryServicesVaultName'), parameters('ResourceGroupStorage'), parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[range(0, parameters('StorageCount'))[copyIndex()]], parameters('StorageIndex')), 2, '0')), '/')[1], split(format('{0}/Azure/storagecontainer;Storage;{1};{2}{3}', parameters('RecoveryServicesVaultName'), parameters('ResourceGroupStorage'), parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[range(0, parameters('StorageCount'))[copyIndex()]], parameters('StorageIndex')), 2, '0')), '/')[2])]",
-                        "[resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[range(0, parameters('StorageCount'))[copyIndex()]], parameters('StorageIndex')), 2, '0')))]"
-                      ]
+                      }
                     },
                     {
                       "condition": "[and(contains(parameters('FslogixStorage'), 'AzureStorageAccount Premium'), greater(parameters('StorageCount'), 0))]",
@@ -7721,7 +7799,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "7586369611926147767"
+              "templateHash": "17728310353616214123"
             }
           },
           "parameters": {
@@ -8885,14 +8963,10 @@
               ]
             },
             {
-              "copy": {
-                "name": "protectedItems_Vm",
-                "count": "[length(range(1, parameters('SessionHostBatchCount')))]"
-              },
-              "condition": "[and(parameters('RecoveryServices'), not(parameters('Fslogix')))]",
+              "condition": "[parameters('RecoveryServices')]",
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2022-09-01",
-              "name": "[format('BackupProtectedItems_VirtualMachines_{0}_{1}', sub(range(1, parameters('SessionHostBatchCount'))[copyIndex()], 1), parameters('Timestamp'))]",
+              "name": "[format('RecoveryServices_VirtualMachines_{0}', parameters('Timestamp'))]",
               "resourceGroup": "[parameters('ResourceGroupManagement')]",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -8900,25 +8974,41 @@
                 },
                 "mode": "Incremental",
                 "parameters": {
+                  "DivisionRemainderValue": {
+                    "value": "[parameters('DivisionRemainderValue')]"
+                  },
+                  "Fslogix": {
+                    "value": "[parameters('Fslogix')]"
+                  },
                   "Location": {
                     "value": "[parameters('Location')]"
                   },
-                  "PolicyId": {
-                    "value": "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.RecoveryServices/vaults/backupPolicies', parameters('RecoveryServicesVaultName'), 'AvdPolicyVm')]"
+                  "MaxResourcesPerTemplateDeployment": {
+                    "value": "[parameters('MaxResourcesPerTemplateDeployment')]"
                   },
                   "RecoveryServicesVaultName": {
                     "value": "[parameters('RecoveryServicesVaultName')]"
                   },
-                  "SessionHostCount": "[if(and(equals(range(1, parameters('SessionHostBatchCount'))[copyIndex()], parameters('SessionHostBatchCount')), greater(parameters('DivisionRemainderValue'), 0)), createObject('value', parameters('DivisionRemainderValue')), createObject('value', parameters('MaxResourcesPerTemplateDeployment')))]",
-                  "SessionHostIndex": "[if(equals(range(1, parameters('SessionHostBatchCount'))[copyIndex()], 1), createObject('value', parameters('SessionHostIndex')), createObject('value', add(mul(sub(range(1, parameters('SessionHostBatchCount'))[copyIndex()], 1), parameters('MaxResourcesPerTemplateDeployment')), parameters('SessionHostIndex'))))]",
-                  "Tags": {
+                  "ResourceGroupHosts": {
+                    "value": "[parameters('ResourceGroupHosts')]"
+                  },
+                  "ResourceGroupManagement": {
+                    "value": "[parameters('ResourceGroupManagement')]"
+                  },
+                  "SessionHostBatchCount": {
+                    "value": "[parameters('SessionHostBatchCount')]"
+                  },
+                  "SessionHostIndex": {
+                    "value": "[parameters('SessionHostIndex')]"
+                  },
+                  "TagsRecoveryServicesVault": {
                     "value": "[parameters('TagsRecoveryServicesVault')]"
+                  },
+                  "Timestamp": {
+                    "value": "[parameters('Timestamp')]"
                   },
                   "VirtualMachineNamePrefix": {
                     "value": "[parameters('VirtualMachineNamePrefix')]"
-                  },
-                  "VirtualMachineResourceGroupName": {
-                    "value": "[parameters('ResourceGroupHosts')]"
                   }
                 },
                 "template": {
@@ -8928,54 +9018,144 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "4274432455811829828"
+                      "templateHash": "5631606630632053025"
                     }
                   },
                   "parameters": {
+                    "DivisionRemainderValue": {
+                      "type": "int"
+                    },
+                    "Fslogix": {
+                      "type": "bool"
+                    },
                     "Location": {
                       "type": "string"
                     },
-                    "PolicyId": {
-                      "type": "string"
+                    "MaxResourcesPerTemplateDeployment": {
+                      "type": "int"
                     },
                     "RecoveryServicesVaultName": {
                       "type": "string"
                     },
-                    "SessionHostCount": {
+                    "ResourceGroupHosts": {
+                      "type": "string"
+                    },
+                    "ResourceGroupManagement": {
+                      "type": "string"
+                    },
+                    "SessionHostBatchCount": {
                       "type": "int"
                     },
                     "SessionHostIndex": {
                       "type": "int"
                     },
-                    "Tags": {
+                    "TagsRecoveryServicesVault": {
                       "type": "object"
+                    },
+                    "Timestamp": {
+                      "type": "string"
                     },
                     "VirtualMachineNamePrefix": {
                       "type": "string"
-                    },
-                    "VirtualMachineResourceGroupName": {
-                      "type": "string"
                     }
-                  },
-                  "variables": {
-                    "v2VmContainer": "iaasvmcontainer;iaasvmcontainerv2;",
-                    "v2Vm": "vm;iaasvmcontainerv2;"
                   },
                   "resources": [
                     {
                       "copy": {
                         "name": "protectedItems_Vm",
-                        "count": "[length(range(0, parameters('SessionHostCount')))]"
+                        "count": "[length(range(1, parameters('SessionHostBatchCount')))]"
                       },
-                      "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
-                      "apiVersion": "2021-08-01",
-                      "name": "[format('{0}/Azure/{1}{2};{3}{4}/{5}{6};{7}{8}', parameters('RecoveryServicesVaultName'), variables('v2VmContainer'), parameters('VirtualMachineResourceGroupName'), parameters('VirtualMachineNamePrefix'), padLeft(add(range(0, parameters('SessionHostCount'))[copyIndex()], parameters('SessionHostIndex')), 4, '0'), variables('v2Vm'), parameters('VirtualMachineResourceGroupName'), parameters('VirtualMachineNamePrefix'), padLeft(add(range(0, parameters('SessionHostCount'))[copyIndex()], parameters('SessionHostIndex')), 4, '0'))]",
-                      "location": "[parameters('Location')]",
-                      "tags": "[parameters('Tags')]",
+                      "condition": "[not(parameters('Fslogix'))]",
+                      "type": "Microsoft.Resources/deployments",
+                      "apiVersion": "2022-09-01",
+                      "name": "[format('BackupProtectedItems_VirtualMachines_{0}_{1}', sub(range(1, parameters('SessionHostBatchCount'))[copyIndex()], 1), parameters('Timestamp'))]",
+                      "resourceGroup": "[parameters('ResourceGroupManagement')]",
                       "properties": {
-                        "protectedItemType": "Microsoft.Compute/virtualMachines",
-                        "policyId": "[parameters('PolicyId')]",
-                        "sourceResourceId": "[resourceId(parameters('VirtualMachineResourceGroupName'), 'Microsoft.Compute/virtualMachines', format('{0}{1}', parameters('VirtualMachineNamePrefix'), padLeft(add(range(0, parameters('SessionHostCount'))[copyIndex()], parameters('SessionHostIndex')), 4, '0')))]"
+                        "expressionEvaluationOptions": {
+                          "scope": "inner"
+                        },
+                        "mode": "Incremental",
+                        "parameters": {
+                          "Location": {
+                            "value": "[parameters('Location')]"
+                          },
+                          "PolicyId": {
+                            "value": "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.RecoveryServices/vaults/backupPolicies', parameters('RecoveryServicesVaultName'), 'AvdPolicyVm')]"
+                          },
+                          "RecoveryServicesVaultName": {
+                            "value": "[parameters('RecoveryServicesVaultName')]"
+                          },
+                          "SessionHostCount": "[if(and(equals(range(1, parameters('SessionHostBatchCount'))[copyIndex()], parameters('SessionHostBatchCount')), greater(parameters('DivisionRemainderValue'), 0)), createObject('value', parameters('DivisionRemainderValue')), createObject('value', parameters('MaxResourcesPerTemplateDeployment')))]",
+                          "SessionHostIndex": "[if(equals(range(1, parameters('SessionHostBatchCount'))[copyIndex()], 1), createObject('value', parameters('SessionHostIndex')), createObject('value', add(mul(sub(range(1, parameters('SessionHostBatchCount'))[copyIndex()], 1), parameters('MaxResourcesPerTemplateDeployment')), parameters('SessionHostIndex'))))]",
+                          "Tags": {
+                            "value": "[parameters('TagsRecoveryServicesVault')]"
+                          },
+                          "VirtualMachineNamePrefix": {
+                            "value": "[parameters('VirtualMachineNamePrefix')]"
+                          },
+                          "VirtualMachineResourceGroupName": {
+                            "value": "[parameters('ResourceGroupHosts')]"
+                          }
+                        },
+                        "template": {
+                          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                          "contentVersion": "1.0.0.0",
+                          "metadata": {
+                            "_generator": {
+                              "name": "bicep",
+                              "version": "0.20.4.51522",
+                              "templateHash": "4274432455811829828"
+                            }
+                          },
+                          "parameters": {
+                            "Location": {
+                              "type": "string"
+                            },
+                            "PolicyId": {
+                              "type": "string"
+                            },
+                            "RecoveryServicesVaultName": {
+                              "type": "string"
+                            },
+                            "SessionHostCount": {
+                              "type": "int"
+                            },
+                            "SessionHostIndex": {
+                              "type": "int"
+                            },
+                            "Tags": {
+                              "type": "object"
+                            },
+                            "VirtualMachineNamePrefix": {
+                              "type": "string"
+                            },
+                            "VirtualMachineResourceGroupName": {
+                              "type": "string"
+                            }
+                          },
+                          "variables": {
+                            "v2VmContainer": "iaasvmcontainer;iaasvmcontainerv2;",
+                            "v2Vm": "vm;iaasvmcontainerv2;"
+                          },
+                          "resources": [
+                            {
+                              "copy": {
+                                "name": "protectedItems_Vm",
+                                "count": "[length(range(0, parameters('SessionHostCount')))]"
+                              },
+                              "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
+                              "apiVersion": "2021-08-01",
+                              "name": "[format('{0}/Azure/{1}{2};{3}{4}/{5}{6};{7}{8}', parameters('RecoveryServicesVaultName'), variables('v2VmContainer'), parameters('VirtualMachineResourceGroupName'), parameters('VirtualMachineNamePrefix'), padLeft(add(range(0, parameters('SessionHostCount'))[copyIndex()], parameters('SessionHostIndex')), 4, '0'), variables('v2Vm'), parameters('VirtualMachineResourceGroupName'), parameters('VirtualMachineNamePrefix'), padLeft(add(range(0, parameters('SessionHostCount'))[copyIndex()], parameters('SessionHostIndex')), 4, '0'))]",
+                              "location": "[parameters('Location')]",
+                              "tags": "[parameters('Tags')]",
+                              "properties": {
+                                "protectedItemType": "Microsoft.Compute/virtualMachines",
+                                "policyId": "[parameters('PolicyId')]",
+                                "sourceResourceId": "[resourceId(parameters('VirtualMachineResourceGroupName'), 'Microsoft.Compute/virtualMachines', format('{0}{1}', parameters('VirtualMachineNamePrefix'), padLeft(add(range(0, parameters('SessionHostCount'))[copyIndex()], parameters('SessionHostIndex')), 4, '0')))]"
+                              }
+                            }
+                          ]
+                        }
                       }
                     }
                   ]
@@ -9254,7 +9434,7 @@
                 }
               },
               "dependsOn": [
-                "protectedItems_Vm"
+                "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('RecoveryServices_VirtualMachines_{0}', parameters('Timestamp')))]"
               ]
             }
           ]
