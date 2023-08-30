@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "16750203009918914330"
+      "templateHash": "14250606567716886270"
     }
   },
   "parameters": {
@@ -1425,7 +1425,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "4573345534966802154"
+              "templateHash": "15409540134570066394"
             }
           },
           "parameters": {
@@ -4251,7 +4251,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "17682831320324994139"
+                      "templateHash": "8899180700353897381"
                     }
                   },
                   "parameters": {
@@ -4293,7 +4293,7 @@
                       "tags": "[parameters('Tags')]",
                       "properties": {
                         "applicationGroupReferences": "[parameters('ApplicationGroupReferences')]",
-                        "friendlyName": "[parameters('FriendlyName')]"
+                        "friendlyName": "[format('{0} ({1})', parameters('FriendlyName'), parameters('Location'))]"
                       }
                     },
                     {
@@ -4472,7 +4472,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "6258966499564960922"
+              "templateHash": "8981888681097547479"
             }
           },
           "parameters": {
@@ -4844,7 +4844,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "17682831320324994139"
+                      "templateHash": "8899180700353897381"
                     }
                   },
                   "parameters": {
@@ -4886,7 +4886,7 @@
                       "tags": "[parameters('Tags')]",
                       "properties": {
                         "applicationGroupReferences": "[parameters('ApplicationGroupReferences')]",
-                        "friendlyName": "[parameters('FriendlyName')]"
+                        "friendlyName": "[format('{0} ({1})', parameters('FriendlyName'), parameters('Location'))]"
                       }
                     },
                     {
@@ -4970,7 +4970,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "17682831320324994139"
+                      "templateHash": "8899180700353897381"
                     }
                   },
                   "parameters": {
@@ -5012,7 +5012,7 @@
                       "tags": "[parameters('Tags')]",
                       "properties": {
                         "applicationGroupReferences": "[parameters('ApplicationGroupReferences')]",
-                        "friendlyName": "[parameters('FriendlyName')]"
+                        "friendlyName": "[format('{0} ({1})', parameters('FriendlyName'), parameters('Location'))]"
                       }
                     },
                     {

@@ -17,7 +17,7 @@ resource newWorkspace 'Microsoft.DesktopVirtualization/workspaces@2021-03-09-pre
   tags: Tags
   properties: {
     applicationGroupReferences: ApplicationGroupReferences
-    friendlyName: FriendlyName
+    friendlyName: '${FriendlyName} (${Location})'
   }
 }
 
