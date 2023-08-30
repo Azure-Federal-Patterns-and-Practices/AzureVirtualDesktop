@@ -17,7 +17,7 @@
         "avdObjectId": {
             "value": "cdcfb416-e2fe-41e2-be12-33813c1cd427"
         },
-        "AzureFilesPrivateDnsZoneResourceId": {
+        "azureFilesPrivateDnsZoneResourceId": {
             "value": "/subscriptions/3764b123-4849-4395-8e6e-ca6d68d8d4b4/resourceGroups/rg-net-d-eu/providers/Microsoft.Network/privateDnsZones/privatelink.file.core.windows.net"
         },
         "customRdpProperty": {
@@ -78,13 +78,13 @@
         "imageSku": {
             "value": "win11-22h2-avd-m365"
         },
-        "imageVersion": {
-            "value": "latest"
+        "ImageVersionResourceId": {
+            "value": ""
         },
         "kerberosEncryption": {
             "value": "RC4"
         },
-        "location": {
+        "locationControlPlane": {
             "value": "eastus"
         },
         "logAnalyticsWorkspaceRetention": {
@@ -123,6 +123,9 @@
         "scalingTool": {
             "value": true
         },
+        "securityLogAnalyticsWorkspaceResourceId": {
+            "value": ""
+        },
         "securityPrincipalObjectIds": {
             "value": [
                 "06c4afa5-b6dc-4719-8034-947887108e29"
@@ -140,7 +143,7 @@
             "value": 0
         },
         "stampIndex": {
-            "value": 2
+            "value": 0
         },
         "storageCount": {
             "value": 1
@@ -152,11 +155,7 @@
             "value": "/subscriptions/3764b123-4849-4395-8e6e-ca6d68d8d4b4/resourceGroups/rg-net-d-eu/providers/Microsoft.Network/virtualNetworks/vnet-net-d-eu/subnets/Clients"
         },
         "tags": {
-            "value": {
-                "Owner": "Jason Masten",
-                "Environment": "Development",
-                "Purpose": "Office Workers"
-            }
+            "value": {}
         },
         "validationEnvironment": {
             "value": false
@@ -179,6 +178,9 @@
                 },
                 "secretName": "VmUsername"
             }
+        },
+        "WorkspaceFriendlyName": {
+            "value": "Jason Masten"
         }
     }
 }
