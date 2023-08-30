@@ -6,30 +6,29 @@
 
 - [**Auto Increase Premium File Share Quota**](./autoIncreasePremiumFileShareQuota.md#auto-increase-premium-file-share-quota)
 - [**Backups**](./backups.md#backups)
-- [**BitLocker Encryption**](./bitlocker.md#bitlocker-encryption)
 - [**Drain Mode**](./drainMode.md#drain-mode)
 - [**FSLogix**](./fslogix.md#fslogix)
 - [**GPU Drivers & Settings**](./gpu.md#gpu-drivers--settings)
 - [**High Availability**](./highAvailability.md#high-availability)
 - [**Monitoring**](./monitoring.md#monitoring)
-- [**Scaling Automation**](./scalingAutomation.md#scaling-automation)
-- [**Security Technical Implementation Guides (STIG)**](./securityTechnicalImplementationGuides.md#security-technical-implementation-guides-stig)
+- [**Scaling Tool**](./scalingTool.md#scaling-tool)
+- [**Server-Side Encryption with Customer Managed Keys**](./serverSideEncryption.md#server-side-encryption)
 - [**SMB Multichannel**](./smbMultiChannel.md#smb-multichannel)
 - [**Start VM On Connect**](./startVmOnConnect.md#start-vm-on-connect)
 - [**Trusted Launch**](./trustedLaunch.md#trusted-launch)
 - [**Validation**](./validation.md#validation)
 - [**Virtual Desktop Optimization Tool**](./virtualDesktopOptimizationTool.md#virtual-desktop-optimization-tool-vdot)
 
-### Security Technical Implementation Guides (STIG)
+### Server-Side Encryption with Customer Managed Keys
 
-This optional feature deploys the required resources to enforce and report on DISA STIG compliance. This is a common configuration for US federal government customers.
+This optional feature deploys the required resources & configuration to enable server-side encryption encryption on the session hosts using a customer managed key. The configuration also enables double encryption which uses a platform managed key in combination with the customer managed key. Also, the temp and cache disks are encrypted using the "encryption at host" feature.
 
-**Reference:** [](https://public.cyber.mil/stigs/)
+> NOTE: If deploying a "pooled" host pool with FSLogix, the data in the profile and office containers are encrypted using encryption on the storage service, not the virtual machine.
+
+**Reference:** [Azure Server-Side Encryption - Microsoft Docs](https://learn.microsoft.com/azure/virtual-machines/disk-encryption)
 
 **Deployed Resources:**
 
-- Automation Account
-  - Modules
-  - Configuration
-  - Compilation Job
-- DSC extension
+- Key Vault
+  - Key Encryption Key
+- Disk Encryption Set
