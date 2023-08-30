@@ -25,4 +25,6 @@ resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
 }]
 
 
-output ResourceId string = applicationGroup.id
+output ApplicationGroupReference array = [
+  applicationGroup.id
+]
