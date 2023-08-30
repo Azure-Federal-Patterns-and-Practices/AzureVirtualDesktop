@@ -257,6 +257,62 @@
                     "visible": true,
                     "elements": [
                         {
+                            "name": "network",
+                            "type": "Microsoft.Common.Section",
+                            "label": "Network",
+                            "visible": true,
+                            "elements": [
+                                {
+                                    "name": "virtualNetworksApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "GET",
+                                        "path": "[concat(steps('basics').scope.subscription.id, '/providers/Microsoft.Network/virtualNetworks?api-version=2022-11-01')]"
+                                    }
+                                },
+                                {
+                                    "name": "virtualNetwork",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": true,
+                                    "label": "Virtual Network",
+                                    "defaultValue": "",
+                                    "toolTip": "Select an existing virtual network for the AVD session hosts.",
+                                    "constraints": {
+                                        "required": true,
+                                        "allowedValues": "[map(steps('hosts').network.virtualNetworksApi.value, (item) => parse(concat('{\"label\":\"', item.name, '\",\"description\":\"Resource group: ', first(skip(split(item.id, '/'), 4)), '\",\"value\":\"', item.id, '\"}')))]"
+                                    }
+                                },
+                                {
+                                    "name": "virtualNetworkApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "GET",
+                                        "path": "[concat(steps('hosts').network.virtualNetwork.id, '?api-version=2023-02-01')]"
+                                    }
+                                },
+                                {
+                                    "name": "subnetsApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "GET",
+                                        "path": "[concat(steps('hosts').network.virtualNetwork, '/subnets?api-version=2022-05-01')]"
+                                    }
+                                },
+                                {
+                                    "name": "subnet",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": true,
+                                    "label": "Subnet",
+                                    "defaultValue": "",
+                                    "toolTip": "Select an existing subnet for the AVD session hosts.",
+                                    "constraints": {
+                                        "required": true,
+                                        "allowedValues": "[map(steps('hosts').network.subnetsApi.value, (item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\"}')))]"
+                                    }
+                                }
+                            ]
+                        },
+                        {
                             "name": "availability",
                             "type": "Microsoft.Common.DropDown",
                             "label": "Availability Options",
@@ -420,7 +476,7 @@
                                     "type": "Microsoft.Solutions.ArmApiControl",
                                     "request": {
                                         "method": "GET",
-                                        "path": "[concat(steps('basics').scope.subscription.id, '/providers/Microsoft.Compute/locations/', steps('hosts').location.name, '/publishers/MicrosoftWindowsDesktop/artifacttypes/vmimage/offers/', steps('hosts').image.offer, '/skus?api-version=2022-08-01')]"
+                                        "path": "[concat(steps('basics').scope.subscription.id, '/providers/Microsoft.Compute/locations/', steps('hosts').network.virtualNetworkApi.location, '/publishers/MicrosoftWindowsDesktop/artifacttypes/vmimage/offers/', steps('hosts').image.offer, '/skus?api-version=2022-08-01')]"
                                     }
                                 },
                                 {
@@ -443,54 +499,6 @@
                                     "resourceType": "Microsoft.Compute/galleries/images",
                                     "constraints": {
                                         "required": true
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "name": "network",
-                            "type": "Microsoft.Common.Section",
-                            "label": "Network",
-                            "visible": true,
-                            "elements": [
-                                {
-                                    "name": "virtualNetworksApi",
-                                    "type": "Microsoft.Solutions.ArmApiControl",
-                                    "request": {
-                                        "method": "GET",
-                                        "path": "[concat(steps('basics').scope.subscription.id, '/providers/Microsoft.Network/virtualNetworks?api-version=2022-11-01')]"
-                                    }
-                                },
-                                {
-                                    "name": "virtualNetwork",
-                                    "type": "Microsoft.Common.DropDown",
-                                    "visible": true,
-                                    "label": "Virtual Network",
-                                    "defaultValue": "",
-                                    "toolTip": "Select an existing virtual network for the AVD session hosts.",
-                                    "constraints": {
-                                        "required": true,
-                                        "allowedValues": "[map(filter(steps('hosts').network.virtualNetworksApi.value, (item) => equals(item.location, steps('hosts').location.name)), (item) => parse(concat('{\"label\":\"', item.name, '\",\"description\":\"Resource group: ', first(skip(split(item.id, '/'), 4)), '\",\"value\":\"', item.id, '\"}')))]"
-                                    }
-                                },
-                                {
-                                    "name": "subnetsApi",
-                                    "type": "Microsoft.Solutions.ArmApiControl",
-                                    "request": {
-                                        "method": "GET",
-                                        "path": "[concat(steps('hosts').network.virtualNetwork, '/subnets?api-version=2022-05-01')]"
-                                    }
-                                },
-                                {
-                                    "name": "subnet",
-                                    "type": "Microsoft.Common.DropDown",
-                                    "visible": true,
-                                    "label": "Subnet",
-                                    "defaultValue": "",
-                                    "toolTip": "Select an existing subnet for the AVD session hosts.",
-                                    "constraints": {
-                                        "required": true,
-                                        "allowedValues": "[map(steps('hosts').network.subnetsApi.value, (item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\"}')))]"
                                     }
                                 }
                             ]
