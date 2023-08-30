@@ -23,7 +23,7 @@ resource newWorkspace 'Microsoft.DesktopVirtualization/workspaces@2021-03-09-pre
 
 resource workspaceDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = if (!Existing && Monitoring) {
   name: 'diag-${WorkspaceName}'
-  scope: Existing ? existingWorkspace : newWorkspace
+  scope: newWorkspace
   properties: {
     logs: [
       {
@@ -47,5 +47,5 @@ resource workspaceDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-
   }
 }
 
-output applicationGroupReferences array = Existing ? existingWorkspace.properties.applicationGroupReferences : newWorkspace.properties.applicationGroupReferences
-output tags object = Existing ? existingWorkspace.tags : newWorkspace.tags
+output applicationGroupReferences array = Existing ? existingWorkspace.properties.applicationGroupReferences : []
+output tags object = Existing ? existingWorkspace.tags : Tags

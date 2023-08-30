@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "10619204003382920898"
+      "templateHash": "6589836532925966324"
     }
   },
   "parameters": {
@@ -1425,7 +1425,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "15409540134570066394"
+              "templateHash": "11462993410834206683"
             }
           },
           "parameters": {
@@ -4251,7 +4251,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "8899180700353897381"
+                      "templateHash": "9037512703313986"
                     }
                   },
                   "parameters": {
@@ -4300,6 +4300,7 @@
                       "condition": "[and(not(parameters('Existing')), parameters('Monitoring'))]",
                       "type": "Microsoft.Insights/diagnosticSettings",
                       "apiVersion": "2021-05-01-preview",
+                      "scope": "[format('Microsoft.DesktopVirtualization/workspaces/{0}', parameters('WorkspaceName'))]",
                       "name": "[format('diag-{0}', parameters('WorkspaceName'))]",
                       "properties": {
                         "logs": [
@@ -4330,11 +4331,11 @@
                   "outputs": {
                     "applicationGroupReferences": {
                       "type": "array",
-                      "value": "[if(parameters('Existing'), reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview').applicationGroupReferences, reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview').applicationGroupReferences)]"
+                      "value": "[if(parameters('Existing'), reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview').applicationGroupReferences, createArray())]"
                     },
                     "tags": {
                       "type": "object",
-                      "value": "[if(parameters('Existing'), reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview', 'full').tags, reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview', 'full').tags)]"
+                      "value": "[if(parameters('Existing'), reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview', 'full').tags, parameters('Tags'))]"
                     }
                   }
                 }
@@ -4472,7 +4473,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "8981888681097547479"
+              "templateHash": "10867685170445677771"
             }
           },
           "parameters": {
@@ -4844,7 +4845,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "8899180700353897381"
+                      "templateHash": "9037512703313986"
                     }
                   },
                   "parameters": {
@@ -4893,6 +4894,7 @@
                       "condition": "[and(not(parameters('Existing')), parameters('Monitoring'))]",
                       "type": "Microsoft.Insights/diagnosticSettings",
                       "apiVersion": "2021-05-01-preview",
+                      "scope": "[format('Microsoft.DesktopVirtualization/workspaces/{0}', parameters('WorkspaceName'))]",
                       "name": "[format('diag-{0}', parameters('WorkspaceName'))]",
                       "properties": {
                         "logs": [
@@ -4923,11 +4925,11 @@
                   "outputs": {
                     "applicationGroupReferences": {
                       "type": "array",
-                      "value": "[if(parameters('Existing'), reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview').applicationGroupReferences, reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview').applicationGroupReferences)]"
+                      "value": "[if(parameters('Existing'), reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview').applicationGroupReferences, createArray())]"
                     },
                     "tags": {
                       "type": "object",
-                      "value": "[if(parameters('Existing'), reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview', 'full').tags, reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview', 'full').tags)]"
+                      "value": "[if(parameters('Existing'), reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview', 'full').tags, parameters('Tags'))]"
                     }
                   }
                 }
@@ -4970,7 +4972,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "8899180700353897381"
+                      "templateHash": "9037512703313986"
                     }
                   },
                   "parameters": {
@@ -5019,6 +5021,7 @@
                       "condition": "[and(not(parameters('Existing')), parameters('Monitoring'))]",
                       "type": "Microsoft.Insights/diagnosticSettings",
                       "apiVersion": "2021-05-01-preview",
+                      "scope": "[format('Microsoft.DesktopVirtualization/workspaces/{0}', parameters('WorkspaceName'))]",
                       "name": "[format('diag-{0}', parameters('WorkspaceName'))]",
                       "properties": {
                         "logs": [
@@ -5049,11 +5052,11 @@
                   "outputs": {
                     "applicationGroupReferences": {
                       "type": "array",
-                      "value": "[if(parameters('Existing'), reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview').applicationGroupReferences, reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview').applicationGroupReferences)]"
+                      "value": "[if(parameters('Existing'), reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview').applicationGroupReferences, createArray())]"
                     },
                     "tags": {
                       "type": "object",
-                      "value": "[if(parameters('Existing'), reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview', 'full').tags, reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview', 'full').tags)]"
+                      "value": "[if(parameters('Existing'), reference(resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName')), '2021-03-09-preview', 'full').tags, parameters('Tags'))]"
                     }
                   }
                 }
