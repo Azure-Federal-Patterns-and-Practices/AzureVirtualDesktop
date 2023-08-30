@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "14250606567716886270"
+      "templateHash": "10619204003382920898"
     }
   },
   "parameters": {
@@ -1015,7 +1015,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "5685467553915694585"
+              "templateHash": "2563115501448925833"
             }
           },
           "parameters": {
@@ -1109,7 +1109,7 @@
             },
             "SecurityPrincipalIdsCount": "[length(parameters('SecurityPrincipalObjectIds'))]",
             "SecurityPrincipalNamesCount": "[length(parameters('SecurityPrincipalNames'))]",
-            "SmbServerLocation": "[parameters('Locations')[parameters('LocationVirtualMachines')].acronym]",
+            "SmbServerLocation": "[parameters('Locations')[parameters('LocationVirtualMachines')].abbreviation]",
             "StorageSku": "[if(equals(parameters('FslogixStorage'), 'None'), 'None', split(parameters('FslogixStorage'), ' ')[1])]",
             "StorageSolution": "[split(parameters('FslogixStorage'), ' ')[0]]",
             "StorageSuffix": "[environment().suffixes.storage]",

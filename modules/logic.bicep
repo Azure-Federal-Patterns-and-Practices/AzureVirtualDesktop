@@ -61,7 +61,7 @@ var RoleDefinitions = {
 }
 var SecurityPrincipalIdsCount = length(SecurityPrincipalObjectIds)
 var SecurityPrincipalNamesCount = length(SecurityPrincipalNames)
-var SmbServerLocation = Locations[LocationVirtualMachines].acronym
+var SmbServerLocation = Locations[LocationVirtualMachines].abbreviation
 var StorageSku = FslogixStorage == 'None' ? 'None' : split(FslogixStorage, ' ')[1]
 var StorageSolution = split(FslogixStorage, ' ')[0]
 var StorageSuffix = environment().suffixes.storage
