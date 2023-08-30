@@ -287,7 +287,7 @@
                                     "type": "Microsoft.Solutions.ArmApiControl",
                                     "request": {
                                         "method": "GET",
-                                        "path": "[concat(steps('hosts').network.virtualNetwork.id, '?api-version=2023-02-01')]"
+                                        "path": "[concat(steps('hosts').network.virtualNetwork, '?api-version=2023-02-01')]"
                                     }
                                 },
                                 {
