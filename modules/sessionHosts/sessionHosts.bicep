@@ -168,33 +168,29 @@ module virtualMachines 'virtualMachines.bicep' = [for i in range(1, SessionHostB
   ]
 }]
 
-resource vault 'Microsoft.RecoveryServices/vaults@2022-03-01' existing = if (RecoveryServices) {
-  name: RecoveryServicesVaultName
+module recoveryServices 'recoveryServices.bicep' = if (RecoveryServices) {
+  name: 'RecoveryServices_VirtualMachines_${Timestamp}'
   scope: resourceGroup(ResourceGroupManagement)
-}
-
-resource backupPolicy_Vm 'Microsoft.RecoveryServices/vaults/backupPolicies@2022-03-01' existing = if (RecoveryServices) {
-  parent: vault
-  name: 'AvdPolicyVm'
-}
-
-module protectedItems_Vm '../protectedItems/virtualMachines.bicep' = [for i in range(1, SessionHostBatchCount): if (RecoveryServices && !Fslogix) {
-  name: 'BackupProtectedItems_VirtualMachines_${i - 1}_${Timestamp}'
-  scope: resourceGroup(ResourceGroupManagement) // Management Resource Group
   params: {
+    DivisionRemainderValue: DivisionRemainderValue
+    Fslogix: Fslogix
     Location: Location
-    PolicyId: backupPolicy_Vm.id
-    RecoveryServicesVaultName: vault.name
-    SessionHostCount: i == SessionHostBatchCount && DivisionRemainderValue > 0 ? DivisionRemainderValue : MaxResourcesPerTemplateDeployment
-    SessionHostIndex: i == 1 ? SessionHostIndex : ((i - 1) * MaxResourcesPerTemplateDeployment) + SessionHostIndex
-    Tags: TagsRecoveryServicesVault
+    MaxResourcesPerTemplateDeployment: MaxResourcesPerTemplateDeployment
+    RecoveryServicesVaultName: RecoveryServicesVaultName
+    ResourceGroupHosts: ResourceGroupHosts
+    ResourceGroupManagement: ResourceGroupManagement
+    SessionHostBatchCount: SessionHostBatchCount
+    SessionHostIndex: SessionHostIndex
+    TagsRecoveryServicesVault: TagsRecoveryServicesVault
+    Timestamp: Timestamp
     VirtualMachineNamePrefix: VirtualMachineNamePrefix
-    VirtualMachineResourceGroupName: ResourceGroupHosts
   }
   dependsOn: [
     virtualMachines
   ]
-}]
+}
+
+
 
 module scalingTool '../scalingTool.bicep' = if (ScalingTool && PooledHostPool) {
   name: 'ScalingTool_${Timestamp}'
@@ -218,6 +214,6 @@ module scalingTool '../scalingTool.bicep' = if (ScalingTool && PooledHostPool) {
     TimeZone: TimeZone
   }
   dependsOn: [
-    protectedItems_Vm
+    recoveryServices
   ]
 }
