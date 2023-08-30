@@ -298,7 +298,7 @@ module rgs 'modules/resourceGroups.bicep' = {
 }
 
 // Management Services: Logging, Automation, Keys, Encryption
-module management 'modules/management.bicep' = {
+module management 'modules/management/management.bicep' = {
   name: 'Management_${Timestamp}'
   params: {
     ActiveDirectorySolution: ActiveDirectorySolution
@@ -352,7 +352,7 @@ module management 'modules/management.bicep' = {
 
 // AVD Control Plane Resources
 // This module deploys the host pool and desktop application group
-module controlPlane 'modules/controlPlane.bicep' = {
+module controlPlane 'modules/controlPlane/controlPlane.bicep' = {
   name: 'ControlPlane_${Timestamp}'
   params: {
     ActiveDirectorySolution: ActiveDirectorySolution

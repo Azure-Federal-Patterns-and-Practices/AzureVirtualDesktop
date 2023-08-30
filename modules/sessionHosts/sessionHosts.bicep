@@ -192,7 +192,7 @@ module recoveryServices 'recoveryServices.bicep' = if (RecoveryServices) {
 
 
 
-module scalingTool '../scalingTool.bicep' = if (ScalingTool && PooledHostPool) {
+module scalingTool 'scalingTool.bicep' = if (ScalingTool && PooledHostPool) {
   name: 'ScalingTool_${Timestamp}'
   scope: resourceGroup(ResourceGroupManagement)
   params: {

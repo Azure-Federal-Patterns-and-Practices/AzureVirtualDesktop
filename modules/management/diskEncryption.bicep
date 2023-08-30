@@ -31,7 +31,7 @@ resource vault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   }
 }
 
-module keyValidation 'deploymentScript.bicep' = {
+module keyValidation '../deploymentScript.bicep' = {
   name: 'DeploymentScript_DiskEncryptionKeyValidation_${Timestamp}'
   params: {
     Arguments: '-VaultName ${vault.name}'
@@ -54,7 +54,7 @@ module key 'key.bicep' = {
   }
 }
 
-module roleAssignment 'roleAssignment.bicep' = {
+module roleAssignment '../roleAssignment.bicep' = {
   name: 'RoleAssignment_${Timestamp}'
   params: {
     PrincipalId: UserAssignedIdentityPrincipalId

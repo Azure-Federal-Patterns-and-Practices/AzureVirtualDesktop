@@ -34,7 +34,7 @@ resource runbook 'Microsoft.Automation/automationAccounts/runbooks@2019-06-01' =
   }
 }
 
-module schedules 'schedules.bicep' = [for i in range(StorageIndex, StorageCount): {
+module schedules '../../schedules.bicep' = [for i in range(StorageIndex, StorageCount): {
   name: 'Schedules_${i}_${Timestamp}'
   params: {
     AutomationAccountName: automationAccount.name
@@ -43,7 +43,7 @@ module schedules 'schedules.bicep' = [for i in range(StorageIndex, StorageCount)
   }
 }]
 
-module jobSchedules 'jobSchedules.bicep' = [for i in range(StorageIndex, StorageCount): {
+module jobSchedules '../../jobSchedules.bicep' = [for i in range(StorageIndex, StorageCount): {
   name: 'JobSchedules_${i}_${Timestamp}'
   params: {
     AutomationAccountName: automationAccount.name
@@ -60,7 +60,7 @@ module jobSchedules 'jobSchedules.bicep' = [for i in range(StorageIndex, Storage
   ]
 }]
 
-module roleAssignment 'roleAssignment.bicep' = {
+module roleAssignment '../../roleAssignment.bicep' = {
   name: 'RoleAssignment_${StorageResourceGroupName}_${Timestamp}'
   scope: resourceGroup(StorageResourceGroupName)
   params: {

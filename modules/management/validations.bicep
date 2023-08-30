@@ -24,7 +24,7 @@ param WorkspaceName string
 var CpuCountMax = contains(HostPoolType, 'Pooled') ? 32 : 128
 var CpuCountMin = contains(HostPoolType, 'Pooled') ? 4 : 2
 
-module acceleratedNetworking 'deploymentScript.bicep' = if (SessionHostCount > 0) {
+module acceleratedNetworking '../deploymentScript.bicep' = if (SessionHostCount > 0) {
   name: 'DeploymentScript_AcceleratedNetworkingValidation_${Timestamp}'
   params: {
     Arguments: '-Location ${Location} -VmSize ${VirtualMachineSize}'
@@ -37,7 +37,7 @@ module acceleratedNetworking 'deploymentScript.bicep' = if (SessionHostCount > 0
   }
 }
 
-module availabilityZones 'deploymentScript.bicep' = if (Availability == 'AvailabilityZones') {
+module availabilityZones '../deploymentScript.bicep' = if (Availability == 'AvailabilityZones') {
   name: 'DeploymentScript_AvailabilityZoneValidation_${Timestamp}'
   params: {
     Arguments: '-Location ${Location} -VmSize ${VirtualMachineSize}'
@@ -50,7 +50,7 @@ module availabilityZones 'deploymentScript.bicep' = if (Availability == 'Availab
   }
 }
 
-module azureNetAppFiles 'deploymentScript.bicep' = {
+module azureNetAppFiles '../deploymentScript.bicep' = {
   name: 'DeploymentScript_AzureNetAppFilesValidation_${Timestamp}'
   params: {
     Arguments: '-Location ${Location} -StorageSolution ${StorageSolution} -VnetName ${VnetName} -VnetResourceGroupName ${VnetResourceGroupName}'
@@ -63,7 +63,7 @@ module azureNetAppFiles 'deploymentScript.bicep' = {
   }
 }
 
-module diskSku 'deploymentScript.bicep' = if (contains(DiskSku, 'Premium')) {
+module diskSku '../deploymentScript.bicep' = if (contains(DiskSku, 'Premium')) {
   name: 'DeploymentScript_DiskSkuValidation_${Timestamp}'
   params: {
     Arguments: '-Location ${Location} -VmSize ${VirtualMachineSize}'
@@ -76,7 +76,7 @@ module diskSku 'deploymentScript.bicep' = if (contains(DiskSku, 'Premium')) {
   }
 }
 
-module hyperVGeneration 'deploymentScript.bicep' = if (contains(ImageSku, '-g2') || contains(ImageSku, 'win11')) {
+module hyperVGeneration '../deploymentScript.bicep' = if (contains(ImageSku, '-g2') || contains(ImageSku, 'win11')) {
   name: 'DeploymentScript_HyperVGenerationValidation_${Timestamp}'
   params: {
     Arguments: '-Location ${Location} -VmSize ${VirtualMachineSize}'
@@ -89,7 +89,7 @@ module hyperVGeneration 'deploymentScript.bicep' = if (contains(ImageSku, '-g2')
   }
 }
 
-module kerberosEncryption 'deploymentScript.bicep' = if (ActiveDirectorySolution == 'AzureActiveDirectoryDomainServices') {
+module kerberosEncryption '../deploymentScript.bicep' = if (ActiveDirectorySolution == 'AzureActiveDirectoryDomainServices') {
   name: 'DeploymentScript_KerberosEncryptionValidation_${Timestamp}'
   params: {
     Arguments: '-DomainName ${DomainName} -KerberosEncryption ${KerberosEncryption}'
@@ -104,7 +104,7 @@ module kerberosEncryption 'deploymentScript.bicep' = if (ActiveDirectorySolution
 
 // add validation for locations; the selected vnet should have the same location as the "LocationVirtualMachine"
 
-module storage 'deploymentScript.bicep' = if (Fslogix) {
+module storage '../deploymentScript.bicep' = if (Fslogix) {
   name: 'DeploymentScript_StorageValidation_${Timestamp}'
   params: {
     Arguments: '-SecurityPrincipalIdsCount ${SecurityPrincipalIdsCount} -SecurityPrincipalNamesCount ${SecurityPrincipalNamesCount} -StorageCount ${StorageCount}'
@@ -117,7 +117,7 @@ module storage 'deploymentScript.bicep' = if (Fslogix) {
   }
 }
 
-module trustedLaunch 'deploymentScript.bicep' = if (contains(ImageSku, '-g2') || contains(ImageSku, 'win11')) {
+module trustedLaunch '../deploymentScript.bicep' = if (contains(ImageSku, '-g2') || contains(ImageSku, 'win11')) {
   name: 'DeploymentScript_TrustedLaunchValidation_${Timestamp}'
   params: {
     Arguments: '-Location ${Location} -VmSize ${VirtualMachineSize}'
@@ -134,7 +134,7 @@ module trustedLaunch 'deploymentScript.bicep' = if (contains(ImageSku, '-g2') ||
 // Recommended minimum vCPU is 4 for multisession hosts and 2 for single session hosts.
 // Recommended maximum vCPU is 32 for multisession hosts and 128 for single session hosts.
 // https://learn.microsoft.com/windows-server/remote/remote-desktop-services/virtual-machine-recs
-module cpuCount 'deploymentScript.bicep' = {
+module cpuCount '../deploymentScript.bicep' = {
   name: 'DeploymentScript_CpuCountValidation_${Timestamp}'
   params: {
     Arguments: '-CpuCountMax ${CpuCountMax} -CpuCountMin ${CpuCountMin} -Location ${Location} -VmSize ${VirtualMachineSize}'
@@ -147,7 +147,7 @@ module cpuCount 'deploymentScript.bicep' = {
   }
 }
 
-module cpuQuota 'deploymentScript.bicep' = {
+module cpuQuota '../deploymentScript.bicep' = {
   name: 'DeploymentScript_CpuQuotaValidation_${Timestamp}'
   params: {
     Arguments: '-Location ${Location} -SessionHostCount ${SessionHostCount} -VmSize ${VirtualMachineSize}'
@@ -160,7 +160,7 @@ module cpuQuota 'deploymentScript.bicep' = {
   }
 }
 
-module workspace 'deploymentScript.bicep' = {
+module workspace '../deploymentScript.bicep' = {
   name: 'DeploymentScript_Workspace_${Timestamp}'
   params: {
     Arguments: '-ResourceGroupName ${resourceGroup().name} -ResourceName ${WorkspaceName}'

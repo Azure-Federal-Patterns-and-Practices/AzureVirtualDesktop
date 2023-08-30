@@ -46,7 +46,7 @@ resource userAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@
   tags: Tags
 }
 
-module roleAssignments 'roleAssignment.bicep' = [for i in range(0, length(RoleAssignments)): {
+module roleAssignments '../roleAssignment.bicep' = [for i in range(0, length(RoleAssignments)): {
   name: 'UAI_RoleAssignment_${i}_${Timestamp}'
   scope: resourceGroup(RoleAssignments[i].scope)
   params: {

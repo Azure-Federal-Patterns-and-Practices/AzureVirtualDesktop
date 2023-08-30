@@ -52,7 +52,7 @@ module applicationGroup 'applicationGroup.bicep' = {
   }
 }
 
-module existingWorkspace 'workspace.bicep' = {
+module existingWorkspace '../management/workspace.bicep' = {
   name: 'Workspace_Existing_${Timestamp}'
   scope: resourceGroup(ResourceGroupManagement)
   params: {
@@ -64,7 +64,7 @@ module existingWorkspace 'workspace.bicep' = {
   }
 }
 
-module updateWorkspace 'workspace.bicep' = {
+module updateWorkspace '../management/workspace.bicep' = {
   name: 'Workspace_Update_${Timestamp}'
   scope: resourceGroup(ResourceGroupManagement)
   params: {
