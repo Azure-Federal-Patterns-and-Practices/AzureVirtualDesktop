@@ -68,7 +68,7 @@ module updateWorkspace '../management/workspace.bicep' = {
   name: 'Workspace_Update_${Timestamp}'
   scope: resourceGroup(ResourceGroupManagement)
   params: {
-    ApplicationGroupReferences: union(existingWorkspace.outputs.applicationGroupReferences, applicationGroup.outputs.ApplicationGroupReference)
+    ApplicationGroupReferences: contains(existingWorkspace.outputs.applicationGroupReferences, applicationGroup.outputs.ResourceId) ? existingWorkspace.outputs.applicationGroupReferences : union(existingWorkspace.outputs.applicationGroupReferences, applicationGroup.outputs.ApplicationGroupReference)
     Existing: false
     FriendlyName: WorkspaceFriendlyName
     Location: Location
