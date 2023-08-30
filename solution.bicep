@@ -124,7 +124,7 @@ param ImageVersionResourceId string = ''
 param KerberosEncryption string = 'RC4'
 
 @description('The deployment location for the AVD management resources.')
-param ControlPlaneLocation string = deployment().location
+param LocationControlPlane string = deployment().location
 
 @maxValue(730)
 @minValue(30)
@@ -219,9 +219,6 @@ param Timestamp string = utcNow('yyyyMMddhhmmss')
 @description('The value determines whether the hostpool should receive early AVD updates for testing.')
 param ValidationEnvironment bool = false
 
-@description('Input the desired location for the virtual machines and their associated resources.')
-param VirtualMachineLocation string = deployment().location
-
 /* @allowed([
   'AzureMonitorAgent'
   'LogAnalyticsAgent'
@@ -242,149 +239,114 @@ param VirtualMachineUsername string
 @description('The friendly name for the AVD workspace that is displayed in the client.')
 param WorkspaceFriendlyName string
 
-//  BATCH SESSION HOSTS
-// The following variables are used to determine the batches to deploy any number of AVD session hosts.
-var MaxResourcesPerTemplateDeployment = 79 // This is the max number of session hosts that can be deployed from the sessionHosts.bicep file in each batch / for loop. Math: (800 - <Number of Static Resources>) / <Number of Looped Resources> 
-var DivisionValue = SessionHostCount / MaxResourcesPerTemplateDeployment // This determines if any full batches are required.
-var DivisionRemainderValue = SessionHostCount % MaxResourcesPerTemplateDeployment // This determines if any partial batches are required.
-var SessionHostBatchCount = DivisionRemainderValue > 0 ? DivisionValue + 1 : DivisionValue // This determines the total number of batches needed, whether full and / or partial.
-
-//  BATCH AVAILABILITY SETS
-// The following variables are used to determine the number of availability sets.
-var MaxAvSetMembers = 200 // This is the max number of session hosts that can be deployed in an availability set.
-var BeginAvSetRange = SessionHostIndex / MaxAvSetMembers // This determines the availability set to start with.
-var EndAvSetRange = (SessionHostCount + SessionHostIndex) / MaxAvSetMembers // This determines the availability set to end with.
-var AvailabilitySetsCount = length(range(BeginAvSetRange, (EndAvSetRange - BeginAvSetRange) + 1))
-
-// RESOURCE NAMES
-var AvailabilitySetNamePrefix = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.availabilitySets), 'location', Locations[VirtualMachineLocation].abbreviation)}-'
-var AutomationAccountName = replace(replace(NamingConvention_SharedServices, 'resourceType', ResourceAbbreviations.automationAccounts), 'location', Locations[VirtualMachineLocation].abbreviation)
-var DeploymentScriptNamePrefix = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.deploymentScripts), 'location', Locations[VirtualMachineLocation].abbreviation)}-'
-var DesktopApplicationGroupName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.desktopApplicationGroups), 'location', Locations[ControlPlaneLocation].abbreviation)
-var DiskEncryptionSetName = replace(replace(NamingConvention_SharedServices, 'resourceType', ResourceAbbreviations.diskEncryptionSets), 'location', Locations[VirtualMachineLocation].abbreviation)
-var DiskNamePrefix = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.disks), 'location', Locations[VirtualMachineLocation].abbreviation)}-'
-var FileShareNames = {
-  CloudCacheProfileContainer: [
-    'profile-containers'
-  ]
-  CloudCacheProfileOfficeContainer: [
-    'office-containers'
-    'profile-containers'
-  ]
-  ProfileContainer: [
-    'profile-containers'
-  ]
-  ProfileOfficeContainer: [
-    'office-containers'
-    'profile-containers'
-  ]
+// Existing Virtual Network Location
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2023-04-01' existing = {
+  name: split(SubnetResourceId, '/')[8]
+  scope: resourceGroup(split(SubnetResourceId, '/')[2], split(SubnetResourceId, '/')[4])
 }
-var HostPoolName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.hostPools), 'location', Locations[ControlPlaneLocation].abbreviation)
-var KeyVaultName = replace(replace(NamingConvention_SharedServices, 'resourceType', ResourceAbbreviations.keyVaults), 'location', Locations[VirtualMachineLocation].abbreviation)
-var Locations = loadJsonContent('artifacts/locations.json')
-var LogAnalyticsWorkspaceName = replace(replace(NamingConvention_SharedServices, 'resourceType', ResourceAbbreviations.logAnalyticsWorkspaces), 'location', Locations[VirtualMachineLocation].abbreviation)
-var NamingConvention = 'resourceType-${Identifier}-${Environment}-location-${StampIndex}'
-var NamingConvention_SharedServices = 'resourceType-${Identifier}-${Environment}-location'
-var NetAppAccountName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.netAppAccounts), 'location', Locations[VirtualMachineLocation].abbreviation)
-var NetAppCapacityPoolName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.netAppCapacityPools), 'location', Locations[VirtualMachineLocation].abbreviation)
-var NetworkInterfaceNamePrefix = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.networkInterfaces), 'location', Locations[VirtualMachineLocation].abbreviation)}-'
-var RecoveryServicesVaultName = replace(replace(NamingConvention_SharedServices, 'resourceType', ResourceAbbreviations.recoveryServicesVaults), 'location', Locations[VirtualMachineLocation].abbreviation)
-var ResourceAbbreviations = loadJsonContent('artifacts/resourceAbbreviations.json')
-var ResourceGroupControlPlane = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[ControlPlaneLocation].abbreviation)}-vd-controlPlane'
-var ResourceGroupHosts = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[VirtualMachineLocation].abbreviation)}-vd-hosts'
-var ResourceGroupManagement = '${replace(replace(NamingConvention_SharedServices, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[VirtualMachineLocation].abbreviation)}-vd-management'
-var ResourceGroupStorage = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[VirtualMachineLocation].abbreviation)}-vd-storage'
-var StorageAccountNamePrefix = replace(replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.storageAccounts), 'location', Locations[VirtualMachineLocation].abbreviation), '-', '')
-var UserAssignedIdentityName = replace(replace(NamingConvention_SharedServices, 'resourceType', ResourceAbbreviations.userAssignedIdentities), 'location', Locations[VirtualMachineLocation].abbreviation)
-var VirtualMachineNamePrefix = replace(replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.virtualMachines), 'location', Locations[VirtualMachineLocation].abbreviation), '-', '')
-var WorkspaceName = replace(replace(NamingConvention_SharedServices, 'resourceType', ResourceAbbreviations.workspaces), 'location', Locations[ControlPlaneLocation].abbreviation)
 
-
-// LOGIC & COMPUTED VALUES
-var FileShares = FileShareNames[FslogixSolution]
-var Fslogix = FslogixStorage == 'None' || !contains(ActiveDirectorySolution, 'DomainServices') ? false : true
-var Netbios = split(DomainName, '.')[0]
-var PooledHostPool = split(HostPoolType, ' ')[0] == 'Pooled' ? true : false
-var PrivateEndpoint = contains(FslogixStorage, 'PrivateEndpoint') ? true : false
-var ResourceGroups = Fslogix ? [
-  ResourceGroupControlPlane
-  ResourceGroupHosts
-  ResourceGroupManagement
-  ResourceGroupStorage
-] : [
-  ResourceGroupControlPlane
-  ResourceGroupHosts
-  ResourceGroupManagement
-]
-var RoleDefinitions = {
-  DesktopVirtualizationPowerOnContributor: '489581de-a3bd-480d-9518-53dea7416b33'
-  Reader: 'acdd72a7-3385-48ef-bd42-f606fba81ae7'
+// Resource Names
+module resourceNames 'modules/resourceNames.bicep' = {
+  name: 'ResourceNames_${Timestamp}'
+  params: {
+    Environment: Environment
+    Identifier: Identifier
+    LocationControlPlane: LocationControlPlane
+    LocationVirtualMachines: virtualNetwork.location
+    StampIndex: StampIndex
+  }
 }
-var SecurityPrincipalIdsCount = length(SecurityPrincipalObjectIds)
-var SecurityPrincipalNamesCount = length(SecurityPrincipalNames)
-var StorageSku = FslogixStorage == 'None' ? 'None' : split(FslogixStorage, ' ')[1]
-var StorageSolution = split(FslogixStorage, ' ')[0]
-var StorageSuffix = environment().suffixes.storage
-var VmTemplate = '{"domain":"${DomainName}","galleryImageOffer":"${ImageOffer}","galleryImagePublisher":"${ImagePublisher}","galleryImageSKU":"${ImageSku}","imageType":"Gallery","imageUri":null,"customImageId":null,"namePrefix":"${VirtualMachineNamePrefix}","osDiskType":"${DiskSku}","useManagedDisks":true,"VirtualMachineSize":{"id":"${VirtualMachineSize}","cores":null,"ram":null},"galleryItemId":"${ImagePublisher}.${ImageOffer}${ImageSku}"}'
+
+// Logic
+module logic 'modules/logic.bicep' = {
+  name: 'Logic_${Timestamp}'
+  params: {
+    ActiveDirectorySolution: ActiveDirectorySolution
+    DiskSku: DiskSku
+    DomainName: DomainName
+    FileShareNames: resourceNames.outputs.FileShareNames
+    FslogixSolution: FslogixSolution
+    FslogixStorage: FslogixStorage
+    HostPoolType: HostPoolType
+    ImageOffer: ImageOffer
+    ImagePublisher: ImagePublisher
+    ImageSku: ImageSku
+    Locations: resourceNames.outputs.Locations
+    LocationVirtualMachines: virtualNetwork.location
+    ResourceGroupControlPlane: resourceNames.outputs.ResourceGroupControlPlane
+    ResourceGroupHosts: resourceNames.outputs.ResourceGroupHosts
+    ResourceGroupManagement: resourceNames.outputs.ResourceGroupManagement
+    ResourceGroupStorage: resourceNames.outputs.ResourceGroupStorage
+    SecurityPrincipalNames: SecurityPrincipalNames
+    SecurityPrincipalObjectIds: SecurityPrincipalObjectIds
+    SessionHostCount: SessionHostCount
+    SessionHostIndex: SessionHostIndex
+    VirtualMachineNamePrefix: resourceNames.outputs.VirtualMachineNamePrefix
+    VirtualMachineSize: VirtualMachineSize
+  }
+}
 
 // Resource Groups
-resource resourceGroups 'Microsoft.Resources/resourceGroups@2020-10-01' = [for i in range(0, length(ResourceGroups)): {
-  name: ResourceGroups[i]
-  location: contains(ResourceGroups[i], 'controlPlane') ? ControlPlaneLocation : VirtualMachineLocation
-  tags: contains(Tags, 'Microsoft.Resources/resourceGroups') ? Tags['Microsoft.Resources/resourceGroups'] : {}
-}]
-
+module rgs 'modules/resourceGroups.bicep' = {
+  name: 'ResourceGroups_${Timestamp}'
+  params: {
+    LocationControlPlane: LocationControlPlane
+    LocationVirtualMachines: virtualNetwork.location
+    ResourceGroups: logic.outputs.ResourceGroups
+    Tags: Tags
+  }
+}
 
 // Management Services: Logging, Automation, Keys, Encryption
 module management 'modules/management.bicep' = {
   name: 'Management_${Timestamp}'
   params: {
     ActiveDirectorySolution: ActiveDirectorySolution
-    AutomationAccountName: AutomationAccountName
+    AutomationAccountName: resourceNames.outputs.AutomationAccountName
     Availability: Availability
     AvdObjectId: AvdObjectId
-    ControlPlaneLocation: ControlPlaneLocation
-    DeploymentScriptNamePrefix: DeploymentScriptNamePrefix
+    LocationControlPlane: LocationControlPlane
+    DeploymentScriptNamePrefix: resourceNames.outputs.DeploymentScriptNamePrefix
     DiskEncryption: DiskEncryption
-    DiskEncryptionSetName: DiskEncryptionSetName
+    DiskEncryptionSetName: resourceNames.outputs.DiskEncryptionSetName
     DiskSku: DiskSku
     DomainName: DomainName
     DrainMode: DrainMode
     Environment: Environment
-    Fslogix: Fslogix
+    Fslogix: logic.outputs.Fslogix
     FslogixSolution: FslogixSolution
     FslogixStorage: FslogixStorage
     HostPoolType: HostPoolType
     ImageSku: ImageSku
     KerberosEncryption: KerberosEncryption
-    KeyVaultName: KeyVaultName
-    LogAnalyticsWorkspaceName: LogAnalyticsWorkspaceName
+    KeyVaultName: resourceNames.outputs.KeyVaultName
+    LogAnalyticsWorkspaceName: resourceNames.outputs.LogAnalyticsWorkspaceName
     LogAnalyticsWorkspaceRetention: LogAnalyticsWorkspaceRetention
     LogAnalyticsWorkspaceSku: LogAnalyticsWorkspaceSku
     Monitoring: Monitoring
-    PooledHostPool: PooledHostPool
+    PooledHostPool: logic.outputs.PooledHostPool
     RecoveryServices: RecoveryServices
-    RecoveryServicesVaultName: RecoveryServicesVaultName
-    ResourceGroupManagement: ResourceGroupManagement
-    ResourceGroupStorage: ResourceGroupStorage
-    RoleDefinitions: RoleDefinitions
-    SecurityPrincipalIdsCount: SecurityPrincipalIdsCount
-    SecurityPrincipalNamesCount: SecurityPrincipalNamesCount
+    RecoveryServicesVaultName: resourceNames.outputs.RecoveryServicesVaultName
+    ResourceGroupManagement: resourceNames.outputs.ResourceGroupManagement
+    ResourceGroupStorage: resourceNames.outputs.ResourceGroupStorage
+    RoleDefinitions: logic.outputs.RoleDefinitions
+    SecurityPrincipalIdsCount: logic.outputs.SecurityPrincipalIdsCount
+    SecurityPrincipalNamesCount: logic.outputs.SecurityPrincipalNamesCount
     SessionHostCount: SessionHostCount
     StorageCount: StorageCount
-    StorageSolution: StorageSolution
+    StorageSolution: logic.outputs.StorageSolution
     SubnetResourceId: SubnetResourceId
     Tags: Tags
     Timestamp: Timestamp
-    TimeZone: Locations[VirtualMachineLocation].timeZone
-    UserAssignedIdentityName: UserAssignedIdentityName
-    VirtualMachineLocation: VirtualMachineLocation
+    TimeZone: logic.outputs.TimeZone
+    UserAssignedIdentityName: resourceNames.outputs.UserAssignedIdentityName
+    LocationVirtualMachines: virtualNetwork.location
     VirtualMachineSize: VirtualMachineSize
     WorkspaceFriendlyName: WorkspaceFriendlyName
-    WorkspaceName: WorkspaceName
+    WorkspaceName: resourceNames.outputs.WorkspaceName
   }
   dependsOn: [
-    resourceGroups
+    rgs
   ]
 }
 
@@ -392,114 +354,114 @@ module management 'modules/management.bicep' = {
 // This module deploys the host pool and desktop application group
 module controlPlane 'modules/controlPlane.bicep' = {
   name: 'ControlPlane_${Timestamp}'
-  scope: resourceGroup(ResourceGroupControlPlane)
   params: {
     ActiveDirectorySolution: ActiveDirectorySolution
     CustomRdpProperty: CustomRdpProperty
-    DesktopApplicationGroupName: DesktopApplicationGroupName
-    HostPoolName: HostPoolName
+    DesktopApplicationGroupName: resourceNames.outputs.DesktopApplicationGroupName
+    HostPoolName: resourceNames.outputs.HostPoolName
     HostPoolType: HostPoolType
-    Location: ControlPlaneLocation
+    Location: LocationControlPlane
     LogAnalyticsWorkspaceResourceId: Monitoring ? management.outputs.LogAnalyticsWorkspaceResourceId : ''
     MaxSessionLimit: MaxSessionLimit
     Monitoring: Monitoring
-    ResourceGroupManagement: ResourceGroupManagement
+    RoleDefinitions: logic.outputs.RoleDefinitions
+    ResourceGroupControlPlane: resourceNames.outputs.ResourceGroupControlPlane
+    ResourceGroupManagement: resourceNames.outputs.ResourceGroupManagement
     SecurityPrincipalIds: SecurityPrincipalObjectIds
     TagsApplicationGroup: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
+      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.DesktopVirtualization/applicationGroups') ? Tags['Microsoft.DesktopVirtualization/applicationGroups'] : {})
     TagsHostPool: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
+      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.DesktopVirtualization/hostPools') ? Tags['Microsoft.DesktopVirtualization/hostPools'] : {})
     Timestamp: Timestamp
     ValidationEnvironment: ValidationEnvironment
-    VmTemplate: VmTemplate
+    VmTemplate: logic.outputs.VmTemplate
     WorkspaceFriendlyName: WorkspaceFriendlyName
-    WorkspaceName: WorkspaceName
+    WorkspaceName: resourceNames.outputs.WorkspaceName
   }
   dependsOn: [
-    resourceGroups
+    rgs
   ]
 }
 
-module fslogix 'modules/fslogix/fslogix.bicep' = if (Fslogix) {
+module fslogix 'modules/fslogix/fslogix.bicep' = if (!(FslogixStorage == 'None') && contains(ActiveDirectorySolution, 'DomainServices')) {
   name: 'FSLogix_${Timestamp}'
-  scope: resourceGroup(ResourceGroupStorage)
   params: {
     _artifactsLocation: _artifactsLocation
     _artifactsLocationSasToken: _artifactsLocationSasToken
     ActiveDirectoryConnection: management.outputs.ValidateANFfActiveDirectory
     ActiveDirectorySolution: ActiveDirectorySolution
-    AutomationAccountName: AutomationAccountName
+    AutomationAccountName: resourceNames.outputs.AutomationAccountName
     Availability: Availability
     AzureFilesPrivateDnsZoneResourceId: AzureFilesPrivateDnsZoneResourceId
     ClientId: management.outputs.UserAssignedIdentityClientId
     DelegatedSubnetId: management.outputs.ValidateANFSubnetId
-    DeploymentScriptNamePrefix: DeploymentScriptNamePrefix
+    DeploymentScriptNamePrefix: resourceNames.outputs.DeploymentScriptNamePrefix
     DiskEncryption: DiskEncryption
     DiskEncryptionSetResourceId: DiskEncryption ? management.outputs.DiskEncryptionSetResourceId : ''
-    DiskNamePrefix: DiskNamePrefix
+    DiskNamePrefix: resourceNames.outputs.DiskNamePrefix
     DiskSku: DiskSku
     DnsServers: management.outputs.ValidateANFDnsServers
     DomainJoinPassword: DomainJoinPassword
     DomainJoinUserPrincipalName: DomainJoinUserPrincipalName
     DomainName: DomainName
-    FileShares: FileShares
+    FileShares: logic.outputs.FileShares
     FslogixShareSizeInGB: FslogixShareSizeInGB
     FslogixSolution: FslogixSolution
     FslogixStorage: FslogixStorage
     KerberosEncryption: KerberosEncryption
-    Location: VirtualMachineLocation
-    NetAppAccountName: NetAppAccountName
-    NetAppCapacityPoolName: NetAppCapacityPoolName
-    Netbios: Netbios
-    NetworkInterfaceNamePrefix: NetworkInterfaceNamePrefix
+    Location: virtualNetwork.location
+    NetAppAccountName: resourceNames.outputs.NetAppAccountName
+    NetAppCapacityPoolName: resourceNames.outputs.NetAppCapacityPoolName
+    Netbios: logic.outputs.Netbios
+    NetworkInterfaceNamePrefix: resourceNames.outputs.NetworkInterfaceNamePrefix
     OuPath: OuPath
-    PrivateEndpoint: PrivateEndpoint
+    PrivateEndpoint: logic.outputs.PrivateEndpoint
     RecoveryServices: RecoveryServices
-    RecoveryServicesVaultName: RecoveryServicesVaultName
-    ResourceGroupManagement: ResourceGroupManagement
-    ResourceGroupStorage: ResourceGroupStorage
+    RecoveryServicesVaultName: resourceNames.outputs.RecoveryServicesVaultName
+    ResourceGroupManagement: resourceNames.outputs.ResourceGroupManagement
+    ResourceGroupStorage: resourceNames.outputs.ResourceGroupStorage
     SecurityPrincipalIds: SecurityPrincipalObjectIds
     SecurityPrincipalNames: SecurityPrincipalNames
-    SmbServerLocation: Locations[VirtualMachineLocation].acronym
-    StorageAccountNamePrefix: StorageAccountNamePrefix
+    SmbServerLocation: logic.outputs.SmbServerLocation
+    StorageAccountNamePrefix: resourceNames.outputs.StorageAccountNamePrefix
     StorageCount: StorageCount
     StorageIndex: StorageIndex
-    StorageSku: StorageSku
-    StorageSolution: StorageSolution
+    StorageSku: logic.outputs.StorageSku
+    StorageSolution: logic.outputs.StorageSolution
     Subnet: split(SubnetResourceId, '/')[10]
     TagsAutomationAccounts: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
+      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.Automation/automationAccounts') ? Tags['Microsoft.Automation/automationAccounts'] : {})
     TagsDeploymentScripts: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
+      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.Resources/deploymentScripts') ? Tags['Microsoft.Resources/deploymentScripts'] : {})
     TagsNetAppAccount: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
+      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.NetApp/netAppAccounts') ? Tags['Microsoft.NetApp/netAppAccounts'] : {})
     TagsNetworkInterfaces: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
+      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.Network/networkInterfaces') ? Tags['Microsoft.Network/networkInterfaces'] : {})
     TagsPrivateEndpoints: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
+      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.Network/privateEndpoints') ? Tags['Microsoft.Network/privateEndpoints'] : {})
     TagsStorageAccounts: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
+      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.Storage/storageAccounts') ? Tags['Microsoft.Storage/storageAccounts'] : {})
     TagsRecoveryServicesVault: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
+      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.RecoveryServices/vaults') ? Tags['Microsoft.RecoveryServices/vaults'] : {})
     TagsVirtualMachines: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
+      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.Compute/virtualMachines') ? Tags['Microsoft.Compute/virtualMachines'] : {})
     Timestamp: Timestamp
-    TimeZone: Locations[VirtualMachineLocation].timeZone
+    TimeZone: logic.outputs.TimeZone
     TrustedLaunch: management.outputs.ValidateTrustedLaunch
     UserAssignedIdentityResourceId: management.outputs.UserAssignedIdentityResourceId
     VirtualNetwork: split(SubnetResourceId, '/')[8]
     VirtualNetworkResourceGroup: split(SubnetResourceId, '/')[4]
-    VirtualMachineNamePrefix: VirtualMachineNamePrefix
+    VirtualMachineNamePrefix: resourceNames.outputs.VirtualMachineNamePrefix
     VirtualMachinePassword: VirtualMachinePassword
     VirtualMachineUsername: VirtualMachineUsername
   }
@@ -507,52 +469,52 @@ module fslogix 'modules/fslogix/fslogix.bicep' = if (Fslogix) {
 
 module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
   name: 'SessionHosts_${Timestamp}'
-  scope: resourceGroup(ResourceGroupHosts)
   params: {
     _artifactsLocation: _artifactsLocation
     _artifactsLocationSasToken: _artifactsLocationSasToken
     AcceleratedNetworking: management.outputs.ValidateAcceleratedNetworking
-    AutomationAccountName: AutomationAccountName
+    AutomationAccountName: resourceNames.outputs.AutomationAccountName
     Availability: Availability
-    AvailabilitySetNamePrefix: AvailabilitySetNamePrefix
-    AvailabilitySetsCount: AvailabilitySetsCount
-    AvailabilitySetsIndex: BeginAvSetRange
+    AvailabilitySetNamePrefix: resourceNames.outputs.AvailabilitySetNamePrefix
+    AvailabilitySetsCount: logic.outputs.AvailabilitySetsCount
+    AvailabilitySetsIndex: logic.outputs.BeginAvSetRange
     AvailabilityZones: management.outputs.ValidateAvailabilityZones
-    DeploymentScriptNamePrefix: DeploymentScriptNamePrefix
+    DeploymentScriptNamePrefix: resourceNames.outputs.DeploymentScriptNamePrefix
     DiskEncryption: DiskEncryption
     DiskEncryptionSetResourceId: DiskEncryption ? management.outputs.DiskEncryptionSetResourceId : ''
-    DiskNamePrefix: DiskNamePrefix
+    DiskNamePrefix: resourceNames.outputs.DiskNamePrefix
     DiskSku: DiskSku
-    DivisionRemainderValue: DivisionRemainderValue
+    DivisionRemainderValue: logic.outputs.DivisionRemainderValue
     DomainJoinPassword: DomainJoinPassword
     DomainJoinUserPrincipalName: DomainJoinUserPrincipalName
     DomainName: DomainName
     ActiveDirectorySolution: ActiveDirectorySolution
     DrainMode: DrainMode
-    Fslogix: Fslogix
+    Fslogix: logic.outputs.Fslogix
     FslogixSolution: FslogixSolution
-    HostPoolName: HostPoolName
+    HostPoolName: resourceNames.outputs.HostPoolName
     HostPoolType: HostPoolType
     ImageOffer: ImageOffer
     ImagePublisher: ImagePublisher
     ImageSku: ImageSku
     ImageVersionResourceId: ImageVersionResourceId
-    Location: VirtualMachineLocation
-    LogAnalyticsWorkspaceName: LogAnalyticsWorkspaceName
+    Location: virtualNetwork.location
+    LogAnalyticsWorkspaceName: resourceNames.outputs.LogAnalyticsWorkspaceName
     ManagedIdentityResourceId: management.outputs.UserAssignedIdentityResourceId
-    MaxResourcesPerTemplateDeployment: MaxResourcesPerTemplateDeployment
+    MaxResourcesPerTemplateDeployment: logic.outputs.MaxResourcesPerTemplateDeployment
     Monitoring: Monitoring
-    NetAppFileShares: Fslogix ? fslogix.outputs.netAppShares : [
+    NetAppFileShares: logic.outputs.Fslogix ? fslogix.outputs.netAppShares : [
       'None'
     ]
-    NetworkInterfaceNamePrefix: NetworkInterfaceNamePrefix
+    NetworkInterfaceNamePrefix: resourceNames.outputs.NetworkInterfaceNamePrefix
     OuPath: OuPath
-    PooledHostPool: PooledHostPool
+    PooledHostPool: logic.outputs.PooledHostPool
     RecoveryServices: RecoveryServices
-    RecoveryServicesVaultName: RecoveryServicesVaultName
-    ResourceGroupControlPlane: ResourceGroupControlPlane
-    ResourceGroupHosts: ResourceGroupHosts
-    ResourceGroupManagement: ResourceGroupManagement
+    RecoveryServicesVaultName: resourceNames.outputs.RecoveryServicesVaultName
+    ResourceGroupControlPlane: resourceNames.outputs.ResourceGroupControlPlane
+    ResourceGroupHosts: resourceNames.outputs.ResourceGroupHosts
+    ResourceGroupManagement: resourceNames.outputs.ResourceGroupManagement
+    RoleDefinitions: logic.outputs.RoleDefinitions
     ScalingBeginPeakTime: ScalingBeginPeakTime
     ScalingEndPeakTime: ScalingEndPeakTime
     ScalingLimitSecondsToForceLogOffUser: ScalingLimitSecondsToForceLogOffUser
@@ -561,38 +523,38 @@ module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
     ScalingTool: ScalingTool
     SecurityPrincipalObjectIds: SecurityPrincipalObjectIds
     SecurityLogAnalyticsWorkspaceResourceId: SecurityLogAnalyticsWorkspaceResourceId
-    SessionHostBatchCount: SessionHostBatchCount
+    SessionHostBatchCount: logic.outputs.SessionHostBatchCount
     SessionHostIndex: SessionHostIndex
-    StorageAccountPrefix: StorageAccountNamePrefix
+    StorageAccountPrefix: resourceNames.outputs.StorageAccountNamePrefix
     StorageCount: StorageCount
     StorageIndex: StorageIndex
-    StorageSolution: StorageSolution
-    StorageSuffix: StorageSuffix
+    StorageSolution: logic.outputs.StorageSolution
+    StorageSuffix: logic.outputs.StorageSuffix
     Subnet: split(SubnetResourceId, '/')[10]
     TagsAutomationAccounts: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
+      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.Automation/automationAccounts') ? Tags['Microsoft.Automation/automationAccounts'] : {})
     TagsAvailabilitySets: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
+      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.Compute/availabilitySets') ? Tags['Microsoft.Compute/availabilitySets'] : {})
     TagsDeploymentScripts: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
+      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.Resources/deploymentScripts') ? Tags['Microsoft.Resources/deploymentScripts'] : {})
     TagsNetworkInterfaces: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
+      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.Network/networkInterfaces') ? Tags['Microsoft.Network/networkInterfaces'] : {})
     TagsRecoveryServicesVault: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
+      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.RecoveryServices/vaults') ? Tags['Microsoft.RecoveryServices/vaults'] : {})
     TagsVirtualMachines: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${HostPoolName}'
+      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.Compute/virtualMachines') ? Tags['Microsoft.Compute/virtualMachines'] : {})
-    TimeDifference: Locations[VirtualMachineLocation].timeDifference
+    TimeDifference: logic.outputs.TimeDifference
     Timestamp: Timestamp
-    TimeZone: Locations[VirtualMachineLocation].timeZone
+    TimeZone: logic.outputs.TimeZone
     TrustedLaunch: management.outputs.ValidateTrustedLaunch
-    VirtualMachineLocation: VirtualMachineLocation
-    VirtualMachineNamePrefix: VirtualMachineNamePrefix
+    LocationVirtualMachine: virtualNetwork.location
+    VirtualMachineNamePrefix: resourceNames.outputs.VirtualMachineNamePrefix
     VirtualMachinePassword: VirtualMachinePassword
     VirtualMachineSize: VirtualMachineSize
     VirtualMachineUsername: VirtualMachineUsername
@@ -600,6 +562,6 @@ module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
     VirtualNetworkResourceGroup: split(SubnetResourceId, '/')[4]
   }
   dependsOn: [
-    resourceGroups
+    rgs
   ]
 }

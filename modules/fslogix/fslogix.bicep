@@ -1,3 +1,5 @@
+targetScope = 'subscription'
+
 param _artifactsLocation string
 @secure()
 param _artifactsLocationSasToken string

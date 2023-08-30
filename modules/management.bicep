@@ -4,7 +4,7 @@ param ActiveDirectorySolution string
 param AutomationAccountName string
 param Availability string
 param AvdObjectId string
-param ControlPlaneLocation string
+param LocationControlPlane string
 param DeploymentScriptNamePrefix string
 param DiskEncryption bool
 param DiskEncryptionSetName string
@@ -19,6 +19,7 @@ param HostPoolType string
 param ImageSku string
 param KerberosEncryption string
 param KeyVaultName string
+param LocationVirtualMachines string
 param LogAnalyticsWorkspaceName string
 param LogAnalyticsWorkspaceRetention int
 param LogAnalyticsWorkspaceSku string
@@ -39,7 +40,6 @@ param Tags object
 param Timestamp string
 param TimeZone string
 param UserAssignedIdentityName string
-param VirtualMachineLocation string
 param VirtualMachineSize string
 param WorkspaceFriendlyName string
 param WorkspaceName string
@@ -52,7 +52,7 @@ module userAssignedIdentity 'userAssignedIdentity.bicep' = {
     DrainMode: DrainMode
     Fslogix: Fslogix
     FslogixStorage: FslogixStorage
-    Location: VirtualMachineLocation
+    Location: LocationVirtualMachines
     UserAssignedIdentityName: UserAssignedIdentityName
     ResourceGroupStorage: ResourceGroupStorage
     Tags: contains(Tags, 'Microsoft.ManagedIdentity/userAssignedIdentities') ? Tags['Microsoft.ManagedIdentity/userAssignedIdentities'] : {}
@@ -87,7 +87,7 @@ module validations 'validations.bicep' = {
     HostPoolType: HostPoolType
     ImageSku: ImageSku
     KerberosEncryption: KerberosEncryption
-    Location: VirtualMachineLocation
+    Location: LocationVirtualMachines
     SecurityPrincipalIdsCount: SecurityPrincipalIdsCount
     SecurityPrincipalNamesCount: SecurityPrincipalNamesCount
     SessionHostCount: SessionHostCount
@@ -121,7 +121,7 @@ module logAnalyticsWorkspace 'logAnalyticsWorkspace.bicep' = if (Monitoring) {
     LogAnalyticsWorkspaceName: LogAnalyticsWorkspaceName
     LogAnalyticsWorkspaceRetention: LogAnalyticsWorkspaceRetention
     LogAnalyticsWorkspaceSku: LogAnalyticsWorkspaceSku
-    Location: VirtualMachineLocation
+    Location: LocationVirtualMachines
     Tags: contains(Tags, 'Microsoft.OperationalInsights/workspaces') ? Tags['Microsoft.OperationalInsights/workspaces'] : {}
   }
 }
@@ -132,7 +132,7 @@ module automationAccount 'automationAccount.bicep' = if (PooledHostPool || conta
   scope: resourceGroup(ResourceGroupManagement)
   params: {
     AutomationAccountName: AutomationAccountName
-    Location: VirtualMachineLocation
+    Location: LocationVirtualMachines
     LogAnalyticsWorkspaceResourceId: Monitoring ? logAnalyticsWorkspace.outputs.ResourceId : ''
     Monitoring: Monitoring
     Tags: contains(Tags, 'Microsoft.Automation/automationAccounts') ? Tags['Microsoft.Automation/automationAccounts'] : {}
@@ -147,7 +147,7 @@ module diskEncryption 'diskEncryption.bicep' = if (DiskEncryption) {
     DiskEncryptionSetName: DiskEncryptionSetName
     Environment: Environment
     KeyVaultName: KeyVaultName
-    Location: VirtualMachineLocation
+    Location: LocationVirtualMachines
     TagsDeploymentScripts: contains(Tags, 'Microsoft.Resources/deploymentScripts') ? Tags['Microsoft.Resources/deploymentScripts'] : {}
     TagsDiskEncryptionSet: contains(Tags, 'Microsoft.Compute/diskEncryptionSets') ? Tags['Microsoft.Compute/diskEncryptionSets'] : {}
     TagsKeyVault: contains(Tags, 'Microsoft.KeyVault/vaults') ? Tags['Microsoft.KeyVault/vaults'] : {}
@@ -162,7 +162,7 @@ module recoveryServicesVault 'recoveryServicesVault.bicep' = if (RecoveryService
   scope: resourceGroup(ResourceGroupManagement)
   params: {
     Fslogix: Fslogix
-    Location: VirtualMachineLocation
+    Location: LocationVirtualMachines
     RecoveryServicesVaultName: RecoveryServicesVaultName
     StorageSolution: StorageSolution
     Tags: contains(Tags, 'Microsoft.RecoveryServices/vaults') ? Tags['Microsoft.RecoveryServices/vaults'] : {}
@@ -177,7 +177,7 @@ module workspace 'workspace.bicep' = {
     ApplicationGroupReferences: []
     Existing: validations.outputs.existingWorkspace == 'true' ? true : false
     FriendlyName: WorkspaceFriendlyName
-    Location: ControlPlaneLocation
+    Location: LocationControlPlane
     LogAnalyticsWorkspaceResourceId: Monitoring ? logAnalyticsWorkspace.outputs.ResourceId : ''
     Monitoring: Monitoring
     Tags: contains(Tags, 'Microsoft.DesktopVirtualization/workspaces') ? Tags['Microsoft.DesktopVirtualization/workspaces'] : {}

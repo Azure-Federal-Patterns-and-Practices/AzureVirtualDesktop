@@ -257,15 +257,6 @@
                     "visible": true,
                     "elements": [
                         {
-                            "name": "location",
-                            "type": "Microsoft.Common.LocationSelector",
-                            "label": "Location",
-                            "toolTip": "Select the location for the AVD session host resources: virtual machines, disks, network interfaces, etc.",
-                            "resourceTypes": [
-                                "Microsoft.Compute/virtualMachines"
-                            ]
-                        },
-                        {
                             "name": "availability",
                             "type": "Microsoft.Common.DropDown",
                             "label": "Availability Options",
@@ -1078,7 +1069,6 @@
                 "Availability": "[steps('hosts').availability]",
                 "AvdObjectId": "[first(map(steps('basics').servicePrincipalApi.value, (item) => item.id))]",
                 "AzureFilesPrivateDnsZoneResourceId": "[if(and(equals(steps('userProfiles').storageProduct, 'AzureStorageAccount'), equals(steps('userProfiles').storageEndpoint, 'PrivateEndpoint')), steps('userProfiles').privateDnsZone.resource, '')]",
-                "ControlPlaneLocation": "[steps('controlPlane').location.name]",
                 "DiskEncryption": "[steps('hosts').diskEncryption]",
                 "DiskSku": "[steps('hosts').diskSku]",
                 "DomainJoinPassword": "[steps('hosts').domainJoinCredentials.password]",
@@ -1096,6 +1086,7 @@
                 "ImageSku": "[steps('hosts').image.sku]",
                 "ImageVersionResourceId": "[if(equals(steps('hosts').image.source, 'gallery'), steps('hosts').image.galleryImage.id, '')]",
                 "KerberosEncryption": "[if(or(equals(steps('userProfiles').profileSolution, 'local'), equals(steps('userProfiles').storageProduct, 'AzureNetAppFiles')), 'RC4', steps('userProfiles').storageKerberosEncryption)]",
+                "LocationControlPlane": "[steps('controlPlane').location.name]",
                 "LogAnalyticsWorkspaceRetention": 30,
                 "LogAnalyticsWorkspaceSku": "PerGB2018",
                 "MaxSessionLimit": "[if(equals(steps('controlPlane').hostPool.type, 'Pooled'), steps('controlPlane').hostPool.maxSessions, 1)]",
@@ -1119,7 +1110,6 @@
                 "SubnetResourceId": "[steps('hosts').network.subnet]",
                 "Tags": "[steps('tags').tags]",
                 "ValidationEnvironment": "[steps('controlPlane').hostPool.validation]",
-                "VirtualMachineLocation": "[steps('hosts').location.name]",
                 "VirtualMachinePassword": "[steps('hosts').localAdminCredentials.password]",
                 "VirtualMachineSize": "[steps('hosts').size]",
                 "VirtualMachineUsername": "[steps('hosts').localAdminCredentials.username]",

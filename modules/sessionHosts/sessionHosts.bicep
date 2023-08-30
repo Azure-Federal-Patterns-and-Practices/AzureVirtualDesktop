@@ -1,3 +1,5 @@
+targetScope = 'subscription'
+
 param _artifactsLocation string
 @secure()
 param _artifactsLocationSasToken string
@@ -42,6 +44,7 @@ param RecoveryServicesVaultName string
 param ResourceGroupControlPlane string
 param ResourceGroupHosts string
 param ResourceGroupManagement string
+param RoleDefinitions object
 param ScalingBeginPeakTime string
 param ScalingEndPeakTime string
 param ScalingLimitSecondsToForceLogOffUser string
@@ -68,7 +71,7 @@ param TimeDifference string
 param Timestamp string
 param TimeZone string
 param TrustedLaunch string
-param VirtualMachineLocation string
+param LocationVirtualMachine string
 param VirtualMachineNamePrefix string
 @secure()
 param VirtualMachinePassword string
@@ -77,20 +80,17 @@ param VirtualMachineUsername string
 param VirtualNetwork string
 param VirtualNetworkResourceGroup string
 
-var VirtualMachineUserLoginRoleDefinitionResourceId = resourceId('Microsoft.Authorization/roleDefinitions', 'fb879df8-f326-4884-b1cf-06f3ad86be52')
-
-resource availabilitySets 'Microsoft.Compute/availabilitySets@2019-07-01' = [for i in range(0, AvailabilitySetsCount): if (PooledHostPool && Availability == 'AvailabilitySets') {
-  name: '${AvailabilitySetNamePrefix}${padLeft((i + AvailabilitySetsIndex), 2, '0')}'
-  location: Location
-  tags: TagsAvailabilitySets
-  sku: {
-    name: 'Aligned'
+module availabilitySets 'availabilitySets.bicep' = if (PooledHostPool && Availability == 'AvailabilitySets') {
+  name: 'AvailabilitySets_${Timestamp}'
+  scope: resourceGroup(ResourceGroupHosts)
+  params: {
+    AvailabilitySetNamePrefix: AvailabilitySetNamePrefix
+    AvailabilitySetsCount: AvailabilitySetsCount
+    AvailabilitySetsIndex: AvailabilitySetsIndex
+    Location: Location
+    TagsAvailabilitySets: TagsAvailabilitySets
   }
-  properties: {
-    platformUpdateDomainCount: 5
-    platformFaultDomainCount: 2
-  }
-}]
+}
 
 // Role Assignment for Virtual Machine Login User
 // This module deploys the role assignments to login to Azure AD joined session hosts
@@ -100,7 +100,7 @@ module roleAssignments '../roleAssignment.bicep' = [for i in range(0, length(Sec
   params: {
     PrincipalId: SecurityPrincipalObjectIds[i]
     PrincipalType: 'Group'
-    RoleDefinitionId: VirtualMachineUserLoginRoleDefinitionResourceId
+    RoleDefinitionId: RoleDefinitions.VirtualMachineUserLogin
   }
 }]
 
@@ -180,7 +180,7 @@ resource backupPolicy_Vm 'Microsoft.RecoveryServices/vaults/backupPolicies@2022-
 
 module protectedItems_Vm '../protectedItems/virtualMachines.bicep' = [for i in range(1, SessionHostBatchCount): if (RecoveryServices && !Fslogix) {
   name: 'BackupProtectedItems_VirtualMachines_${i - 1}_${Timestamp}'
-  scope: resourceGroup(resourceGroup().name) // Management Resource Group
+  scope: resourceGroup(ResourceGroupManagement) // Management Resource Group
   params: {
     Location: Location
     PolicyId: backupPolicy_Vm.id
@@ -208,7 +208,7 @@ module scalingTool '../scalingTool.bicep' = if (ScalingTool && PooledHostPool) {
     HostPoolName: HostPoolName
     HostPoolResourceGroupName: ResourceGroupManagement
     LimitSecondsToForceLogOffUser: ScalingLimitSecondsToForceLogOffUser
-    Location: VirtualMachineLocation
+    Location: LocationVirtualMachine
     MinimumNumberOfRdsh: ScalingMinimumNumberOfRdsh
     ResourceGroupHosts: ResourceGroupHosts
     ResourceGroupManagement: ResourceGroupManagement
