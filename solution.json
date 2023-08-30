@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "4280534327351665600"
+      "templateHash": "18053756998184337582"
     }
   },
   "parameters": {
@@ -5276,7 +5276,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "13111711374451884841"
+              "templateHash": "13730438443636625666"
             }
           },
           "parameters": {
@@ -5542,7 +5542,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "10966854819522634394"
+                      "templateHash": "5478708508499571258"
                     }
                   },
                   "parameters": {
@@ -5608,7 +5608,7 @@
                     }
                   },
                   "variables": {
-                    "NicName": "[format('{0}-mgt', parameters('NetworkInterfaceNamePrefix'))]",
+                    "NicName": "[format('{0}mgt', parameters('NetworkInterfaceNamePrefix'))]",
                     "VmName": "[format('{0}mgt', parameters('VirtualMachineNamePrefix'))]"
                   },
                   "resources": [
@@ -5662,7 +5662,7 @@
                               "diskEncryptionSet": "[if(parameters('DiskEncryption'), createObject('id', parameters('DiskEncryptionSetResourceId')), null())]",
                               "storageAccountType": "[parameters('DiskSku')]"
                             },
-                            "name": "[format('{0}-mgt', parameters('DiskNamePrefix'))]"
+                            "name": "[format('{0}mgt', parameters('DiskNamePrefix'))]"
                           },
                           "dataDisks": []
                         },

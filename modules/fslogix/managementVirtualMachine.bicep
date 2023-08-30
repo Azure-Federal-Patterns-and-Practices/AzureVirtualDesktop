@@ -21,7 +21,7 @@ param VirtualMachineNamePrefix string
 param VirtualMachinePassword string
 param VirtualMachineUsername string
 
-var NicName = '${NetworkInterfaceNamePrefix}-mgt'
+var NicName = '${NetworkInterfaceNamePrefix}mgt'
 var VmName = '${VirtualMachineNamePrefix}mgt'
 
 resource networkInterface 'Microsoft.Network/networkInterfaces@2020-05-01' = {
@@ -73,7 +73,7 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-11-01' = {
           } : null
           storageAccountType: DiskSku
         }
-        name: '${DiskNamePrefix}-mgt'
+        name: '${DiskNamePrefix}mgt'
       }
       dataDisks: []
     }
