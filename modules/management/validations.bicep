@@ -102,8 +102,6 @@ module kerberosEncryption '../deploymentScript.bicep' = if (ActiveDirectorySolut
   }
 }
 
-// add validation for locations; the selected vnet should have the same location as the "LocationVirtualMachine"
-
 module storage '../deploymentScript.bicep' = if (Fslogix) {
   name: 'DeploymentScript_StorageValidation_${Timestamp}'
   params: {
