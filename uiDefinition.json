@@ -1062,7 +1062,6 @@
                                 "Microsoft.Network/privateEndpoints",
                                 "Microsoft.OperationalInsights/workspaces",
                                 "Microsoft.RecoveryServices/vaults",
-                                "Microsoft.Resources/deploymentScripts",
                                 "Microsoft.Resources/resourceGroups",
                                 "Microsoft.Storage/storageAccounts"
                             ]
