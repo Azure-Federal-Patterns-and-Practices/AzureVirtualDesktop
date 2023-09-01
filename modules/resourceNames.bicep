@@ -30,7 +30,7 @@ var FileShareNames = {
 }
 var HostPoolName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.hostPools), 'location', Locations[LocationControlPlane].abbreviation)
 var KeyVaultName = replace(replace(NamingConvention_SharedServices, 'resourceType', ResourceAbbreviations.keyVaults), 'location', Locations[LocationVirtualMachines].abbreviation)
-var Locations = loadJsonContent('../artifacts/locations.json')
+var Locations = loadJsonContent('../data/locations.json')
 var LogAnalyticsWorkspaceName = replace(replace(NamingConvention_SharedServices, 'resourceType', ResourceAbbreviations.logAnalyticsWorkspaces), 'location', Locations[LocationVirtualMachines].abbreviation)
 var NamingConvention = 'resourceType-${Identifier}-${Environment}-location-${StampIndex}'
 var NamingConvention_SharedServices = 'resourceType-${Identifier}-${Environment}-location'
@@ -38,7 +38,7 @@ var NetAppAccountName = replace(replace(NamingConvention, 'resourceType', Resour
 var NetAppCapacityPoolName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.netAppCapacityPools), 'location', Locations[LocationVirtualMachines].abbreviation)
 var NetworkInterfaceNamePrefix = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.networkInterfaces), 'location', Locations[LocationVirtualMachines].abbreviation)}-'
 var RecoveryServicesVaultName = replace(replace(NamingConvention_SharedServices, 'resourceType', ResourceAbbreviations.recoveryServicesVaults), 'location', Locations[LocationVirtualMachines].abbreviation)
-var ResourceAbbreviations = loadJsonContent('../artifacts/resourceAbbreviations.json')
+var ResourceAbbreviations = loadJsonContent('../data/resourceAbbreviations.json')
 var ResourceGroupControlPlane = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[LocationControlPlane].abbreviation)}-vd-controlPlane'
 var ResourceGroupHosts = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[LocationVirtualMachines].abbreviation)}-vd-hosts'
 var ResourceGroupManagement = '${replace(replace(NamingConvention_SharedServices, 'resourceType', ResourceAbbreviations.resourceGroups), 'location', Locations[LocationVirtualMachines].abbreviation)}-vd-management'
