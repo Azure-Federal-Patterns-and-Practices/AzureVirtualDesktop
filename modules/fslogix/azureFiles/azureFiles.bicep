@@ -209,7 +209,7 @@ module recoveryServices 'recoveryServices.bicep' = if (RecoveryServices) {
   }
 }
 
-module autoIncreasePremiumFileShareQuota 'autoIncreasePremiumFileShareQuota.bicep' = if (contains(FslogixStorage, 'AzureStorageAccount Premium') && StorageCount > 0) {
+module autoIncreasePremiumFileShareQuota '../../management/autoIncreasePremiumFileShareQuota.bicep' = if (contains(FslogixStorage, 'AzureStorageAccount Premium') && StorageCount > 0) {
   name: 'AutoIncreasePremiumFileShareQuota_${Timestamp}'
   scope: resourceGroup(ResourceGroupManagement)
   params: {
