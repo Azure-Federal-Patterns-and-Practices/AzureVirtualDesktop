@@ -57,7 +57,7 @@ try
     $Output = [pscustomobject][ordered]@{
         installer = $Installer
     }
-    $JsonOutput = ($Output | ConvertTo-Json).ToString()
+    $JsonOutput = $Output | ConvertTo-Json
     Write-Log -Message 'Output:' -Type 'INFO'
     $JsonOutput | Add-Content -Path 'C:\cse.txt' -Force
     return $JsonOutput
