@@ -1,9 +1,6 @@
-param _artifactsLocation string
-@secure()
-param _artifactsLocationSasToken string
+param ArtifactsLocation string
 param ActiveDirectoryConnection string
 param DelegatedSubnetId string
-param DeploymentScriptNamePrefix string
 param DnsServers string
 @secure()
 param DomainJoinPassword string
@@ -21,11 +18,9 @@ param SecurityPrincipalNames array
 param SmbServerLocation string
 param StorageSku string
 param StorageSolution string
-param TagsDeploymentScripts object
 param TagsNetAppAccount object
 param TagsVirtualMachines object
 param Timestamp string
-param UserAssignedIdentityResourceId string
 
 resource netAppAccount 'Microsoft.NetApp/netAppAccounts@2021-06-01' = {
   name: NetAppAccountName
@@ -139,16 +134,12 @@ module ntfsPermissions 'ntfsPermissions.bicep' = {
   name: 'FslogixNtfsPermissions_${Timestamp}'
   scope: resourceGroup(ResourceGroupManagement)
   params: {
-    _artifactsLocation: _artifactsLocation
-    _artifactsLocationSasToken: _artifactsLocationSasToken
+    ArtifactsLocation: ArtifactsLocation
     CommandToExecute: 'powershell -ExecutionPolicy Unrestricted -File Set-NtfsPermissions.ps1 -DomainJoinPassword "${DomainJoinPassword}" -DomainJoinUserPrincipalName ${DomainJoinUserPrincipalName} -FslogixSolution ${FslogixSolution} -SecurityPrincipalNames "${SecurityPrincipalNames}" -SmbServerLocation ${SmbServerLocation} -StorageSolution ${StorageSolution}'
-    DeploymentScriptNamePrefix: DeploymentScriptNamePrefix
     Location: Location
     ManagementVmName: ManagementVmName
-    TagsDeploymentScripts: TagsDeploymentScripts
     TagsVirtualMachines: TagsVirtualMachines
     Timestamp: Timestamp
-    UserAssignedIdentityResourceId: UserAssignedIdentityResourceId
   }
   dependsOn: [
     volumes

@@ -8,7 +8,6 @@ param StampIndex int
 
 var AvailabilitySetNamePrefix = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.availabilitySets), 'location', Locations[LocationVirtualMachines].abbreviation)}-'
 var AutomationAccountName = replace(replace(NamingConvention_SharedServices, 'resourceType', ResourceAbbreviations.automationAccounts), 'location', Locations[LocationVirtualMachines].abbreviation)
-var DeploymentScriptNamePrefix = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.deploymentScripts), 'location', Locations[LocationVirtualMachines].abbreviation)}-'
 var DesktopApplicationGroupName = replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.desktopApplicationGroups), 'location', Locations[LocationControlPlane].abbreviation)
 var DiskEncryptionSetName = replace(replace(NamingConvention_SharedServices, 'resourceType', ResourceAbbreviations.diskEncryptionSets), 'location', Locations[LocationVirtualMachines].abbreviation)
 var DiskNamePrefix = '${replace(replace(NamingConvention, 'resourceType', ResourceAbbreviations.disks), 'location', Locations[LocationVirtualMachines].abbreviation)}-'
@@ -51,7 +50,6 @@ var WorkspaceName = replace(replace(NamingConvention_SharedServices, 'resourceTy
 
 output AvailabilitySetNamePrefix string = AvailabilitySetNamePrefix
 output AutomationAccountName string = AutomationAccountName
-output DeploymentScriptNamePrefix string = DeploymentScriptNamePrefix
 output DesktopApplicationGroupName string = DesktopApplicationGroupName
 output DiskEncryptionSetName string = DiskEncryptionSetName
 output DiskNamePrefix string = DiskNamePrefix

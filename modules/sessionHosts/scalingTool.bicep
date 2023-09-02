@@ -1,6 +1,4 @@
-param _artifactsLocation string
-@secure()
-param _artifactsLocationSasToken string
+param ArtifactsLocation string
 param AutomationAccountName string
 param BeginPeakTime string
 param EndPeakTime string
@@ -36,7 +34,7 @@ resource runbook 'Microsoft.Automation/automationAccounts/runbooks@2019-06-01' =
     logProgress: false
     logVerbose: false
     publishContentLink: {
-      uri: '${_artifactsLocation}Set-HostPoolScaling.ps1${_artifactsLocationSasToken}'
+      uri: '${ArtifactsLocation}Set-HostPoolScaling.ps1'
       version: '1.0.0.0'
     }
   }

@@ -1,14 +1,19 @@
 targetScope = 'subscription'
 
 param ActiveDirectorySolution string
+param ArtifactsLocation string
 param AutomationAccountName string
 param Availability string
 param AvdObjectId string
+param AzurePowerShellAzModuleMsiLink string
 param LocationControlPlane string
-param DeploymentScriptNamePrefix string
+param DiskNamePrefix string
 param DiskEncryption bool
 param DiskEncryptionSetName string
 param DiskSku string
+@secure()
+param DomainJoinPassword string
+param DomainJoinUserPrincipalName string
 param DomainName string
 param DrainMode bool
 param Environment string
@@ -16,7 +21,6 @@ param Fslogix bool
 param FslogixSolution string
 param FslogixStorage string
 param HostPoolType string
-param ImageSku string
 param KerberosEncryption string
 param KeyVaultName string
 param LocationVirtualMachines string
@@ -24,25 +28,30 @@ param LogAnalyticsWorkspaceName string
 param LogAnalyticsWorkspaceRetention int
 param LogAnalyticsWorkspaceSku string
 param Monitoring bool
+param NetworkInterfaceNamePrefix string
 param PooledHostPool bool
 param RecoveryServices bool
 param RecoveryServicesVaultName string
 param ResourceGroupManagement string
 param ResourceGroupStorage string
 param RoleDefinitions object
-param SecurityPrincipalIdsCount int
-param SecurityPrincipalNamesCount int
 param SessionHostCount int
-param StorageCount int
 param StorageSolution string
 param SubnetResourceId string
 param Tags object
 param Timestamp string
 param TimeZone string
 param UserAssignedIdentityName string
+param VirtualMachineNamePrefix string
+@secure()
+param VirtualMachinePassword string
+param VirtualMachineUsername string
 param VirtualMachineSize string
 param WorkspaceFriendlyName string
 param WorkspaceName string
+
+var CpuCountMax = contains(HostPoolType, 'Pooled') ? 32 : 128
+var CpuCountMin = contains(HostPoolType, 'Pooled') ? 4 : 2
 
 module userAssignedIdentity 'userAssignedIdentity.bicep' = {
   scope: resourceGroup(ResourceGroupManagement)
@@ -72,34 +81,65 @@ resource roleAssignment_validation 'Microsoft.Authorization/roleAssignments@2022
   }
 }
 
-// Deployment Validation
+module diskEncryption 'diskEncryption.bicep' = if (DiskEncryption) {
+  name: 'DiskEncryption_${Timestamp}'
+  scope: resourceGroup(ResourceGroupManagement)
+  params: {
+    DiskEncryptionSetName: DiskEncryptionSetName
+    Environment: Environment
+    KeyVaultName: KeyVaultName
+    Location: LocationVirtualMachines
+    TagsDiskEncryptionSet: contains(Tags, 'Microsoft.Compute/diskEncryptionSets') ? Tags['Microsoft.Compute/diskEncryptionSets'] : {}
+    TagsKeyVault: contains(Tags, 'Microsoft.KeyVault/vaults') ? Tags['Microsoft.KeyVault/vaults'] : {}
+    Timestamp: Timestamp
+    UserAssignedIdentityPrincipalId: userAssignedIdentity.outputs.principalId
+    UserAssignedIdentityResourceId: userAssignedIdentity.outputs.id
+  }
+}
+
+// Management VM
+// The management VM is required to validate the deployment and configure FSLogix storage.
+module virtualMachine 'virtualMachine.bicep' = if (contains(ActiveDirectorySolution, 'DomainServices')) {
+  name: 'ManagementVirtualMachine_${Timestamp}'
+  scope: resourceGroup(ResourceGroupManagement)
+  params: {
+    ArtifactsLocation: ArtifactsLocation
+    AzurePowerShellAzModuleMsiLink: AzurePowerShellAzModuleMsiLink 
+    DiskEncryption: DiskEncryption
+    DiskEncryptionSetResourceId: diskEncryption.outputs.diskEncryptionSetResourceId
+    DiskNamePrefix: DiskNamePrefix
+    DiskSku: DiskSku
+    DomainJoinPassword: DomainJoinPassword
+    DomainJoinUserPrincipalName: DomainJoinUserPrincipalName
+    DomainName: DomainName
+    Location: LocationVirtualMachines
+    NetworkInterfaceNamePrefix: NetworkInterfaceNamePrefix
+    Subnet: split(SubnetResourceId, '/')[10]
+    TagsNetworkInterfaces: contains(Tags, 'Microsoft.Network/networkInterfaces') ? Tags['Microsoft.Network/networkInterfaces'] : {}
+    TagsVirtualMachines: contains(Tags, 'Microsoft.Compute/virtualMachines') ? Tags['Microsoft.Compute/virtualMachines'] : {}
+    UserAssignedIdentityClientId: userAssignedIdentity.outputs.clientId
+    UserAssignedIdentityResourceId: userAssignedIdentity.outputs.id
+    VirtualNetwork: split(SubnetResourceId, '/')[8]
+    VirtualNetworkResourceGroup: split(SubnetResourceId, '/')[4]
+    VirtualMachineNamePrefix: VirtualMachineNamePrefix
+    VirtualMachinePassword: VirtualMachinePassword
+    VirtualMachineUsername: VirtualMachineUsername
+  }
+}
+
+// Deployment Validations
 // This module validates the selected parameter values and collects required data
-module validations 'validations.bicep' = {
+module validations 'customScriptExtensions.bicep' = {
   scope: resourceGroup(ResourceGroupManagement)
   name: 'Validations_${Timestamp}'
   params: {
-    ActiveDirectorySolution: ActiveDirectorySolution
-    Availability: Availability
-    DeploymentScriptNamePrefix: DeploymentScriptNamePrefix
-    DiskSku: DiskSku
-    DomainName: DomainName
-    Fslogix: Fslogix
-    HostPoolType: HostPoolType
-    ImageSku: ImageSku
-    KerberosEncryption: KerberosEncryption
+    ArtifactsLocation: ArtifactsLocation
+    File: 'Get-Validations.ps1'
     Location: LocationVirtualMachines
-    SecurityPrincipalIdsCount: SecurityPrincipalIdsCount
-    SecurityPrincipalNamesCount: SecurityPrincipalNamesCount
-    SessionHostCount: SessionHostCount
-    StorageCount: StorageCount
-    StorageSolution: StorageSolution
-    Tags: contains(Tags, 'Microsoft.Resources/deploymentScripts') ? Tags['Microsoft.Resources/deploymentScripts'] : {}
-    Timestamp: Timestamp
-    UserAssignedIdentityResourceId: userAssignedIdentity.outputs.id
-    VirtualMachineSize: VirtualMachineSize
-    VnetName: split(SubnetResourceId, '/')[8]
-    VnetResourceGroupName: split(SubnetResourceId, '/')[4]
-    WorkspaceName: WorkspaceName
+    Parameters: '-CpuCountMax ${CpuCountMax} -CpuCountMin ${CpuCountMin} -Environment ${Environment} -KerberosEncryption ${KerberosEncryption} -Location ${LocationVirtualMachines} -SessionHostCount ${SessionHostCount} -StorageSolution ${StorageSolution} -SubscriptionId ${subscription().subscriptionId} -TenantId ${tenant().tenantId} -UserAssignedIdentityClientId ${userAssignedIdentity.outputs.clientId} -VirtualMachineSize ${VirtualMachineSize} -WorkspaceName ${WorkspaceName} -WorkspaceResourceGroupName ${ResourceGroupManagement}'
+    Tags: contains(Tags, 'Microsoft.Compute/virtualMachines') ? Tags['Microsoft.Compute/virtualMachines'] : {}
+    UserAssignedIdentityClientId: userAssignedIdentity.outputs.clientId
+    VirtualMachineName: virtualMachine.outputs.Name
   }
 }
 
@@ -139,24 +179,6 @@ module automationAccount 'automationAccount.bicep' = if (PooledHostPool || conta
   }
 }
 
-module diskEncryption 'diskEncryption.bicep' = if (DiskEncryption) {
-  name: 'DiskEncryption_${Timestamp}'
-  scope: resourceGroup(ResourceGroupManagement)
-  params: {
-    DeploymentScriptNamePrefix: DeploymentScriptNamePrefix
-    DiskEncryptionSetName: DiskEncryptionSetName
-    Environment: Environment
-    KeyVaultName: KeyVaultName
-    Location: LocationVirtualMachines
-    TagsDeploymentScripts: contains(Tags, 'Microsoft.Resources/deploymentScripts') ? Tags['Microsoft.Resources/deploymentScripts'] : {}
-    TagsDiskEncryptionSet: contains(Tags, 'Microsoft.Compute/diskEncryptionSets') ? Tags['Microsoft.Compute/diskEncryptionSets'] : {}
-    TagsKeyVault: contains(Tags, 'Microsoft.KeyVault/vaults') ? Tags['Microsoft.KeyVault/vaults'] : {}
-    Timestamp: Timestamp
-    UserAssignedIdentityPrincipalId: userAssignedIdentity.outputs.principalId
-    UserAssignedIdentityResourceId: userAssignedIdentity.outputs.id
-  }
-}
-
 module recoveryServicesVault 'recoveryServicesVault.bicep' = if (RecoveryServices) {
   name: 'RecoveryServicesVault_${Timestamp}'
   scope: resourceGroup(ResourceGroupManagement)
@@ -175,7 +197,7 @@ module workspace 'workspace.bicep' = {
   scope: resourceGroup(ResourceGroupManagement)
   params: {
     ApplicationGroupReferences: []
-    Existing: validations.outputs.existingWorkspace == 'true' ? true : false
+    Existing: validations.outputs.value.existingWorkspace == 'true' ? true : false
     FriendlyName: WorkspaceFriendlyName
     Location: LocationControlPlane
     LogAnalyticsWorkspaceResourceId: Monitoring ? logAnalyticsWorkspace.outputs.ResourceId : ''
@@ -189,9 +211,10 @@ output DiskEncryptionSetResourceId string = DiskEncryption ? diskEncryption.outp
 output LogAnalyticsWorkspaceResourceId string = Monitoring ? logAnalyticsWorkspace.outputs.ResourceId : ''
 output UserAssignedIdentityClientId string = userAssignedIdentity.outputs.clientId
 output UserAssignedIdentityResourceId string = userAssignedIdentity.outputs.id
-output ValidateAcceleratedNetworking string = validations.outputs.acceleratedNetworking
-output ValidateANFfActiveDirectory string = validations.outputs.anfActiveDirectory
-output ValidateANFDnsServers string = validations.outputs.anfDnsServers
-output ValidateANFSubnetId string = validations.outputs.anfSubnetId
-output ValidateAvailabilityZones array = validations.outputs.availabilityZones
-output ValidateTrustedLaunch string = validations.outputs.trustedLaunch
+output ValidateAcceleratedNetworking string = validations.outputs.value.acceleratedNetworking
+output ValidateANFfActiveDirectory string = validations.outputs.value.anfActiveDirectory
+output ValidateANFDnsServers string = validations.outputs.value.anfDnsServers
+output ValidateANFSubnetId string = validations.outputs.value.anfSubnetId
+output ValidateAvailabilityZones array = Availability == 'AvailabilityZones' ? validations.outputs.value.availabilityZones : [ '1' ]
+output ValidateTrustedLaunch string = validations.outputs.value.trustedLaunch
+output VirtualMachineName string = virtualMachine.outputs.Name

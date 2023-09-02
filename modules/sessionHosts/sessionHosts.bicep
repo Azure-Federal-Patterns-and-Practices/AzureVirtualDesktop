@@ -1,17 +1,14 @@
 targetScope = 'subscription'
 
-param _artifactsLocation string
-@secure()
-param _artifactsLocationSasToken string
 param AcceleratedNetworking string
 param ActiveDirectorySolution string
+param ArtifactsLocation string
 param AutomationAccountName string
 param Availability string
 param AvailabilitySetNamePrefix string
 param AvailabilitySetsCount int
 param AvailabilitySetsIndex int
 param AvailabilityZones array
-param DeploymentScriptNamePrefix string
 param DiskEncryption bool
 param DiskEncryptionSetResourceId string
 param DiskNamePrefix string
@@ -32,7 +29,7 @@ param ImageSku string
 param ImageVersionResourceId string
 param Location string
 param LogAnalyticsWorkspaceName string
-param ManagedIdentityResourceId string
+param ManagementVMName string
 param MaxResourcesPerTemplateDeployment int
 param Monitoring bool
 param NetAppFileShares array
@@ -63,7 +60,6 @@ param StorageSuffix string
 param Subnet string
 param TagsAutomationAccounts object
 param TagsAvailabilitySets object
-param TagsDeploymentScripts object
 param TagsNetworkInterfaces object
 param TagsRecoveryServicesVault object
 param TagsVirtualMachines object
@@ -71,7 +67,7 @@ param TimeDifference string
 param Timestamp string
 param TimeZone string
 param TrustedLaunch string
-param LocationVirtualMachine string
+param UserAssignedIdentityClientId string
 param VirtualMachineNamePrefix string
 @secure()
 param VirtualMachinePassword string
@@ -109,14 +105,12 @@ module virtualMachines 'virtualMachines.bicep' = [for i in range(1, SessionHostB
   name: 'VirtualMachines_${i - 1}_${Timestamp}'
   scope: resourceGroup(ResourceGroupHosts)
   params: {
-    _artifactsLocation: _artifactsLocation
-    _artifactsLocationSasToken: _artifactsLocationSasToken
     AcceleratedNetworking: AcceleratedNetworking
     ActiveDirectorySolution: ActiveDirectorySolution
+    ArtifactsLocation: ArtifactsLocation
     Availability: Availability
     AvailabilityZones: AvailabilityZones
     AvailabilitySetNamePrefix: AvailabilitySetNamePrefix
-    DeploymentScriptNamePrefix: DeploymentScriptNamePrefix
     DiskEncryption: DiskEncryption
     DiskEncryptionSetResourceId: DiskEncryptionSetResourceId
     DiskNamePrefix: DiskNamePrefix
@@ -135,7 +129,7 @@ module virtualMachines 'virtualMachines.bicep' = [for i in range(1, SessionHostB
     ImageVersionResourceId: ImageVersionResourceId
     Location: Location
     LogAnalyticsWorkspaceName: LogAnalyticsWorkspaceName
-    ManagedIdentityResourceId: ManagedIdentityResourceId
+    ManagementVMName: ManagementVMName
     Monitoring: Monitoring
     NetAppFileShares: NetAppFileShares
     NetworkInterfaceNamePrefix: NetworkInterfaceNamePrefix
@@ -151,11 +145,11 @@ module virtualMachines 'virtualMachines.bicep' = [for i in range(1, SessionHostB
     StorageSolution: StorageSolution
     StorageSuffix: StorageSuffix
     Subnet: Subnet
-    TagsDeploymentScripts: TagsDeploymentScripts
     TagsNetworkInterfaces: TagsNetworkInterfaces
     TagsVirtualMachines: TagsVirtualMachines
     Timestamp: Timestamp
     TrustedLaunch: TrustedLaunch
+    UserAssignedIdentityClientId: UserAssignedIdentityClientId
     VirtualMachineNamePrefix: VirtualMachineNamePrefix
     VirtualMachinePassword: VirtualMachinePassword
     VirtualMachineSize: VirtualMachineSize
@@ -196,15 +190,14 @@ module scalingTool 'scalingTool.bicep' = if (ScalingTool && PooledHostPool) {
   name: 'ScalingTool_${Timestamp}'
   scope: resourceGroup(ResourceGroupManagement)
   params: {
-    _artifactsLocation: _artifactsLocation
-    _artifactsLocationSasToken: _artifactsLocationSasToken
+    ArtifactsLocation: ArtifactsLocation
     AutomationAccountName: AutomationAccountName
     BeginPeakTime: ScalingBeginPeakTime
     EndPeakTime: ScalingEndPeakTime
     HostPoolName: HostPoolName
     HostPoolResourceGroupName: ResourceGroupManagement
     LimitSecondsToForceLogOffUser: ScalingLimitSecondsToForceLogOffUser
-    Location: LocationVirtualMachine
+    Location: Location
     MinimumNumberOfRdsh: ScalingMinimumNumberOfRdsh
     ResourceGroupHosts: ResourceGroupHosts
     ResourceGroupManagement: ResourceGroupManagement

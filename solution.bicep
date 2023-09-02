@@ -1,11 +1,10 @@
 targetScope = 'subscription'
 
-@description('The URL prefix for linked resources.')
-param _artifactsLocation string = 'https://raw.githubusercontent.com/jamasten/AzureVirtualDesktop/main/artifacts/'
+@description('The URL prefix for the scripts required in this solution. If you do not have public internet access to the default value below, you need to host the scripts in the "Artifacts" folder in Azure Blobs and provide the URL prefix below.')
+param ArtifactsLocation string = 'https://raw.githubusercontent.com/jamasten/AzureVirtualDesktop/main/artifacts/'
 
-@secure()
-@description('The SAS Token for the scripts if they are stored on an Azure Storage Account.')
-param _artifactsLocationSasToken string = ''
+@description('The resource ID for the storage account hosting the artifacts.')
+param ArtifactsStorageAccountResourceId string = ''
 
 @allowed([
   'ActiveDirectoryDomainServices'
@@ -29,6 +28,9 @@ param AvdObjectId string
 
 @description('If using private endpoints with Azure Files, input the Resource ID for the Private DNS Zone linked to your hub virtual network.')
 param AzureFilesPrivateDnsZoneResourceId string = ''
+
+@description('The link to the Azure PowerShell Az Module MSI file to install the modules on the management VM.  If you do not have public internet access to the default value below, you need to host the MSI file in Azure Blobs and provide the URL below.')
+param AzurePowerShellAzModuleMsiLink string = 'https://github.com/Azure/azure-powershell/releases/download/v10.2.0-August2023/Az-Cmdlets-10.2.0.37547-x64.msi'
 
 @description('Input RDP properties to add or remove RDP functionality on the AVD host pool. Settings reference: https://learn.microsoft.com/windows-server/remote/remote-desktop-services/clients/rdp-files')
 param CustomRdpProperty string = 'audiocapturemode:i:1;camerastoredirect:s:*;use multimon:i:0;drivestoredirect:s:;'
@@ -302,14 +304,18 @@ module management 'modules/management/management.bicep' = {
   name: 'Management_${Timestamp}'
   params: {
     ActiveDirectorySolution: ActiveDirectorySolution
+    ArtifactsLocation: ArtifactsLocation
     AutomationAccountName: resourceNames.outputs.AutomationAccountName
     Availability: Availability
     AvdObjectId: AvdObjectId
+    AzurePowerShellAzModuleMsiLink: AzurePowerShellAzModuleMsiLink 
     LocationControlPlane: LocationControlPlane
-    DeploymentScriptNamePrefix: resourceNames.outputs.DeploymentScriptNamePrefix
     DiskEncryption: DiskEncryption
     DiskEncryptionSetName: resourceNames.outputs.DiskEncryptionSetName
+    DiskNamePrefix: resourceNames.outputs.DiskNamePrefix
     DiskSku: DiskSku
+    DomainJoinPassword: DomainJoinPassword
+    DomainJoinUserPrincipalName: DomainJoinUserPrincipalName
     DomainName: DomainName
     DrainMode: DrainMode
     Environment: Environment
@@ -317,23 +323,20 @@ module management 'modules/management/management.bicep' = {
     FslogixSolution: FslogixSolution
     FslogixStorage: FslogixStorage
     HostPoolType: HostPoolType
-    ImageSku: ImageSku
     KerberosEncryption: KerberosEncryption
     KeyVaultName: resourceNames.outputs.KeyVaultName
     LogAnalyticsWorkspaceName: resourceNames.outputs.LogAnalyticsWorkspaceName
     LogAnalyticsWorkspaceRetention: LogAnalyticsWorkspaceRetention
     LogAnalyticsWorkspaceSku: LogAnalyticsWorkspaceSku
     Monitoring: Monitoring
+    NetworkInterfaceNamePrefix: resourceNames.outputs.NetworkInterfaceNamePrefix
     PooledHostPool: logic.outputs.PooledHostPool
     RecoveryServices: RecoveryServices
     RecoveryServicesVaultName: resourceNames.outputs.RecoveryServicesVaultName
     ResourceGroupManagement: resourceNames.outputs.ResourceGroupManagement
     ResourceGroupStorage: resourceNames.outputs.ResourceGroupStorage
     RoleDefinitions: logic.outputs.RoleDefinitions
-    SecurityPrincipalIdsCount: logic.outputs.SecurityPrincipalIdsCount
-    SecurityPrincipalNamesCount: logic.outputs.SecurityPrincipalNamesCount
     SessionHostCount: SessionHostCount
-    StorageCount: StorageCount
     StorageSolution: logic.outputs.StorageSolution
     SubnetResourceId: SubnetResourceId
     Tags: Tags
@@ -341,7 +344,10 @@ module management 'modules/management/management.bicep' = {
     TimeZone: logic.outputs.TimeZone
     UserAssignedIdentityName: resourceNames.outputs.UserAssignedIdentityName
     LocationVirtualMachines: virtualNetwork.location
+    VirtualMachineNamePrefix: resourceNames.outputs.VirtualMachineNamePrefix
+    VirtualMachinePassword: VirtualMachinePassword
     VirtualMachineSize: VirtualMachineSize
+    VirtualMachineUsername: VirtualMachineUsername
     WorkspaceFriendlyName: WorkspaceFriendlyName
     WorkspaceName: resourceNames.outputs.WorkspaceName
   }
@@ -388,8 +394,7 @@ module controlPlane 'modules/controlPlane/controlPlane.bicep' = {
 module fslogix 'modules/fslogix/fslogix.bicep' = if (!(FslogixStorage == 'None') && contains(ActiveDirectorySolution, 'DomainServices')) {
   name: 'FSLogix_${Timestamp}'
   params: {
-    _artifactsLocation: _artifactsLocation
-    _artifactsLocationSasToken: _artifactsLocationSasToken
+    ArtifactsLocation: ArtifactsLocation
     ActiveDirectoryConnection: management.outputs.ValidateANFfActiveDirectory
     ActiveDirectorySolution: ActiveDirectorySolution
     AutomationAccountName: resourceNames.outputs.AutomationAccountName
@@ -397,11 +402,6 @@ module fslogix 'modules/fslogix/fslogix.bicep' = if (!(FslogixStorage == 'None')
     AzureFilesPrivateDnsZoneResourceId: AzureFilesPrivateDnsZoneResourceId
     ClientId: management.outputs.UserAssignedIdentityClientId
     DelegatedSubnetId: management.outputs.ValidateANFSubnetId
-    DeploymentScriptNamePrefix: resourceNames.outputs.DeploymentScriptNamePrefix
-    DiskEncryption: DiskEncryption
-    DiskEncryptionSetResourceId: DiskEncryption ? management.outputs.DiskEncryptionSetResourceId : ''
-    DiskNamePrefix: resourceNames.outputs.DiskNamePrefix
-    DiskSku: DiskSku
     DnsServers: management.outputs.ValidateANFDnsServers
     DomainJoinPassword: DomainJoinPassword
     DomainJoinUserPrincipalName: DomainJoinUserPrincipalName
@@ -412,10 +412,10 @@ module fslogix 'modules/fslogix/fslogix.bicep' = if (!(FslogixStorage == 'None')
     FslogixStorage: FslogixStorage
     KerberosEncryption: KerberosEncryption
     Location: virtualNetwork.location
+    ManagementVmName: management.outputs.VirtualMachineName
     NetAppAccountName: resourceNames.outputs.NetAppAccountName
     NetAppCapacityPoolName: resourceNames.outputs.NetAppCapacityPoolName
     Netbios: logic.outputs.Netbios
-    NetworkInterfaceNamePrefix: resourceNames.outputs.NetworkInterfaceNamePrefix
     OuPath: OuPath
     PrivateEndpoint: logic.outputs.PrivateEndpoint
     RecoveryServices: RecoveryServices
@@ -434,15 +434,9 @@ module fslogix 'modules/fslogix/fslogix.bicep' = if (!(FslogixStorage == 'None')
     TagsAutomationAccounts: union({
       'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.Automation/automationAccounts') ? Tags['Microsoft.Automation/automationAccounts'] : {})
-    TagsDeploymentScripts: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
-    }, contains(Tags, 'Microsoft.Resources/deploymentScripts') ? Tags['Microsoft.Resources/deploymentScripts'] : {})
     TagsNetAppAccount: union({
       'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.NetApp/netAppAccounts') ? Tags['Microsoft.NetApp/netAppAccounts'] : {})
-    TagsNetworkInterfaces: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
-    }, contains(Tags, 'Microsoft.Network/networkInterfaces') ? Tags['Microsoft.Network/networkInterfaces'] : {})
     TagsPrivateEndpoints: union({
       'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.Network/privateEndpoints') ? Tags['Microsoft.Network/privateEndpoints'] : {})
@@ -457,29 +451,22 @@ module fslogix 'modules/fslogix/fslogix.bicep' = if (!(FslogixStorage == 'None')
     }, contains(Tags, 'Microsoft.Compute/virtualMachines') ? Tags['Microsoft.Compute/virtualMachines'] : {})
     Timestamp: Timestamp
     TimeZone: logic.outputs.TimeZone
-    TrustedLaunch: management.outputs.ValidateTrustedLaunch
-    UserAssignedIdentityResourceId: management.outputs.UserAssignedIdentityResourceId
     VirtualNetwork: split(SubnetResourceId, '/')[8]
     VirtualNetworkResourceGroup: split(SubnetResourceId, '/')[4]
-    VirtualMachineNamePrefix: resourceNames.outputs.VirtualMachineNamePrefix
-    VirtualMachinePassword: VirtualMachinePassword
-    VirtualMachineUsername: VirtualMachineUsername
   }
 }
 
 module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
   name: 'SessionHosts_${Timestamp}'
   params: {
-    _artifactsLocation: _artifactsLocation
-    _artifactsLocationSasToken: _artifactsLocationSasToken
     AcceleratedNetworking: management.outputs.ValidateAcceleratedNetworking
+    ArtifactsLocation: ArtifactsLocation
     AutomationAccountName: resourceNames.outputs.AutomationAccountName
     Availability: Availability
     AvailabilitySetNamePrefix: resourceNames.outputs.AvailabilitySetNamePrefix
     AvailabilitySetsCount: logic.outputs.AvailabilitySetsCount
     AvailabilitySetsIndex: logic.outputs.BeginAvSetRange
     AvailabilityZones: management.outputs.ValidateAvailabilityZones
-    DeploymentScriptNamePrefix: resourceNames.outputs.DeploymentScriptNamePrefix
     DiskEncryption: DiskEncryption
     DiskEncryptionSetResourceId: DiskEncryption ? management.outputs.DiskEncryptionSetResourceId : ''
     DiskNamePrefix: resourceNames.outputs.DiskNamePrefix
@@ -500,7 +487,7 @@ module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
     ImageVersionResourceId: ImageVersionResourceId
     Location: virtualNetwork.location
     LogAnalyticsWorkspaceName: resourceNames.outputs.LogAnalyticsWorkspaceName
-    ManagedIdentityResourceId: management.outputs.UserAssignedIdentityResourceId
+    ManagementVMName: management.outputs.VirtualMachineName
     MaxResourcesPerTemplateDeployment: logic.outputs.MaxResourcesPerTemplateDeployment
     Monitoring: Monitoring
     NetAppFileShares: logic.outputs.Fslogix ? fslogix.outputs.netAppShares : [
@@ -537,9 +524,6 @@ module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
     TagsAvailabilitySets: union({
       'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.Compute/availabilitySets') ? Tags['Microsoft.Compute/availabilitySets'] : {})
-    TagsDeploymentScripts: union({
-      'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
-    }, contains(Tags, 'Microsoft.Resources/deploymentScripts') ? Tags['Microsoft.Resources/deploymentScripts'] : {})
     TagsNetworkInterfaces: union({
       'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.Network/networkInterfaces') ? Tags['Microsoft.Network/networkInterfaces'] : {})
@@ -553,7 +537,7 @@ module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
     Timestamp: Timestamp
     TimeZone: logic.outputs.TimeZone
     TrustedLaunch: management.outputs.ValidateTrustedLaunch
-    LocationVirtualMachine: virtualNetwork.location
+    UserAssignedIdentityClientId: management.outputs.UserAssignedIdentityClientId
     VirtualMachineNamePrefix: resourceNames.outputs.VirtualMachineNamePrefix
     VirtualMachinePassword: VirtualMachinePassword
     VirtualMachineSize: VirtualMachineSize

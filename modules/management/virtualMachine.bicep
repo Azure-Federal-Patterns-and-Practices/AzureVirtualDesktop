@@ -1,3 +1,5 @@
+param ArtifactsLocation string
+param AzurePowerShellAzModuleMsiLink string
 param DiskEncryption bool
 param DiskEncryptionSetResourceId string
 param DiskNamePrefix string
@@ -11,8 +13,8 @@ param NetworkInterfaceNamePrefix string
 param Subnet string
 param TagsNetworkInterfaces object
 param TagsVirtualMachines object
-param Timestamp string
-param TrustedLaunch string
+param Timestamp string = utcNow('yyyyMMddhhmmss')
+param UserAssignedIdentityClientId string
 param UserAssignedIdentityResourceId string
 param VirtualNetwork string
 param VirtualNetworkResourceGroup string
@@ -99,11 +101,11 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-11-01' = {
       ]
     }
     securityProfile: {
-      uefiSettings: TrustedLaunch == 'true' ? {
+      uefiSettings: {
         secureBootEnabled: true
         vTpmEnabled: true
-      } : null
-      securityType: TrustedLaunch == 'true' ? 'TrustedLaunch' : null
+      }
+      securityType: 'TrustedLaunch'
       encryptionAtHost: DiskEncryption
     }
     diagnosticsProfile: {
@@ -141,6 +143,19 @@ resource extension_JsonADDomainExtension 'Microsoft.Compute/virtualMachines/exte
     protectedSettings: {
       Password: DomainJoinPassword
     }
+  }
+}
+
+module extension_CustomScriptExtension 'customScriptExtensions.bicep' = {
+  name: 'CSE_InstallAzurePowerShellAzModule_${Timestamp}'
+  params: {
+    ArtifactsLocation: ArtifactsLocation
+    File: 'Install-AzurePowerShellAzModule.ps1'
+    Location: Location
+    Parameters: '-URI ${AzurePowerShellAzModuleMsiLink}'
+    Tags: TagsVirtualMachines
+    VirtualMachineName: virtualMachine.name
+    UserAssignedIdentityClientId: UserAssignedIdentityClientId
   }
 }
 

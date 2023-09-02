@@ -1,7 +1,6 @@
 {
     "automationAccounts": "aa",
     "availabilitySets": "as",
-    "deploymentScripts": "ds",
     "desktopApplicationGroups": "dag",
     "remoteApplicationGroups": "rag",
     "disks": "disk",

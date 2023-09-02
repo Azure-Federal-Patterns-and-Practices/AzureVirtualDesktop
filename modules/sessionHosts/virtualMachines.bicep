@@ -1,11 +1,8 @@
-param _artifactsLocation string
-@secure()
-param _artifactsLocationSasToken string
+param ArtifactsLocation string
 param AcceleratedNetworking string
 param Availability string
 param AvailabilitySetNamePrefix string
 param AvailabilityZones array
-param DeploymentScriptNamePrefix string
 param DiskEncryption bool
 param DiskEncryptionSetResourceId string
 param DiskNamePrefix string
@@ -26,7 +23,7 @@ param ImageSku string
 param ImageVersionResourceId string
 param Location string
 param LogAnalyticsWorkspaceName string
-param ManagedIdentityResourceId string
+param ManagementVMName string
 param Monitoring bool
 param NetAppFileShares array
 param NetworkInterfaceNamePrefix string
@@ -42,11 +39,11 @@ param StorageIndex int
 param StorageSolution string
 param StorageSuffix string
 param Subnet string
-param TagsDeploymentScripts object
 param TagsNetworkInterfaces object
 param TagsVirtualMachines object
 param Timestamp string
 param TrustedLaunch string
+param UserAssignedIdentityClientId string
 param VirtualMachineNamePrefix string
 @secure()
 param VirtualMachinePassword string
@@ -268,7 +265,7 @@ resource extension_CustomScriptExtension 'Microsoft.Compute/virtualMachines/exte
     autoUpgradeMinorVersion: true
     settings: {
       fileUris: [
-        '${_artifactsLocation}Set-SessionHostConfiguration.ps1${_artifactsLocationSasToken}'
+        '${ArtifactsLocation}Set-SessionHostConfiguration.ps1'
       ]
       timestamp: Timestamp
     }
@@ -282,17 +279,17 @@ resource extension_CustomScriptExtension 'Microsoft.Compute/virtualMachines/exte
 }]
 
 // Enables drain mode on the session hosts so users cannot login to hosts immediately after the deployment
-module drainMode '../deploymentScript.bicep' = if (DrainMode) {
+module drainMode '../management/customScriptExtensions.bicep' = if (DrainMode) {
   name: 'DeploymentScript_DrainMode_${Timestamp}'
   scope: resourceGroup(ResourceGroupManagement)
   params: {
-    Arguments: '-ResourceGroup ${ResourceGroupManagement} -HostPool ${HostPoolName}'
+    ArtifactsLocation: ArtifactsLocation
+    File: 'Set-AvdDrainMode.ps1'
     Location: Location
-    Name: '${DeploymentScriptNamePrefix}drain'
-    Script: 'param([Parameter(Mandatory)][string]$HostPool,[Parameter(Mandatory)][string]$ResourceGroup); $SessionHosts = (Get-AzWvdSessionHost -ResourceGroupName $ResourceGroup -HostPoolName $HostPool).Name; foreach($SessionHost in $SessionHosts){$Name = ($SessionHost -split "/")[1]; Update-AzWvdSessionHost -ResourceGroupName $ResourceGroup -HostPoolName $HostPool -Name $Name -AllowNewSession:$False}; $DeploymentScriptOutputs = @{}; $DeploymentScriptOutputs["hostPool"] = $HostPool'
-    Tags: TagsDeploymentScripts
-    Timestamp: Timestamp
-    UserAssignedIdentityResourceId: ManagedIdentityResourceId
+    Parameters: '-HostPoolName ${HostPoolName} -HostPoolResourceGroupName ${ResourceGroupManagement}'
+    Tags: TagsVirtualMachines
+    UserAssignedIdentityClientId: UserAssignedIdentityClientId
+    VirtualMachineName: ManagementVMName
   }
   dependsOn: [
     extension_CustomScriptExtension

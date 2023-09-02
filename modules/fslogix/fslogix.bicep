@@ -1,8 +1,6 @@
 targetScope = 'subscription'
 
-param _artifactsLocation string
-@secure()
-param _artifactsLocationSasToken string
+param ArtifactsLocation string
 param ActiveDirectoryConnection string
 param ActiveDirectorySolution string
 param AutomationAccountName string
@@ -10,11 +8,6 @@ param Availability string
 param AzureFilesPrivateDnsZoneResourceId string
 param ClientId string
 param DelegatedSubnetId string
-param DeploymentScriptNamePrefix string
-param DiskEncryption bool
-param DiskEncryptionSetResourceId string
-param DiskNamePrefix string
-param DiskSku string
 param DnsServers string
 @secure()
 param DomainJoinPassword string
@@ -26,10 +19,10 @@ param FslogixSolution string
 param FslogixStorage string
 param KerberosEncryption string
 param Location string
+param ManagementVmName string
 param NetAppAccountName string
 param NetAppCapacityPoolName string
 param Netbios string
-param NetworkInterfaceNamePrefix string
 param OuPath string
 param PrivateEndpoint bool
 param RecoveryServices bool
@@ -46,63 +39,24 @@ param StorageSku string
 param StorageSolution string
 param Subnet string
 param TagsAutomationAccounts object
-param TagsDeploymentScripts object
 param TagsNetAppAccount object
-param TagsNetworkInterfaces object
 param TagsPrivateEndpoints object
 param TagsRecoveryServicesVault object
 param TagsStorageAccounts object
 param TagsVirtualMachines object
 param Timestamp string
 param TimeZone string
-param TrustedLaunch string
-param UserAssignedIdentityResourceId string
 param VirtualNetwork string
 param VirtualNetworkResourceGroup string
-param VirtualMachineNamePrefix string
-@secure()
-param VirtualMachinePassword string
-param VirtualMachineUsername string
-
-// Fslogix Management VM
-// This module is required to fully configure any storage option for FSLogix
-module managementVirtualMachine 'managementVirtualMachine.bicep' = if (contains(ActiveDirectorySolution, 'DomainServices')) {
-  name: 'ManagementVirtualMachine_${Timestamp}'
-  scope: resourceGroup(ResourceGroupManagement)
-  params: {
-    DiskEncryption: DiskEncryption
-    DiskEncryptionSetResourceId: DiskEncryptionSetResourceId
-    DiskNamePrefix: DiskNamePrefix
-    DiskSku: DiskSku
-    DomainJoinPassword: DomainJoinPassword
-    DomainJoinUserPrincipalName: DomainJoinUserPrincipalName
-    DomainName: DomainName
-    Location: Location
-    NetworkInterfaceNamePrefix: NetworkInterfaceNamePrefix
-    Subnet: Subnet
-    TagsNetworkInterfaces: TagsNetworkInterfaces
-    TagsVirtualMachines: TagsVirtualMachines
-    Timestamp: Timestamp
-    TrustedLaunch: TrustedLaunch
-    UserAssignedIdentityResourceId: UserAssignedIdentityResourceId
-    VirtualNetwork: VirtualNetwork
-    VirtualNetworkResourceGroup: VirtualNetworkResourceGroup
-    VirtualMachineNamePrefix: VirtualMachineNamePrefix
-    VirtualMachinePassword: VirtualMachinePassword
-    VirtualMachineUsername: VirtualMachineUsername
-  }
-}
 
 // Azure NetApp Files for Fslogix
 module azureNetAppFiles 'azureNetAppFiles.bicep' = if (StorageSolution == 'AzureNetAppFiles' && contains(ActiveDirectorySolution, 'DomainServices')) {
   name: 'AzureNetAppFiles_${Timestamp}'
   scope: resourceGroup(ResourceGroupStorage)
   params: {
-    _artifactsLocation: _artifactsLocation
-    _artifactsLocationSasToken: _artifactsLocationSasToken
+    ArtifactsLocation: ArtifactsLocation
     ActiveDirectoryConnection: ActiveDirectoryConnection
     DelegatedSubnetId: DelegatedSubnetId
-    DeploymentScriptNamePrefix: DeploymentScriptNamePrefix
     DnsServers: DnsServers
     DomainJoinPassword: DomainJoinPassword
     DomainJoinUserPrincipalName: DomainJoinUserPrincipalName
@@ -110,7 +64,7 @@ module azureNetAppFiles 'azureNetAppFiles.bicep' = if (StorageSolution == 'Azure
     FileShares: FileShares
     FslogixSolution: FslogixSolution
     Location: Location
-    ManagementVmName: managementVirtualMachine.outputs.Name
+    ManagementVmName: ManagementVmName
     NetAppAccountName: NetAppAccountName
     NetAppCapacityPoolName: NetAppCapacityPoolName
     OuPath: OuPath
@@ -119,11 +73,9 @@ module azureNetAppFiles 'azureNetAppFiles.bicep' = if (StorageSolution == 'Azure
     SmbServerLocation: SmbServerLocation
     StorageSku: StorageSku
     StorageSolution: StorageSolution
-    TagsDeploymentScripts: TagsDeploymentScripts
     TagsNetAppAccount: TagsNetAppAccount
     TagsVirtualMachines: TagsVirtualMachines
     Timestamp: Timestamp
-    UserAssignedIdentityResourceId: UserAssignedIdentityResourceId
   }
 }
 
@@ -132,14 +84,12 @@ module azureFiles 'azureFiles/azureFiles.bicep' = if (StorageSolution == 'AzureS
   name: 'AzureFiles_${Timestamp}'
   scope: resourceGroup(ResourceGroupStorage)
   params: {
-    _artifactsLocation: _artifactsLocation
-    _artifactsLocationSasToken: _artifactsLocationSasToken
+    ArtifactsLocation: ArtifactsLocation
     ActiveDirectorySolution: ActiveDirectorySolution
     AutomationAccountName: AutomationAccountName
     Availability: Availability
     AzureFilesPrivateDnsZoneResourceId: AzureFilesPrivateDnsZoneResourceId
     ClientId: ClientId
-    DeploymentScriptNamePrefix: DeploymentScriptNamePrefix
     DomainJoinPassword: DomainJoinPassword
     DomainJoinUserPrincipalName: DomainJoinUserPrincipalName
     FileShares: FileShares
@@ -148,7 +98,7 @@ module azureFiles 'azureFiles/azureFiles.bicep' = if (StorageSolution == 'AzureS
     FslogixStorage: FslogixStorage
     KerberosEncryption: KerberosEncryption
     Location: Location
-    ManagementVmName: managementVirtualMachine.outputs.Name
+    ManagementVmName: ManagementVmName
     Netbios: Netbios
     OuPath: OuPath
     PrivateEndpoint: PrivateEndpoint
@@ -165,14 +115,12 @@ module azureFiles 'azureFiles/azureFiles.bicep' = if (StorageSolution == 'AzureS
     StorageSolution: StorageSolution
     Subnet: Subnet
     TagsAutomationAccounts: TagsAutomationAccounts
-    TagsDeploymentScripts: TagsDeploymentScripts
     TagsPrivateEndpoints: TagsPrivateEndpoints
     TagsRecoveryServicesVault: TagsRecoveryServicesVault
     TagsStorageAccounts: TagsStorageAccounts
     TagsVirtualMachines: TagsVirtualMachines
     Timestamp: Timestamp
     TimeZone: TimeZone
-    UserAssignedIdentityResourceId: UserAssignedIdentityResourceId
     VirtualNetwork: VirtualNetwork
     VirtualNetworkResourceGroup: VirtualNetworkResourceGroup
   }

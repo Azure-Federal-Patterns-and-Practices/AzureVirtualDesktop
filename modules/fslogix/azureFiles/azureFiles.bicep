@@ -1,11 +1,8 @@
-param _artifactsLocation string
-@secure()
-param _artifactsLocationSasToken string
+param ArtifactsLocation string
 param AutomationAccountName string
 param Availability string
 param AzureFilesPrivateDnsZoneResourceId string
 param ClientId string
-param DeploymentScriptNamePrefix string
 @secure()
 param DomainJoinPassword string
 param DomainJoinUserPrincipalName string
@@ -33,14 +30,12 @@ param StorageSku string
 param StorageSolution string
 param Subnet string
 param TagsAutomationAccounts object
-param TagsDeploymentScripts object
 param TagsPrivateEndpoints object
 param TagsRecoveryServicesVault object
 param TagsStorageAccounts object
 param TagsVirtualMachines object
 param Timestamp string
 param TimeZone string
-param UserAssignedIdentityResourceId string
 param VirtualNetwork string
 param VirtualNetworkResourceGroup string
 
@@ -184,16 +179,12 @@ module ntfsPermissions '../ntfsPermissions.bicep' = if (contains(ActiveDirectory
   name: 'FslogixNtfsPermissions_${Timestamp}'
   scope: resourceGroup(ResourceGroupManagement)
   params: {
-    _artifactsLocation: _artifactsLocation
-    _artifactsLocationSasToken: _artifactsLocationSasToken
+    ArtifactsLocation: ArtifactsLocation
     CommandToExecute: 'powershell -ExecutionPolicy Unrestricted -File Set-NtfsPermissions.ps1 -ClientId ${ClientId} -DomainJoinPassword "${DomainJoinPassword}" -DomainJoinUserPrincipalName ${DomainJoinUserPrincipalName} -ActiveDirectorySolution ${ActiveDirectorySolution} -Environment ${environment().name} -FslogixSolution ${FslogixSolution} -KerberosEncryptionType ${KerberosEncryption} -Netbios ${Netbios} -OuPath "${OuPath}" -SecurityPrincipalNames "${SecurityPrincipalNames}" -StorageAccountPrefix ${StorageAccountNamePrefix} -StorageAccountResourceGroupName ${ResourceGroupStorage} -StorageCount ${StorageCount} -StorageIndex ${StorageIndex} -StorageSolution ${StorageSolution} -StorageSuffix ${environment().suffixes.storage} -SubscriptionId ${subscription().subscriptionId} -TenantId ${subscription().tenantId}'
-    DeploymentScriptNamePrefix: DeploymentScriptNamePrefix
     Location: Location
     ManagementVmName: ManagementVmName
-    TagsDeploymentScripts: TagsDeploymentScripts
     TagsVirtualMachines: TagsVirtualMachines
     Timestamp: Timestamp
-    UserAssignedIdentityResourceId: UserAssignedIdentityResourceId
   }
   dependsOn: [
     privateDnsZoneGroups
@@ -222,8 +213,7 @@ module autoIncreasePremiumFileShareQuota 'autoIncreasePremiumFileShareQuota.bice
   name: 'AutoIncreasePremiumFileShareQuota_${Timestamp}'
   scope: resourceGroup(ResourceGroupManagement)
   params: {
-    _artifactsLocation: _artifactsLocation
-    _artifactsLocationSasToken: _artifactsLocationSasToken
+    ArtifactsLocation: ArtifactsLocation
     AutomationAccountName: AutomationAccountName
     Location: Location
     StorageAccountNamePrefix: StorageAccountNamePrefix
