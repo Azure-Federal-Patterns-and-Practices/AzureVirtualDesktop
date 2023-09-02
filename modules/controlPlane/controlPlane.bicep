@@ -12,7 +12,7 @@ param Monitoring bool
 param ResourceGroupControlPlane string
 param ResourceGroupManagement string
 param RoleDefinitions object
-param SecurityPrincipalIds array
+param SecurityPrincipalObjectIds array
 param TagsApplicationGroup object
 param TagsHostPool object
 param Timestamp string
@@ -47,7 +47,7 @@ module applicationGroup 'applicationGroup.bicep' = {
     HostPoolResourceId: hostPool.outputs.ResourceId
     Location: Location
     RoleDefinitions: RoleDefinitions
-    SecurityPrincipalIds: SecurityPrincipalIds
+    SecurityPrincipalObjectIds: SecurityPrincipalObjectIds
     TagsApplicationGroup: TagsApplicationGroup
   }
 }

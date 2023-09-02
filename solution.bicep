@@ -178,11 +178,8 @@ param ScalingTool bool = true
 @description('The resource ID of the log analytics workspace used for Azure Sentinel and / or Defender for Cloud. When using the Microsoft Monitoring Agent, this allows you to multihome the agent to reduce unnecessary log collection and reduce cost.')
 param SecurityLogAnalyticsWorkspaceResourceId string = ''
 
-@description('An array of Security Principal object IDs to assign to the AVD Application Group and FSLogix Storage.')
-param SecurityPrincipalObjectIds array = []
-
-@description('An array of Security Principal names to assign NTFS permissions on the Azure File Share to support Fslogix. This is only required for pooled host pools using FSLogix. The names should align to the object IDs provided in the "SecurityPrincipalObjectIds" parameter.')
-param SecurityPrincipalNames array = []
+@description('An array of Security Principals with their object IDs and display names to assign to the AVD Application Group and FSLogix Storage.')
+param SecurityPrincipals array
 
 @maxValue(5000)
 @minValue(0)
@@ -279,8 +276,7 @@ module logic 'modules/logic.bicep' = {
     ResourceGroupHosts: resourceNames.outputs.ResourceGroupHosts
     ResourceGroupManagement: resourceNames.outputs.ResourceGroupManagement
     ResourceGroupStorage: resourceNames.outputs.ResourceGroupStorage
-    SecurityPrincipalNames: SecurityPrincipalNames
-    SecurityPrincipalObjectIds: SecurityPrincipalObjectIds
+    SecurityPrincipals: SecurityPrincipals
     SessionHostCount: SessionHostCount
     SessionHostIndex: SessionHostIndex
     VirtualMachineNamePrefix: resourceNames.outputs.VirtualMachineNamePrefix
@@ -373,7 +369,7 @@ module controlPlane 'modules/controlPlane/controlPlane.bicep' = {
     RoleDefinitions: logic.outputs.RoleDefinitions
     ResourceGroupControlPlane: resourceNames.outputs.ResourceGroupControlPlane
     ResourceGroupManagement: resourceNames.outputs.ResourceGroupManagement
-    SecurityPrincipalIds: SecurityPrincipalObjectIds
+    SecurityPrincipalObjectIds: filter(SecurityPrincipals, item => item.objectId)
     TagsApplicationGroup: union({
       'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.DesktopVirtualization/applicationGroups') ? Tags['Microsoft.DesktopVirtualization/applicationGroups'] : {})
@@ -422,8 +418,8 @@ module fslogix 'modules/fslogix/fslogix.bicep' = if (!(FslogixStorage == 'None')
     RecoveryServicesVaultName: resourceNames.outputs.RecoveryServicesVaultName
     ResourceGroupManagement: resourceNames.outputs.ResourceGroupManagement
     ResourceGroupStorage: resourceNames.outputs.ResourceGroupStorage
-    SecurityPrincipalIds: SecurityPrincipalObjectIds
-    SecurityPrincipalNames: SecurityPrincipalNames
+    SecurityPrincipalObjectIds: filter(SecurityPrincipals, item => item.objectId)
+    SecurityPrincipalNames: filter(SecurityPrincipals, item => item.name)
     SmbServerLocation: logic.outputs.SmbServerLocation
     StorageAccountNamePrefix: resourceNames.outputs.StorageAccountNamePrefix
     StorageCount: StorageCount
@@ -508,7 +504,7 @@ module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
     ScalingMinimumNumberOfRdsh: ScalingMinimumNumberOfRdsh
     ScalingSessionThresholdPerCPU: ScalingSessionThresholdPerCPU
     ScalingTool: ScalingTool
-    SecurityPrincipalObjectIds: SecurityPrincipalObjectIds
+    SecurityPrincipalObjectIds: filter(SecurityPrincipals, item => item.objectId)
     SecurityLogAnalyticsWorkspaceResourceId: SecurityLogAnalyticsWorkspaceResourceId
     SessionHostBatchCount: logic.outputs.SessionHostBatchCount
     SessionHostIndex: SessionHostIndex

@@ -16,8 +16,7 @@ param ResourceGroupControlPlane string
 param ResourceGroupHosts string
 param ResourceGroupManagement string
 param ResourceGroupStorage string
-param SecurityPrincipalObjectIds array
-param SecurityPrincipalNames array
+param SecurityPrincipals array
 param SessionHostCount int
 param SessionHostIndex int
 param VirtualMachineNamePrefix string
@@ -59,8 +58,7 @@ var RoleDefinitions = {
   Reader: 'acdd72a7-3385-48ef-bd42-f606fba81ae7'
   VirtualMachineUserLogin: 'fb879df8-f326-4884-b1cf-06f3ad86be52'
 }
-var SecurityPrincipalIdsCount = length(SecurityPrincipalObjectIds)
-var SecurityPrincipalNamesCount = length(SecurityPrincipalNames)
+var SecurityPrincipalsCount = length(SecurityPrincipals)
 var SmbServerLocation = Locations[LocationVirtualMachines].abbreviation
 var StorageSku = FslogixStorage == 'None' ? 'None' : split(FslogixStorage, ' ')[1]
 var StorageSolution = split(FslogixStorage, ' ')[0]
@@ -81,8 +79,7 @@ output PrivateEndpoint bool = PrivateEndpoint
 output ResourceGroups array = ResourceGroups
 output RoleDefinitions object = RoleDefinitions
 output SessionHostBatchCount int = SessionHostBatchCount
-output SecurityPrincipalIdsCount int = SecurityPrincipalIdsCount
-output SecurityPrincipalNamesCount int = SecurityPrincipalNamesCount
+output SecurityPrincipalsCount int = SecurityPrincipalsCount
 output SmbServerLocation string = SmbServerLocation
 output StorageSku string = StorageSku
 output StorageSolution string = StorageSolution

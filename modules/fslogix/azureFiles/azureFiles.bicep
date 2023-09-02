@@ -21,7 +21,7 @@ param RecoveryServices bool
 param RecoveryServicesVaultName string
 param ResourceGroupManagement string
 param ResourceGroupStorage string
-param SecurityPrincipalIds array
+param SecurityPrincipalObjectIds array
 param SecurityPrincipalNames array
 param StorageAccountNamePrefix string
 param StorageCount int
@@ -102,10 +102,10 @@ resource storageAccounts 'Microsoft.Storage/storageAccounts@2022-09-01' = [for i
 // Assigns the SMB Contributor role to the Storage Account so users can save their profiles to the file share using FSLogix
 resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for i in range(0, StorageCount): {
   scope: storageAccounts[i]
-  name: guid(SecurityPrincipalIds[i], RoleDefinitionId, storageAccounts[i].id)
+  name: guid(SecurityPrincipalObjectIds[i], RoleDefinitionId, storageAccounts[i].id)
   properties: {
     roleDefinitionId: RoleDefinitionId
-    principalId: SecurityPrincipalIds[i]
+    principalId: SecurityPrincipalObjectIds[i]
   }
 }]
 

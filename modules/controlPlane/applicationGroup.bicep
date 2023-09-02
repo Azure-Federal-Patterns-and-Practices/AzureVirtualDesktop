@@ -2,7 +2,7 @@ param DesktopApplicationGroupName string
 param HostPoolResourceId string
 param Location string
 param RoleDefinitions object
-param SecurityPrincipalIds array
+param SecurityPrincipalObjectIds array
 param TagsApplicationGroup object
 
 resource applicationGroup 'Microsoft.DesktopVirtualization/applicationGroups@2021-03-09-preview' = {
@@ -15,12 +15,12 @@ resource applicationGroup 'Microsoft.DesktopVirtualization/applicationGroups@202
   }
 }
 
-resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for i in range(0, length(SecurityPrincipalIds)): {
+resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for i in range(0, length(SecurityPrincipalObjectIds)): {
   scope: applicationGroup
-  name: guid(SecurityPrincipalIds[i], RoleDefinitions.DesktopVirtualizationUser, DesktopApplicationGroupName)
+  name: guid(SecurityPrincipalObjectIds[i], RoleDefinitions.DesktopVirtualizationUser, DesktopApplicationGroupName)
   properties: {
     roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', RoleDefinitions.DesktopVirtualizationUser)
-    principalId: SecurityPrincipalIds[i]
+    principalId: SecurityPrincipalObjectIds[i]
   }
 }]
 

@@ -29,7 +29,7 @@ param RecoveryServices bool
 param RecoveryServicesVaultName string
 param ResourceGroupManagement string
 param ResourceGroupStorage string
-param SecurityPrincipalIds array
+param SecurityPrincipalObjectIds array
 param SecurityPrincipalNames array
 param SmbServerLocation string
 param StorageAccountNamePrefix string
@@ -106,7 +106,7 @@ module azureFiles 'azureFiles/azureFiles.bicep' = if (StorageSolution == 'AzureS
     RecoveryServicesVaultName: RecoveryServicesVaultName
     ResourceGroupManagement: ResourceGroupManagement
     ResourceGroupStorage: ResourceGroupStorage
-    SecurityPrincipalIds: SecurityPrincipalIds
+    SecurityPrincipalObjectIds: SecurityPrincipalObjectIds
     SecurityPrincipalNames: SecurityPrincipalNames
     StorageAccountNamePrefix: StorageAccountNamePrefix
     StorageCount: StorageCount
