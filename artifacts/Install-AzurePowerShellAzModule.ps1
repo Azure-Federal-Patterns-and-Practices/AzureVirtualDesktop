@@ -52,7 +52,7 @@ try
 {
     $Installer = $URI.Split('/')[-1]
     Get-WebFile -FileName $Installer -URL $URI
-    Start-Process -FilePath 'msiexec.exe' -ArgumentList "/i $Installer /quiet /qn /norestart /passive" -Wait -Passthru
+    Start-Process -FilePath 'msiexec.exe' -ArgumentList "/i $Installer /quiet /qn /norestart /passive" -Wait -Passthru | Out-Null
     Write-Log -Message 'Installed Azure PowerShell AZ Module' -Type 'INFO'
     $Output = [pscustomobject][ordered]@{
         installer = $Installer
