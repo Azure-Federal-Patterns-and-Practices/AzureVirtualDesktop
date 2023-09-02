@@ -58,7 +58,7 @@ try
         installer = $Installer
     }
     $JsonOutput = $Output | ConvertTo-Json
-    return $JsonOutput
+    return $JsonOutput.ToString()
 }
 catch 
 {
