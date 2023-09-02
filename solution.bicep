@@ -301,6 +301,7 @@ module management 'modules/management/management.bicep' = {
   params: {
     ActiveDirectorySolution: ActiveDirectorySolution
     ArtifactsLocation: ArtifactsLocation
+    ArtifactsStorageAccountResourceId: ArtifactsStorageAccountResourceId
     AutomationAccountName: resourceNames.outputs.AutomationAccountName
     Availability: Availability
     AvdObjectId: AvdObjectId

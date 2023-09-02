@@ -2,6 +2,7 @@ targetScope = 'subscription'
 
 param ActiveDirectorySolution string
 param ArtifactsLocation string
+param ArtifactsStorageAccountResourceId string
 param AutomationAccountName string
 param Availability string
 param AvdObjectId string
@@ -57,6 +58,7 @@ module userAssignedIdentity 'userAssignedIdentity.bicep' = {
   scope: resourceGroup(ResourceGroupManagement)
   name: 'UserAssignedIdentity_${Timestamp}'
   params: {
+    ArtifactsStorageAccountResourceId: ArtifactsStorageAccountResourceId
     DiskEncryption: DiskEncryption
     DrainMode: DrainMode
     Fslogix: Fslogix

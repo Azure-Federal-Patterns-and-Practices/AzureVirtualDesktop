@@ -1,3 +1,4 @@
+param ArtifactsStorageAccountResourceId string
 param DiskEncryption bool
 param DrainMode bool
 param Fslogix bool
@@ -9,6 +10,12 @@ param Timestamp string
 param UserAssignedIdentityName string
 param VirtualNetworkResourceGroupName string
 
+var ArtifactsStorageRoleAssignment = !empty(ArtifactsStorageAccountResourceId) ? [
+  {
+    roleDefinitionId: '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1' // STorage Blob Data Reader
+    scope: '${split(ArtifactsStorageAccountResourceId, '/')[2]}, ${split(ArtifactsStorageAccountResourceId, '/')[4]}'
+  }
+] : []
 var DiskEncryptionRoleAssignment = DiskEncryption ? [
   {
     roleDefinitionId: '14b46e9e-c2b7-41b4-b07b-48a6ebf60603' // Key Vault Crypto Officer (Bitlocker key)
@@ -38,7 +45,7 @@ var FSLogixPrivateEndpointRoleAssignment = contains(FslogixStorage, 'PrivateEndp
   }
 ] : []
 var FSLogixRoleAssignments = union(FSLogixNtfsRoleAssignments, FSLogixPrivateEndpointRoleAssignment)
-var RoleAssignments = union(DiskEncryptionRoleAssignment, DrainModeRoleAssignment, FSLogixRoleAssignments)
+var RoleAssignments = union(ArtifactsStorageRoleAssignment, DiskEncryptionRoleAssignment, DrainModeRoleAssignment, FSLogixRoleAssignments)
 
 resource userAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
   name: UserAssignedIdentityName
