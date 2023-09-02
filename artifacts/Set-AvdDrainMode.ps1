@@ -36,7 +36,10 @@ try
         $Name = ($SessionHost -split "/")[1]; Update-AzWvdSessionHost -ResourceGroupName $ResourceGroup -HostPoolName $HostPool -Name $Name -AllowNewSession:$False
     }
     Write-Log -Message 'Drain Mode Succeeded' -Type 'INFO'
-    $JsonOutput = $HostPool | ConvertTo-Json
+    $Output = [pscustomobject][ordered]@{
+        hostPool = $HostPool
+    }
+    $JsonOutput = $Output | ConvertTo-Json
     return $JsonOutput
 }
 catch 

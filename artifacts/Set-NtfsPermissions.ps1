@@ -314,6 +314,11 @@ try
             Write-Log -Message "Unmounting the Azure file share, $FileShare, succeeded" -Type 'INFO'
         }
     }
+    $Output = [pscustomobject][ordered]@{
+        shares = $Shares
+    }
+    $JsonOutput = $Output | ConvertTo-Json
+    return $JsonOutput
 }
 catch {
     Write-Log -Message $_ -Type 'ERROR'

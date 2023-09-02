@@ -54,7 +54,11 @@ try
     Get-WebFile -FileName $Installer -URL $URI
     Start-Process -FilePath 'msiexec.exe' -ArgumentList "/i $Installer /quiet /qn /norestart /passive" -Wait -Passthru
     Write-Log -Message 'Installed Azure PowerShell AZ Module' -Type 'INFO'
-    return $Installer
+    $Output = [pscustomobject][ordered]@{
+        installer = $Installer
+    }
+    $JsonOutput = $Output | ConvertTo-Json
+    return $JsonOutput
 }
 catch 
 {

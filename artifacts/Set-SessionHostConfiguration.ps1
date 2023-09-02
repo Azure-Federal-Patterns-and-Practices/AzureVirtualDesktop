@@ -563,6 +563,12 @@ try
     {
         Start-Process -FilePath 'shutdown' -ArgumentList '/r /t 30'
     }
+
+    $Output = [pscustomobject][ordered]@{
+        activeDirectorySolution = $ActiveDirectorySolution
+    }
+    $JsonOutput = $Output | ConvertTo-Json
+    return $JsonOutput
 }
 catch 
 {
