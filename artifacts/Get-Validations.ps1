@@ -208,7 +208,7 @@ try
         anfSubnetId = if($StorageSolution -eq "AzureNetAppFiles"){$SubnetId}else{"NotApplicable"}
         anfActiveDirectory = if($StorageSolution -eq "AzureNetAppFiles"){$DeployAnfAd}else{"false"}
         availabilityZones = $AvailabilityZones
-        existingWorksapce = if($Workspace){"true"}else{"false"}
+        existingWorkspace = if($Workspace){"true"}else{"false"}
         trustedLaunch = $TrustedLaunch
     }
     $JsonOutput = $Output | ConvertTo-Json
