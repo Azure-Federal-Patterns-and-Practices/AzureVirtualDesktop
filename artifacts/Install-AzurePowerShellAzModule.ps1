@@ -47,6 +47,7 @@ function Get-WebFile
 }
 
 $ErrorActionPreference = 'Stop'
+$WarningPreference = 'SilentlyContinue'
 
 try 
 {

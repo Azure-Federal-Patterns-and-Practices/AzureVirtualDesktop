@@ -127,9 +127,8 @@ function Get-WebFile
     until((Test-Path $FileName) -or $Counter -eq 9)
 }
 
-
 $ErrorActionPreference = 'Stop'
-
+$WarningPreference = 'SilentlyContinue'
 
 try 
 {
@@ -501,7 +500,7 @@ try
         # Create registry key(s) if necessary
         if(!(Test-Path -Path $Setting.Path))
         {
-            New-Item -Path $Setting.Path -Force
+            New-Item -Path $Setting.Path -Force | Out-Null
         }
 
         # Checks for existing registry setting
@@ -511,13 +510,13 @@ try
         # Creates the registry setting when it does not exist
         if(!$Value)
         {
-            New-ItemProperty -Path $Setting.Path -Name $Setting.Name -PropertyType $Setting.PropertyType -Value $Setting.Value -Force
+            New-ItemProperty -Path $Setting.Path -Name $Setting.Name -PropertyType $Setting.PropertyType -Value $Setting.Value -Force | Out-Null
             Write-Log -Message "Added registry setting: $LogOutputValue" -Type 'INFO'
         }
         # Updates the registry setting when it already exists
         elseif($Value.$($Setting.Name) -ne $Setting.Value)
         {
-            Set-ItemProperty -Path $Setting.Path -Name $Setting.Name -Value $Setting.Value -Force
+            Set-ItemProperty -Path $Setting.Path -Name $Setting.Name -Value $Setting.Value -Force | Out-Null
             Write-Log -Message "Updated registry setting: $LogOutputValue" -Type 'INFO'
         }
         # Writes log output when registry setting has the correct value
@@ -525,7 +524,7 @@ try
         {
             Write-Log -Message "Registry setting exists with correct value: $LogOutputValue" -Type 'INFO'    
         }
-        Start-Sleep -Seconds 1
+        Start-Sleep -Seconds 1 | Out-Null
     }
 
 
@@ -535,15 +534,15 @@ try
     # Disabling this method for installing the AVD agent until AAD Join can completed successfully
     $BootInstaller = 'AVD-Bootloader.msi'
     Get-WebFile -FileName $BootInstaller -URL 'https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RWrxrH'
-    Start-Process -FilePath 'msiexec.exe' -ArgumentList "/i $BootInstaller /quiet /qn /norestart /passive" -Wait -Passthru
+    Start-Process -FilePath 'msiexec.exe' -ArgumentList "/i $BootInstaller /quiet /qn /norestart /passive" -Wait -Passthru | Out-Null
     Write-Log -Message 'Installed AVD Bootloader' -Type 'INFO'
-    Start-Sleep -Seconds 5
+    Start-Sleep -Seconds 5 | Out-Null
 
     $AgentInstaller = 'AVD-Agent.msi'
     Get-WebFile -FileName $AgentInstaller -URL 'https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RWrmXv'
-    Start-Process -FilePath 'msiexec.exe' -ArgumentList "/i $AgentInstaller /quiet /qn /norestart /passive REGISTRATIONTOKEN=$HostPoolRegistrationToken" -Wait -PassThru
+    Start-Process -FilePath 'msiexec.exe' -ArgumentList "/i $AgentInstaller /quiet /qn /norestart /passive REGISTRATIONTOKEN=$HostPoolRegistrationToken" -Wait -PassThru | Out-Null
     Write-Log -Message 'Installed AVD Agent' -Type 'INFO'
-    Start-Sleep -Seconds 5
+    Start-Sleep -Seconds 5 | Out-Null
 
 
     ##############################################################
@@ -553,7 +552,7 @@ try
     {
         $mma = New-Object -ComObject 'AgentConfigManager.MgmtSvcCfg'
         $mma.AddCloudWorkspace($SecurityWorkspaceId, $SecurityWorkspaceKey)
-        $mma.ReloadConfiguration()
+        $mma.ReloadConfiguration() | Out-Null
     }
 
     ##############################################################
@@ -561,7 +560,7 @@ try
     ##############################################################
     if(($ActiveDirectorySolution -eq "AzureActiveDirectory" -or $ActiveDirectorySolution -eq "AzureActiveDirectoryIntuneEnrollment") -and $AmdVmSize -eq 'false' -and $NvidiaVmSize -eq 'false')
     {
-        Start-Process -FilePath 'shutdown' -ArgumentList '/r /t 30'
+        Start-Process -FilePath 'shutdown' -ArgumentList '/r /t 30' | Out-Null
     }
 
     $Output = [pscustomobject][ordered]@{

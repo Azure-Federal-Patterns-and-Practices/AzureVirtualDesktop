@@ -200,7 +200,7 @@ try
     Write-Log -Message "Existing Workspace Validation Succeeded" -Type 'INFO'
 
 
-    Disconnect-AzAccount
+    Disconnect-AzAccount | Out-Null
 
     $Output = [pscustomobject][ordered]@{
         acceleratedNetworking = $AcceleratedNetworking

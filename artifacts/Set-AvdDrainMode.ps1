@@ -28,8 +28,12 @@ function Write-Log
     $Entry | Out-File -FilePath $Path -Append
 }
 
+$ErrorActionPreference = 'Stop'
+$WarningPreference = 'SilentlyContinue'
+
 try 
 {
+    Connect-AzAccount -Environment $Environment -Tenant $TenantId -Subscription $SubscriptionId -Identity -AccountId $UserAssignedIdentityClientId | Out-Null
     $SessionHosts = (Get-AzWvdSessionHost -ResourceGroupName $ResourceGroup -HostPoolName $HostPool).Name
     foreach($SessionHost in $SessionHosts)
     {
@@ -39,6 +43,9 @@ try
     $Output = [pscustomobject][ordered]@{
         hostPool = $HostPool
     }
+
+    Disconnect-AzAccount | Out-Null
+
     $JsonOutput = $Output | ConvertTo-Json
     return $JsonOutput
 }

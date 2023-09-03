@@ -85,6 +85,7 @@ function Write-Log
 }
 
 $ErrorActionPreference = 'Stop'
+$WarningPreference = 'SilentlyContinue'
 
 try 
 {
@@ -97,39 +98,12 @@ try
         $RsatInstalled = (Get-WindowsFeature -Name 'RSAT-AD-PowerShell').Installed
         if(!$RsatInstalled)
         {
-            Install-WindowsFeature -Name 'RSAT-AD-PowerShell'
+            Install-WindowsFeature -Name 'RSAT-AD-PowerShell' | Out-Null
             Write-Log -Message "Installation of the AD module succeeded" -Type 'INFO'
         }
         else
         {
             Write-Log -Message "AD module already exists" -Type 'INFO'   
-        }
-    }
-
-    if($StorageSolution -eq 'AzureStorageAccount')
-    {
-        # Install latest NuGet Provider; recommended for PowerShellGet
-        $NuGet = Get-PackageProvider | Where-Object {$_.Name -eq 'NuGet'}
-        if(!$NuGet)
-        {
-            Install-PackageProvider -Name 'NuGet' -Force
-            Write-Log -Message "Installed the NuGet Package Provider" -Type 'INFO'
-        }
-        else
-        {
-            Write-Log -Message "NuGet Package Provider already exists" -Type 'INFO'    
-        }
-        
-        # Install required Az.Storage module
-        $AzStorageModule = Get-Module -ListAvailable | Where-Object {$_.Name -eq 'Az.Storage'}
-        if(!$AzStorageModule)
-        {
-            Install-Module -Name 'Az.Storage' -Repository 'PSGallery' -RequiredVersion '5.5.0' -Force
-            Write-Log -Message "Installed the Az.Storage module" -Type 'INFO'
-        }
-        else 
-        {
-            Write-Log -Message "Az.Storage module already exists" -Type 'INFO'
         }
     }
 
@@ -140,7 +114,7 @@ try
     # Convert Security Principal Names from a JSON array to a PowerShell array
     [array]$SecurityPrincipalNames = $SecurityPrincipalNames.Replace("'",'"') | ConvertFrom-Json
     Write-Log -Message "Security Principal Names:" -Type 'INFO'
-    $SecurityPrincipalNames | Add-Content -Path 'C:\cse.txt' -Force
+    $SecurityPrincipalNames | Add-Content -Path 'C:\cse.txt' -Force | Out-Null
 
     # Selects the appropraite share names based on the FSlogixSolution param from the deployment
     $Shares = switch($FslogixSolution)
@@ -193,7 +167,7 @@ try
                 $FileServer = '\\' + $StorageAccountName + $FilesSuffix
 
                 # Connects to Azure using a User Assigned Managed Identity
-                Connect-AzAccount -Identity -AccountId $ClientId -Environment $Environment -Tenant $TenantId -Subscription $SubscriptionId
+                Connect-AzAccount -Identity -AccountId $ClientId -Environment $Environment -Tenant $TenantId -Subscription $SubscriptionId | Out-Null
                 Write-Log -Message "Authenticated to Azure" -Type 'INFO'
 
                 # Get the storage account key
@@ -212,7 +186,7 @@ try
                     $KerberosKey = (Get-AzStorageAccountKey -ResourceGroupName $StorageAccountResourceGroupName -Name $StorageAccountName -ListKerbKey | Where-Object {$_.Keyname -contains 'kerb1'}).Value
                     if(!$KerberosKey)
                     {
-                        New-AzStorageAccountKey -ResourceGroupName $StorageAccountResourceGroupName -Name $StorageAccountName -KeyName kerb1
+                        New-AzStorageAccountKey -ResourceGroupName $StorageAccountResourceGroupName -Name $StorageAccountName -KeyName kerb1 | Out-Null
                         $Key = (Get-AzStorageAccountKey -ResourceGroupName $StorageAccountResourceGroupName -Name $StorageAccountName -ListKerbKey | Where-Object {$_.Keyname -contains 'kerb1'}).Value
                         Write-Log -Message "Kerberos Key creation on Storage Account, $StorageAccountName, succeeded." -Type 'INFO'
                     } 
@@ -259,7 +233,7 @@ try
                         -ActiveDirectoryDomainsid $Domain.DomainSID `
                         -ActiveDirectoryAzureStorageSid $ComputerObject.SID.Value `
                         -ActiveDirectorySamAccountName $SamAccountName `
-                        -ActiveDirectoryAccountType 'Computer'
+                        -ActiveDirectoryAccountType 'Computer' | Out-Null
                     Write-Log -Message "Storage Account update with domain join info succeeded" -Type 'INFO'
                 
                     # Enable AES256 encryption if selected
@@ -267,21 +241,21 @@ try
                     {
                         # Set the Kerberos encryption on the computer object
                         $DistinguishedName = 'CN=' + $StorageAccountName + ',' + $OuPath
-                        Set-ADComputer -Credential $DomainCredential -Identity $DistinguishedName -KerberosEncryptionType 'AES256'
+                        Set-ADComputer -Credential $DomainCredential -Identity $DistinguishedName -KerberosEncryptionType 'AES256' | Out-Null
                         Write-Log -Message "Setting Kerberos AES256 Encryption on the computer object succeeded" -Type 'INFO'
                         
                         # Reset the Kerberos key on the Storage Account
-                        New-AzStorageAccountKey -ResourceGroupName $StorageAccountResourceGroupName -Name $StorageAccountName -KeyName kerb1
+                        New-AzStorageAccountKey -ResourceGroupName $StorageAccountResourceGroupName -Name $StorageAccountName -KeyName kerb1 | Out-Null
                         $Key = (Get-AzStorageAccountKey -ResourceGroupName $StorageAccountResourceGroupName -Name $StorageAccountName -ListKerbKey | Where-Object {$_.Keyname -contains 'kerb1'}).Value
                         Write-Log -Message "Resetting the Kerberos key on the Storage Account succeeded" -Type 'INFO'
                     
                         # Update the password on the computer object with the new Kerberos key on the Storage Account
                         $NewPassword = ConvertTo-SecureString -String $Key -AsPlainText -Force
-                        Set-ADAccountPassword -Credential $DomainCredential -Identity $DistinguishedName -Reset -NewPassword $NewPassword
+                        Set-ADAccountPassword -Credential $DomainCredential -Identity $DistinguishedName -Reset -NewPassword $NewPassword | Out-Null
                         Write-Log -Message "Setting the new Kerberos key on the Computer Object succeeded" -Type 'INFO'
                     }
                 }
-                Disconnect-AzAccount
+                Disconnect-AzAccount | Out-Null
                 Write-Log -Message "Disconnection to Azure succeeded" -Type 'INFO'
             }
         }
@@ -290,7 +264,7 @@ try
         {
             # Mount file share
             $FileShare = $FileServer + '\' + $Share
-            New-PSDrive -Name 'Z' -PSProvider 'FileSystem' -Root $FileShare -Credential $Credential
+            New-PSDrive -Name 'Z' -PSProvider 'FileSystem' -Root $FileShare -Credential $Credential | Out-Null
             Write-Log -Message "Mounting the Azure file share, $FileShare, succeeded" -Type 'INFO'
 
             # Set recommended NTFS permissions on the file share
@@ -305,12 +279,12 @@ try
             $ACL.SetAccessRule($DomainUsers)
             $CreatorOwner = New-Object System.Security.AccessControl.FileSystemAccessRule("Creator Owner","Modify","ContainerInherit,ObjectInherit","InheritOnly","Allow")
             $ACL.AddAccessRule($CreatorOwner)
-            $ACL | Set-Acl -Path 'Z:'
+            $ACL | Set-Acl -Path 'Z:' | Out-Null
             Write-Log -Message "Setting the NTFS permissions on the Azure file share succeeded" -Type 'INFO'
 
             # Unmount file share
-            Remove-PSDrive -Name 'Z' -PSProvider 'FileSystem' -Force
-            Start-Sleep -Seconds 5
+            Remove-PSDrive -Name 'Z' -PSProvider 'FileSystem' -Force | Out-Null
+            Start-Sleep -Seconds 5 | Out-Null
             Write-Log -Message "Unmounting the Azure file share, $FileShare, succeeded" -Type 'INFO'
         }
     }
