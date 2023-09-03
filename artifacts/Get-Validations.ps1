@@ -85,10 +85,11 @@ function Write-Log
 }
 
 $ErrorActionPreference = 'Stop'
+$WarningPreference = 'SilentlyContinue'
 
 try 
 {
-    Connect-AzAccount -Environment $Environment -Tenant $TenantId -Subscription $SubscriptionId -Identity -AccountId $UserAssignedIdentityClientId
+    Connect-AzAccount -Environment $Environment -Tenant $TenantId -Subscription $SubscriptionId -Identity -AccountId $UserAssignedIdentityClientId | Out-Null
     $Sku = Get-AzComputeResourceSku -Location $Location | Where-Object {$_.ResourceType -eq "virtualMachines" -and $_.Name -eq $VirtualMachineSize}
     
     ##############################################################
