@@ -53,6 +53,8 @@ param WorkspaceName string
 
 var CpuCountMax = contains(HostPoolType, 'Pooled') ? 32 : 128
 var CpuCountMin = contains(HostPoolType, 'Pooled') ? 4 : 2
+var VirtualNetworkName = split(SubnetResourceId, '/')[8]
+var VirtualNetworkResourceGroupName = split(SubnetResourceId, '/')[4]
 
 module userAssignedIdentity 'userAssignedIdentity.bicep' = {
   scope: resourceGroup(ResourceGroupManagement)
@@ -121,8 +123,8 @@ module virtualMachine 'virtualMachine.bicep' = if (contains(ActiveDirectorySolut
     TagsVirtualMachines: contains(Tags, 'Microsoft.Compute/virtualMachines') ? Tags['Microsoft.Compute/virtualMachines'] : {}
     UserAssignedIdentityClientId: userAssignedIdentity.outputs.clientId
     UserAssignedIdentityResourceId: userAssignedIdentity.outputs.id
-    VirtualNetwork: split(SubnetResourceId, '/')[8]
-    VirtualNetworkResourceGroup: split(SubnetResourceId, '/')[4]
+    VirtualNetwork: VirtualNetworkName
+    VirtualNetworkResourceGroup: VirtualNetworkResourceGroupName
     VirtualMachineNamePrefix: VirtualMachineNamePrefix
     VirtualMachinePassword: VirtualMachinePassword
     VirtualMachineUsername: VirtualMachineUsername
@@ -138,7 +140,7 @@ module validations 'customScriptExtensions.bicep' = {
     ArtifactsLocation: ArtifactsLocation
     File: 'Get-Validations.ps1'
     Location: LocationVirtualMachines
-    Parameters: '-CpuCountMax ${CpuCountMax} -CpuCountMin ${CpuCountMin} -Environment ${Environment} -KerberosEncryption ${KerberosEncryption} -Location ${LocationVirtualMachines} -SessionHostCount ${SessionHostCount} -StorageSolution ${StorageSolution} -SubscriptionId ${subscription().subscriptionId} -TenantId ${tenant().tenantId} -UserAssignedIdentityClientId ${userAssignedIdentity.outputs.clientId} -VirtualMachineSize ${VirtualMachineSize} -WorkspaceName ${WorkspaceName} -WorkspaceResourceGroupName ${ResourceGroupManagement}'
+    Parameters: '-CpuCountMax ${CpuCountMax} -CpuCountMin ${CpuCountMin} -DomainName ${DomainName} -Environment ${Environment} -KerberosEncryption ${KerberosEncryption} -Location ${LocationVirtualMachines} -SessionHostCount ${SessionHostCount} -StorageSolution ${StorageSolution} -SubscriptionId ${subscription().subscriptionId} -TenantId ${tenant().tenantId} -UserAssignedIdentityClientId ${userAssignedIdentity.outputs.clientId} -VirtualMachineSize ${VirtualMachineSize} -VirtualNetworkName ${VirtualNetworkName} -VirtualNetworkResourceGroupName ${VirtualNetworkResourceGroupName} -WorkspaceName ${WorkspaceName} -WorkspaceResourceGroupName ${ResourceGroupManagement}'
     Tags: contains(Tags, 'Microsoft.Compute/virtualMachines') ? Tags['Microsoft.Compute/virtualMachines'] : {}
     UserAssignedIdentityClientId: userAssignedIdentity.outputs.clientId
     VirtualMachineName: virtualMachine.outputs.Name

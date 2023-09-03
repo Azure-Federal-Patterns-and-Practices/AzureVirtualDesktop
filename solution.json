@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "3559042950303052174"
+      "templateHash": "14999708521333649777"
     }
   },
   "parameters": {
@@ -1422,7 +1422,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "8842289806609206570"
+              "templateHash": "5117882350933764280"
             }
           },
           "parameters": {
@@ -1573,7 +1573,9 @@
           },
           "variables": {
             "CpuCountMax": "[if(contains(parameters('HostPoolType'), 'Pooled'), 32, 128)]",
-            "CpuCountMin": "[if(contains(parameters('HostPoolType'), 'Pooled'), 4, 2)]"
+            "CpuCountMin": "[if(contains(parameters('HostPoolType'), 'Pooled'), 4, 2)]",
+            "VirtualNetworkName": "[split(parameters('SubnetResourceId'), '/')[8]]",
+            "VirtualNetworkResourceGroupName": "[split(parameters('SubnetResourceId'), '/')[4]]"
           },
           "resources": [
             {
@@ -2079,10 +2081,10 @@
                     "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('UserAssignedIdentity_{0}', parameters('Timestamp'))), '2022-09-01').outputs.id.value]"
                   },
                   "VirtualNetwork": {
-                    "value": "[split(parameters('SubnetResourceId'), '/')[8]]"
+                    "value": "[variables('VirtualNetworkName')]"
                   },
                   "VirtualNetworkResourceGroup": {
-                    "value": "[split(parameters('SubnetResourceId'), '/')[4]]"
+                    "value": "[variables('VirtualNetworkResourceGroupName')]"
                   },
                   "VirtualMachineNamePrefix": {
                     "value": "[parameters('VirtualMachineNamePrefix')]"
@@ -2443,7 +2445,7 @@
                     "value": "[parameters('LocationVirtualMachines')]"
                   },
                   "Parameters": {
-                    "value": "[format('-CpuCountMax {0} -CpuCountMin {1} -Environment {2} -KerberosEncryption {3} -Location {4} -SessionHostCount {5} -StorageSolution {6} -SubscriptionId {7} -TenantId {8} -UserAssignedIdentityClientId {9} -VirtualMachineSize {10} -WorkspaceName {11} -WorkspaceResourceGroupName {12}', variables('CpuCountMax'), variables('CpuCountMin'), parameters('Environment'), parameters('KerberosEncryption'), parameters('LocationVirtualMachines'), parameters('SessionHostCount'), parameters('StorageSolution'), subscription().subscriptionId, tenant().tenantId, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('UserAssignedIdentity_{0}', parameters('Timestamp'))), '2022-09-01').outputs.clientId.value, parameters('VirtualMachineSize'), parameters('WorkspaceName'), parameters('ResourceGroupManagement'))]"
+                    "value": "[format('-CpuCountMax {0} -CpuCountMin {1} -DomainName {2} -Environment {3} -KerberosEncryption {4} -Location {5} -SessionHostCount {6} -StorageSolution {7} -SubscriptionId {8} -TenantId {9} -UserAssignedIdentityClientId {10} -VirtualMachineSize {11} -VirtualNetworkName {12} -VirtualNetworkResourceGroupName {13} -WorkspaceName {14} -WorkspaceResourceGroupName {15}', variables('CpuCountMax'), variables('CpuCountMin'), parameters('DomainName'), parameters('Environment'), parameters('KerberosEncryption'), parameters('LocationVirtualMachines'), parameters('SessionHostCount'), parameters('StorageSolution'), subscription().subscriptionId, tenant().tenantId, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('UserAssignedIdentity_{0}', parameters('Timestamp'))), '2022-09-01').outputs.clientId.value, parameters('VirtualMachineSize'), variables('VirtualNetworkName'), variables('VirtualNetworkResourceGroupName'), parameters('WorkspaceName'), parameters('ResourceGroupManagement'))]"
                   },
                   "Tags": "[if(contains(parameters('Tags'), 'Microsoft.Compute/virtualMachines'), createObject('value', parameters('Tags')['Microsoft.Compute/virtualMachines']), createObject('value', createObject()))]",
                   "UserAssignedIdentityClientId": {
