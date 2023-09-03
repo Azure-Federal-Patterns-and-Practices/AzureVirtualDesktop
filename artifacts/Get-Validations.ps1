@@ -183,12 +183,12 @@ try
     # vCPU Quota Validation
     ##############################################################
     $RequestedCores = $vCPUs * $SessionHostCount
-    $Family = (Get-AzComputeResourceSku -Location $Location | Where-Object {$_.Name -eq $VmSize}).Family
+    $Family = (Get-AzComputeResourceSku -Location $Location | Where-Object {$_.Name -eq $VirtualMachineSize}).Family
     $CpuData = Get-AzVMUsage -Location $Location | Where-Object {$_.Name.Value -eq $Family}
     $AvailableCores = $CpuData.Limit - $CpuData.CurrentValue; $RequestedCores = $vCPUs * $SessionHostCount
     if($RequestedCores -gt $AvailableCores)
     {
-        Write-Error -Exception "INSUFFICIENT CORE QUOTA: The selected VM size, $VmSize, does not have adequate core quota in the selected location."
+        Write-Error -Exception "INSUFFICIENT CORE QUOTA: The selected VM size, $VirtualMachineSize, does not have adequate core quota in the selected location."
     }
     Write-Log -Message "vCPU Quota Validation Succeeded" -Type 'INFO'
 
