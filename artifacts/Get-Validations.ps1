@@ -195,7 +195,7 @@ try
     ##############################################################
     # vCPU Quota Validation
     ##############################################################
-    $Workspace = Get-AzResource -ResourceGroupName $ResourceGroupName -ResourceName $ResourceName
+    $Workspace = Get-AzResource -ResourceGroupName $WorkspaceResourceGroupName -ResourceName $WorkspaceName
     Write-Log -Message "Existing Workspace Validation Succeeded" -Type 'INFO'
 
 
