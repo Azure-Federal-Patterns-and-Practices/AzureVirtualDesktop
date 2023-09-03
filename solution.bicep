@@ -370,7 +370,7 @@ module controlPlane 'modules/controlPlane/controlPlane.bicep' = {
     RoleDefinitions: logic.outputs.RoleDefinitions
     ResourceGroupControlPlane: resourceNames.outputs.ResourceGroupControlPlane
     ResourceGroupManagement: resourceNames.outputs.ResourceGroupManagement
-    SecurityPrincipalObjectIds: filter(SecurityPrincipals, item => item.objectId)
+    SecurityPrincipalObjectIds: map(SecurityPrincipals, item => '"${item.objectId}"')
     TagsApplicationGroup: union({
       'cm-resource-parent': '${subscription().id}}/resourceGroups/${resourceNames.outputs.ResourceGroupManagement}/providers/Microsoft.DesktopVirtualization/hostpools/${resourceNames.outputs.HostPoolName}'
     }, contains(Tags, 'Microsoft.DesktopVirtualization/applicationGroups') ? Tags['Microsoft.DesktopVirtualization/applicationGroups'] : {})
@@ -419,8 +419,8 @@ module fslogix 'modules/fslogix/fslogix.bicep' = if (!(FslogixStorage == 'None')
     RecoveryServicesVaultName: resourceNames.outputs.RecoveryServicesVaultName
     ResourceGroupManagement: resourceNames.outputs.ResourceGroupManagement
     ResourceGroupStorage: resourceNames.outputs.ResourceGroupStorage
-    SecurityPrincipalObjectIds: filter(SecurityPrincipals, item => item.objectId)
-    SecurityPrincipalNames: filter(SecurityPrincipals, item => item.name)
+    SecurityPrincipalObjectIds: map(SecurityPrincipals, item => '"${item.objectId}"')
+    SecurityPrincipalNames: map(SecurityPrincipals, item => '"${item.name}"')
     SmbServerLocation: logic.outputs.SmbServerLocation
     StorageAccountNamePrefix: resourceNames.outputs.StorageAccountNamePrefix
     StorageCount: StorageCount
@@ -505,7 +505,7 @@ module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
     ScalingMinimumNumberOfRdsh: ScalingMinimumNumberOfRdsh
     ScalingSessionThresholdPerCPU: ScalingSessionThresholdPerCPU
     ScalingTool: ScalingTool
-    SecurityPrincipalObjectIds: filter(SecurityPrincipals, item => item.objectId)
+    SecurityPrincipalObjectIds: map(SecurityPrincipals, item => '"${item.objectId}"')
     SecurityLogAnalyticsWorkspaceResourceId: SecurityLogAnalyticsWorkspaceResourceId
     SessionHostBatchCount: logic.outputs.SessionHostBatchCount
     SessionHostIndex: SessionHostIndex

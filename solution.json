@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "15009134987464970935"
+      "templateHash": "13183071761290957875"
     }
   },
   "parameters": {
@@ -3503,7 +3503,7 @@
             "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ResourceNames_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ResourceGroupManagement.value]"
           },
           "SecurityPrincipalObjectIds": {
-            "value": "[filter(parameters('SecurityPrincipals'), lambda('item', lambdaVariables('item').objectId))]"
+            "value": "[map(parameters('SecurityPrincipals'), lambda('item', format('\"{0}\"', lambdaVariables('item').objectId)))]"
           },
           "TagsApplicationGroup": {
             "value": "[union(createObject('cm-resource-parent', format('{0}}}/resourceGroups/{1}/providers/Microsoft.DesktopVirtualization/hostpools/{2}', subscription().id, reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ResourceNames_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ResourceGroupManagement.value, reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ResourceNames_{0}', parameters('Timestamp'))), '2022-09-01').outputs.HostPoolName.value)), if(contains(parameters('Tags'), 'Microsoft.DesktopVirtualization/applicationGroups'), parameters('Tags')['Microsoft.DesktopVirtualization/applicationGroups'], createObject()))]"
@@ -4238,10 +4238,10 @@
             "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ResourceNames_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ResourceGroupStorage.value]"
           },
           "SecurityPrincipalObjectIds": {
-            "value": "[filter(parameters('SecurityPrincipals'), lambda('item', lambdaVariables('item').objectId))]"
+            "value": "[map(parameters('SecurityPrincipals'), lambda('item', format('\"{0}\"', lambdaVariables('item').objectId)))]"
           },
           "SecurityPrincipalNames": {
-            "value": "[filter(parameters('SecurityPrincipals'), lambda('item', lambdaVariables('item').name))]"
+            "value": "[map(parameters('SecurityPrincipals'), lambda('item', format('\"{0}\"', lambdaVariables('item').name)))]"
           },
           "SmbServerLocation": {
             "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('Logic_{0}', parameters('Timestamp'))), '2022-09-01').outputs.SmbServerLocation.value]"
@@ -6099,7 +6099,7 @@
             "value": "[parameters('ScalingTool')]"
           },
           "SecurityPrincipalObjectIds": {
-            "value": "[filter(parameters('SecurityPrincipals'), lambda('item', lambdaVariables('item').objectId))]"
+            "value": "[map(parameters('SecurityPrincipals'), lambda('item', format('\"{0}\"', lambdaVariables('item').objectId)))]"
           },
           "SecurityLogAnalyticsWorkspaceResourceId": {
             "value": "[parameters('SecurityLogAnalyticsWorkspaceResourceId')]"
