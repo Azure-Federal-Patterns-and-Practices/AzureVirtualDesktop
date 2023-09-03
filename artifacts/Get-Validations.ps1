@@ -100,7 +100,7 @@ try
     ##############################################################
     # Availability Zone Validation
     ##############################################################
-    $AvailabilityZones = $Sku.locationInfo.zones | Sort-Object | ConvertTo-Json -AsArray
+    $AvailabilityZones = $Sku.locationInfo.zones | Sort-Object
     Write-Log -Message "Accelerated Networking Validation Succeeded" -Type 'INFO'
 
     ##############################################################
