@@ -7,8 +7,8 @@ param HostPoolResourceGroupName string
 param LimitSecondsToForceLogOffUser string
 param Location string
 param MinimumNumberOfRdsh string
+param ResourceGroupControlPlane string
 param ResourceGroupHosts string
-param ResourceGroupManagement string
 param SessionThresholdPerCPU string
 param Tags object
 param TimeDifference string
@@ -16,8 +16,8 @@ param Time string = utcNow('u')
 param TimeZone string
 
 var RoleAssignments = [
+  ResourceGroupControlPlane
   ResourceGroupHosts
-  ResourceGroupManagement
 ]
 
 resource automationAccount 'Microsoft.Automation/automationAccounts@2022-08-08' existing = {

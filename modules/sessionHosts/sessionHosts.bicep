@@ -199,8 +199,8 @@ module scalingTool '../management/scalingTool.bicep' = if (ScalingTool && Pooled
     LimitSecondsToForceLogOffUser: ScalingLimitSecondsToForceLogOffUser
     Location: Location
     MinimumNumberOfRdsh: ScalingMinimumNumberOfRdsh
+    ResourceGroupControlPlane: ResourceGroupControlPlane
     ResourceGroupHosts: ResourceGroupHosts
-    ResourceGroupManagement: ResourceGroupManagement
     SessionThresholdPerCPU: ScalingSessionThresholdPerCPU
     Tags: TagsAutomationAccounts
     TimeDifference: TimeDifference
