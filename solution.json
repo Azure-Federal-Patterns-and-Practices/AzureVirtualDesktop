@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "12318790444640990168"
+      "templateHash": "17719965852750151179"
     }
   },
   "parameters": {
@@ -3534,7 +3534,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "18134059410770318670"
+              "templateHash": "10563690645021384411"
             }
           },
           "parameters": {
@@ -4013,7 +4013,9 @@
                 },
                 "mode": "Incremental",
                 "parameters": {
-                  "ApplicationGroupReferences": "[if(contains(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Workspace_Existing_{0}', parameters('Timestamp'))), '2022-09-01').outputs.applicationGroupReferences.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupControlPlane')), 'Microsoft.Resources/deployments', format('ApplicationGroup_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ResourceId.value), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Workspace_Existing_{0}', parameters('Timestamp'))), '2022-09-01').outputs.applicationGroupReferences.value), createObject('value', union(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Workspace_Existing_{0}', parameters('Timestamp'))), '2022-09-01').outputs.applicationGroupReferences.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupControlPlane')), 'Microsoft.Resources/deployments', format('ApplicationGroup_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ApplicationGroupReference.value)))]",
+                  "ApplicationGroupReferences": {
+                    "value": "[union(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Workspace_Existing_{0}', parameters('Timestamp'))), '2022-09-01').outputs.applicationGroupReferences.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupControlPlane')), 'Microsoft.Resources/deployments', format('ApplicationGroup_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ApplicationGroupReference.value)]"
+                  },
                   "Existing": {
                     "value": false
                   },
