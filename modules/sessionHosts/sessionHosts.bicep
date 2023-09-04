@@ -111,6 +111,7 @@ module virtualMachines 'virtualMachines.bicep' = [for i in range(1, SessionHostB
     Availability: Availability
     AvailabilityZones: AvailabilityZones
     AvailabilitySetNamePrefix: AvailabilitySetNamePrefix
+    BatchCount: i
     DiskEncryption: DiskEncryption
     DiskEncryptionSetResourceId: DiskEncryptionSetResourceId
     DiskNamePrefix: DiskNamePrefix

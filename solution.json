@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "7762129321832072827"
+      "templateHash": "3652844634619533668"
     }
   },
   "parameters": {
@@ -6385,7 +6385,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "7282166505637254562"
+              "templateHash": "8236219177817522493"
             }
           },
           "parameters": {
@@ -6785,6 +6785,9 @@
                   "AvailabilitySetNamePrefix": {
                     "value": "[parameters('AvailabilitySetNamePrefix')]"
                   },
+                  "BatchCount": {
+                    "value": "[range(1, parameters('SessionHostBatchCount'))[copyIndex()]]"
+                  },
                   "DiskEncryption": {
                     "value": "[parameters('DiskEncryption')]"
                   },
@@ -6924,7 +6927,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "5896762063845582367"
+                      "templateHash": "5998896189234673768"
                     }
                   },
                   "parameters": {
@@ -6945,6 +6948,9 @@
                     },
                     "AvailabilityZones": {
                       "type": "array"
+                    },
+                    "BatchCount": {
+                      "type": "int"
                     },
                     "DiskEncryption": {
                       "type": "bool"
@@ -7341,7 +7347,7 @@
                         }
                       },
                       "dependsOn": [
-                        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('CSE_DrainMode_{0}', parameters('Timestamp')))]",
+                        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('CSE_DrainMode_{0}_{1}', parameters('BatchCount'), parameters('Timestamp')))]",
                         "[resourceId('Microsoft.Compute/virtualMachines', format('{0}{1}', parameters('VirtualMachineNamePrefix'), padLeft(add(range(0, parameters('SessionHostCount'))[range(0, parameters('SessionHostCount'))[copyIndex()]], parameters('SessionHostIndex')), 4, '0')))]"
                       ]
                     },
@@ -7364,7 +7370,7 @@
                         "settings": "[if(variables('Intune'), createObject('mdmId', '0000000a-0000-0000-c000-000000000000'), null())]"
                       },
                       "dependsOn": [
-                        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('CSE_DrainMode_{0}', parameters('Timestamp')))]",
+                        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('CSE_DrainMode_{0}_{1}', parameters('BatchCount'), parameters('Timestamp')))]",
                         "[resourceId('Microsoft.Compute/virtualMachines', format('{0}{1}', parameters('VirtualMachineNamePrefix'), padLeft(add(range(0, parameters('SessionHostCount'))[range(0, parameters('SessionHostCount'))[copyIndex()]], parameters('SessionHostIndex')), 4, '0')))]"
                       ]
                     },
@@ -7420,7 +7426,7 @@
                       "condition": "[parameters('DrainMode')]",
                       "type": "Microsoft.Resources/deployments",
                       "apiVersion": "2022-09-01",
-                      "name": "[format('CSE_DrainMode_{0}', parameters('Timestamp'))]",
+                      "name": "[format('CSE_DrainMode_{0}_{1}', parameters('BatchCount'), parameters('Timestamp'))]",
                       "resourceGroup": "[parameters('ResourceGroupManagement')]",
                       "properties": {
                         "expressionEvaluationOptions": {
