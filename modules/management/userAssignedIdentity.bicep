@@ -12,7 +12,7 @@ param VirtualNetworkResourceGroupName string
 
 var ArtifactsStorageRoleAssignment = !empty(ArtifactsStorageAccountResourceId) ? [
   {
-    roleDefinitionId: '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1' // STorage Blob Data Reader
+    roleDefinitionId: '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1' // Storage Blob Data Reader
     scope: '${split(ArtifactsStorageAccountResourceId, '/')[2]}, ${split(ArtifactsStorageAccountResourceId, '/')[4]}'
   }
 ] : []
