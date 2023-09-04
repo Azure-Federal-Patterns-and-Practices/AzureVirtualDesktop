@@ -2,11 +2,27 @@
 Param(
     [parameter(Mandatory)]
     [string]
+    $Environment,
+
+    [parameter(Mandatory)]
+    [string]
     $HostPoolName,
 
     [parameter(Mandatory)]
     [string]
-    $HostPoolResourceGroupName
+    $HostPoolResourceGroupName,
+
+    [parameter(Mandatory)]
+    [string]
+    $SubscriptionId,
+
+    [parameter(Mandatory)]
+    [string]
+    $TenantId,
+
+    [parameter(Mandatory)]
+    [string]
+    $UserAssignedIdentityClientId
 )
 
 function Write-Log
