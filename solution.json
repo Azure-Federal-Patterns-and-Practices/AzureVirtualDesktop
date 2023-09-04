@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "17719965852750151179"
+      "templateHash": "3907564988013000391"
     }
   },
   "parameters": {
@@ -3534,7 +3534,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "10563690645021384411"
+              "templateHash": "8118000851369431068"
             }
           },
           "parameters": {
@@ -3598,6 +3598,9 @@
             "WorkspaceName": {
               "type": "string"
             }
+          },
+          "variables": {
+            "NullArray": []
           },
           "resources": [
             {
@@ -4014,7 +4017,7 @@
                 "mode": "Incremental",
                 "parameters": {
                   "ApplicationGroupReferences": {
-                    "value": "[union(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Workspace_Existing_{0}', parameters('Timestamp'))), '2022-09-01').outputs.applicationGroupReferences.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupControlPlane')), 'Microsoft.Resources/deployments', format('ApplicationGroup_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ApplicationGroupReference.value)]"
+                    "value": "[union(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Workspace_Existing_{0}', parameters('Timestamp'))), '2022-09-01').outputs.applicationGroupReferences.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupControlPlane')), 'Microsoft.Resources/deployments', format('ApplicationGroup_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ApplicationGroupReference.value, variables('NullArray'))]"
                   },
                   "Existing": {
                     "value": false
