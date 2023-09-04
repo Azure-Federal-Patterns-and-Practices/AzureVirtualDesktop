@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "13183071761290957875"
+      "templateHash": "17886782992998300340"
     }
   },
   "parameters": {
@@ -1422,7 +1422,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "11417816469022740593"
+              "templateHash": "7529170945268154536"
             }
           },
           "parameters": {
@@ -1650,7 +1650,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "6423101309337414323"
+                      "templateHash": "18360935203891251409"
                     }
                   },
                   "parameters": {
@@ -1727,7 +1727,7 @@
                             "value": "ServicePrincipal"
                           },
                           "RoleDefinitionId": {
-                            "value": "[resourceId('Microsoft.Authorization/roleDefinitions', variables('RoleAssignments')[range(0, length(variables('RoleAssignments')))[copyIndex()]].roleDefinitionId)]"
+                            "value": "[variables('RoleAssignments')[range(0, length(variables('RoleAssignments')))[copyIndex()]].roleDefinitionId]"
                           }
                         },
                         "template": {
@@ -1737,7 +1737,7 @@
                             "_generator": {
                               "name": "bicep",
                               "version": "0.20.4.51522",
-                              "templateHash": "15274677324610017489"
+                              "templateHash": "3512679634413550227"
                             }
                           },
                           "parameters": {
@@ -1757,7 +1757,7 @@
                               "apiVersion": "2022-04-01",
                               "name": "[guid(parameters('PrincipalId'), parameters('RoleDefinitionId'), resourceGroup().id)]",
                               "properties": {
-                                "roleDefinitionId": "[parameters('RoleDefinitionId')]",
+                                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', parameters('RoleDefinitionId'))]",
                                 "principalId": "[parameters('PrincipalId')]",
                                 "principalType": "[parameters('PrincipalType')]"
                               }
@@ -1830,7 +1830,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "9968753331911324978"
+                      "templateHash": "13476729775300316208"
                     }
                   },
                   "parameters": {
@@ -1982,7 +1982,7 @@
                             "_generator": {
                               "name": "bicep",
                               "version": "0.20.4.51522",
-                              "templateHash": "15274677324610017489"
+                              "templateHash": "3512679634413550227"
                             }
                           },
                           "parameters": {
@@ -2002,7 +2002,7 @@
                               "apiVersion": "2022-04-01",
                               "name": "[guid(parameters('PrincipalId'), parameters('RoleDefinitionId'), resourceGroup().id)]",
                               "properties": {
-                                "roleDefinitionId": "[parameters('RoleDefinitionId')]",
+                                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', parameters('RoleDefinitionId'))]",
                                 "principalId": "[parameters('PrincipalId')]",
                                 "principalType": "[parameters('PrincipalType')]"
                               }
@@ -4302,7 +4302,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "10299684969075224233"
+              "templateHash": "13633681589210262953"
             }
           },
           "parameters": {
@@ -4909,7 +4909,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "15921140224313493098"
+                      "templateHash": "6710753945130075169"
                     }
                   },
                   "parameters": {
@@ -5108,7 +5108,7 @@
                       "scope": "[format('Microsoft.Storage/storageAccounts/{0}', format('{0}{1}', parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[range(0, parameters('StorageCount'))[copyIndex()]], parameters('StorageIndex')), 2, '0')))]",
                       "name": "[guid(parameters('SecurityPrincipalObjectIds')[range(0, parameters('StorageCount'))[copyIndex()]], variables('RoleDefinitionId'), resourceId('Microsoft.Storage/storageAccounts', format('{0}{1}', parameters('StorageAccountNamePrefix'), padLeft(add(range(0, parameters('StorageCount'))[range(0, parameters('StorageCount'))[copyIndex()]], parameters('StorageIndex')), 2, '0'))))]",
                       "properties": {
-                        "roleDefinitionId": "[variables('RoleDefinitionId')]",
+                        "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', variables('RoleDefinitionId'))]",
                         "principalId": "[parameters('SecurityPrincipalObjectIds')[range(0, parameters('StorageCount'))[copyIndex()]]]"
                       },
                       "dependsOn": [
@@ -5596,7 +5596,7 @@
                             "_generator": {
                               "name": "bicep",
                               "version": "0.20.4.51522",
-                              "templateHash": "7182358037124609313"
+                              "templateHash": "15764771864914717889"
                             }
                           },
                           "parameters": {
@@ -5898,7 +5898,7 @@
                                     "_generator": {
                                       "name": "bicep",
                                       "version": "0.20.4.51522",
-                                      "templateHash": "15274677324610017489"
+                                      "templateHash": "3512679634413550227"
                                     }
                                   },
                                   "parameters": {
@@ -5918,7 +5918,7 @@
                                       "apiVersion": "2022-04-01",
                                       "name": "[guid(parameters('PrincipalId'), parameters('RoleDefinitionId'), resourceGroup().id)]",
                                       "properties": {
-                                        "roleDefinitionId": "[parameters('RoleDefinitionId')]",
+                                        "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', parameters('RoleDefinitionId'))]",
                                         "principalId": "[parameters('PrincipalId')]",
                                         "principalType": "[parameters('PrincipalType')]"
                                       }
@@ -6184,7 +6184,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "10556961381007031563"
+              "templateHash": "13455786733425891817"
             }
           },
           "parameters": {
@@ -6520,7 +6520,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "15274677324610017489"
+                      "templateHash": "3512679634413550227"
                     }
                   },
                   "parameters": {
@@ -6540,7 +6540,7 @@
                       "apiVersion": "2022-04-01",
                       "name": "[guid(parameters('PrincipalId'), parameters('RoleDefinitionId'), resourceGroup().id)]",
                       "properties": {
-                        "roleDefinitionId": "[parameters('RoleDefinitionId')]",
+                        "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', parameters('RoleDefinitionId'))]",
                         "principalId": "[parameters('PrincipalId')]",
                         "principalType": "[parameters('PrincipalType')]"
                       }
@@ -7596,7 +7596,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "11859557486285794036"
+                      "templateHash": "16751788488885408706"
                     }
                   },
                   "parameters": {
@@ -7751,7 +7751,7 @@
                             "value": "ServicePrincipal"
                           },
                           "RoleDefinitionId": {
-                            "value": "[resourceId('Microsoft.Authorization/roleDefinitions', '40c5ff49-9181-41f8-ae61-143b0e78555e')]"
+                            "value": "40c5ff49-9181-41f8-ae61-143b0e78555e"
                           }
                         },
                         "template": {
@@ -7761,7 +7761,7 @@
                             "_generator": {
                               "name": "bicep",
                               "version": "0.20.4.51522",
-                              "templateHash": "15274677324610017489"
+                              "templateHash": "3512679634413550227"
                             }
                           },
                           "parameters": {
@@ -7781,7 +7781,7 @@
                               "apiVersion": "2022-04-01",
                               "name": "[guid(parameters('PrincipalId'), parameters('RoleDefinitionId'), resourceGroup().id)]",
                               "properties": {
-                                "roleDefinitionId": "[parameters('RoleDefinitionId')]",
+                                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', parameters('RoleDefinitionId'))]",
                                 "principalId": "[parameters('PrincipalId')]",
                                 "principalType": "[parameters('PrincipalType')]"
                               }

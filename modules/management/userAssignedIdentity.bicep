@@ -59,7 +59,7 @@ module roleAssignments '../roleAssignment.bicep' = [for i in range(0, length(Rol
   params: {
     PrincipalId: userAssignedIdentity.properties.principalId
     PrincipalType: 'ServicePrincipal'
-    RoleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', RoleAssignments[i].roleDefinitionId)
+    RoleDefinitionId: RoleAssignments[i].roleDefinitionId
   }
 }]
 

@@ -104,7 +104,7 @@ resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
   scope: storageAccounts[i]
   name: guid(SecurityPrincipalObjectIds[i], RoleDefinitionId, storageAccounts[i].id)
   properties: {
-    roleDefinitionId: RoleDefinitionId
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', RoleDefinitionId)
     principalId: SecurityPrincipalObjectIds[i]
   }
 }]
