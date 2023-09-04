@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "3814173733236579619"
+      "templateHash": "1888888489261301676"
     }
   },
   "parameters": {
@@ -6385,7 +6385,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "11292142290878529444"
+              "templateHash": "16694057404250402777"
             }
           },
           "parameters": {
@@ -6927,7 +6927,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "10939325806721081131"
+                      "templateHash": "18440596139087960406"
                     }
                   },
                   "parameters": {
@@ -7444,7 +7444,7 @@
                             "value": "[parameters('Location')]"
                           },
                           "Parameters": {
-                            "value": "[format('-Environment {0} -HostPoolName {1} -HostPoolResourceGroupName {2} -SubscriptionId {3} -TenantId {4} -UserAssignedIdentityClientId {5}', environment().name, parameters('HostPoolName'), parameters('ResourceGroupControlPlane'), subscription().subscriptionId, tenant().tenantId, parameters('UserAssignedIdentityClientId'))]"
+                            "value": "[format('-Environment {0} -HostPoolName {1} -HostPoolResourceGroupName {2} -SessionHostCount {3} -SessionHostIndex {4} -SubscriptionId {5} -TenantId {6} -UserAssignedIdentityClientId {7} -VirtualMachineNamePrefix {8}', environment().name, parameters('HostPoolName'), parameters('ResourceGroupControlPlane'), parameters('SessionHostCount'), parameters('SessionHostIndex'), subscription().subscriptionId, tenant().tenantId, parameters('UserAssignedIdentityClientId'), parameters('VirtualMachineNamePrefix'))]"
                           },
                           "Tags": {
                             "value": "[parameters('TagsVirtualMachines')]"

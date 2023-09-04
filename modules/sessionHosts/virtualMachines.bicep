@@ -287,7 +287,7 @@ module drainMode '../management/customScriptExtensions.bicep' = if (DrainMode) {
     ArtifactsLocation: ArtifactsLocation
     File: 'Set-AvdDrainMode.ps1'
     Location: Location
-    Parameters: '-Environment ${environment().name} -HostPoolName ${HostPoolName} -HostPoolResourceGroupName ${ResourceGroupControlPlane} -SubscriptionId ${subscription().subscriptionId} -TenantId ${tenant().tenantId} -UserAssignedIdentityClientId ${UserAssignedIdentityClientId}'
+    Parameters: '-Environment ${environment().name} -HostPoolName ${HostPoolName} -HostPoolResourceGroupName ${ResourceGroupControlPlane} -SessionHostCount ${SessionHostCount} -SessionHostIndex ${SessionHostIndex} -SubscriptionId ${subscription().subscriptionId} -TenantId ${tenant().tenantId} -UserAssignedIdentityClientId ${UserAssignedIdentityClientId} -VirtualMachineNamePrefix ${VirtualMachineNamePrefix}'
     Tags: TagsVirtualMachines
     UserAssignedIdentityClientId: UserAssignedIdentityClientId
     VirtualMachineName: ManagementVMName
