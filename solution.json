@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "17811559022279802740"
+      "templateHash": "12729484367209610255"
     }
   },
   "parameters": {
@@ -3503,7 +3503,7 @@
             "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ResourceNames_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ResourceGroupManagement.value]"
           },
           "SecurityPrincipalObjectIds": {
-            "value": "[map(parameters('SecurityPrincipals'), lambda('item', format('\"{0}\"', lambdaVariables('item').objectId)))]"
+            "value": "[map(parameters('SecurityPrincipals'), lambda('item', lambdaVariables('item').objectId))]"
           },
           "TagsApplicationGroup": {
             "value": "[union(createObject('cm-resource-parent', format('{0}}}/resourceGroups/{1}/providers/Microsoft.DesktopVirtualization/hostpools/{2}', subscription().id, reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ResourceNames_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ResourceGroupManagement.value, reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ResourceNames_{0}', parameters('Timestamp'))), '2022-09-01').outputs.HostPoolName.value)), if(contains(parameters('Tags'), 'Microsoft.DesktopVirtualization/applicationGroups'), parameters('Tags')['Microsoft.DesktopVirtualization/applicationGroups'], createObject()))]"
@@ -4238,10 +4238,10 @@
             "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ResourceNames_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ResourceGroupStorage.value]"
           },
           "SecurityPrincipalObjectIds": {
-            "value": "[map(parameters('SecurityPrincipals'), lambda('item', format('\"{0}\"', lambdaVariables('item').objectId)))]"
+            "value": "[map(parameters('SecurityPrincipals'), lambda('item', lambdaVariables('item').objectId))]"
           },
           "SecurityPrincipalNames": {
-            "value": "[map(parameters('SecurityPrincipals'), lambda('item', format('\"{0}\"', lambdaVariables('item').name)))]"
+            "value": "[map(parameters('SecurityPrincipals'), lambda('item', lambdaVariables('item').name))]"
           },
           "SmbServerLocation": {
             "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('Logic_{0}', parameters('Timestamp'))), '2022-09-01').outputs.SmbServerLocation.value]"
@@ -4302,7 +4302,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "13633681589210262953"
+              "templateHash": "14263302444431333947"
             }
           },
           "parameters": {
@@ -4909,7 +4909,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "6710753945130075169"
+                      "templateHash": "10097310755487211200"
                     }
                   },
                   "parameters": {
@@ -5033,7 +5033,7 @@
                   },
                   "variables": {
                     "Endpoint": "[split(parameters('FslogixStorage'), ' ')[2]]",
-                    "RoleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', '0c867c2a-1d8c-454a-a3db-ab2ea1bdc8bb')]",
+                    "RoleDefinitionId": "0c867c2a-1d8c-454a-a3db-ab2ea1bdc8bb",
                     "SmbMultiChannel": {
                       "multichannel": {
                         "enabled": true
@@ -5596,7 +5596,7 @@
                             "_generator": {
                               "name": "bicep",
                               "version": "0.20.4.51522",
-                              "templateHash": "15764771864914717889"
+                              "templateHash": "8009148943158134498"
                             }
                           },
                           "parameters": {
@@ -5888,7 +5888,7 @@
                                     "value": "ServicePrincipal"
                                   },
                                   "RoleDefinitionId": {
-                                    "value": "[resourceId('Microsoft.Authorization/roleDefinitions', '17d1049b-9a84-46fb-8f53-869881c3d3ab')]"
+                                    "value": "17d1049b-9a84-46fb-8f53-869881c3d3ab"
                                   }
                                 },
                                 "template": {
@@ -6099,7 +6099,7 @@
             "value": "[parameters('ScalingTool')]"
           },
           "SecurityPrincipalObjectIds": {
-            "value": "[map(parameters('SecurityPrincipals'), lambda('item', format('\"{0}\"', lambdaVariables('item').objectId)))]"
+            "value": "[map(parameters('SecurityPrincipals'), lambda('item', lambdaVariables('item').objectId))]"
           },
           "SecurityLogAnalyticsWorkspaceResourceId": {
             "value": "[parameters('SecurityLogAnalyticsWorkspaceResourceId')]"

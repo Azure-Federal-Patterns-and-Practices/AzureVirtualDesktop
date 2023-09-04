@@ -40,7 +40,7 @@ param VirtualNetwork string
 param VirtualNetworkResourceGroup string
 
 var Endpoint = split(FslogixStorage, ' ')[2]
-var RoleDefinitionId = resourceId('Microsoft.Authorization/roleDefinitions', '0c867c2a-1d8c-454a-a3db-ab2ea1bdc8bb') // Storage File Data SMB Share Contributor 
+var RoleDefinitionId = '0c867c2a-1d8c-454a-a3db-ab2ea1bdc8bb' // Storage File Data SMB Share Contributor 
 var SmbMultiChannel = {
   multichannel: {
     enabled: true
