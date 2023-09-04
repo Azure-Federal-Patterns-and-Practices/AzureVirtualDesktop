@@ -50,14 +50,15 @@ $WarningPreference = 'SilentlyContinue'
 try 
 {
     Connect-AzAccount -Environment $Environment -Tenant $TenantId -Subscription $SubscriptionId -Identity -AccountId $UserAssignedIdentityClientId | Out-Null
-    $SessionHosts = (Get-AzWvdSessionHost -ResourceGroupName $ResourceGroup -HostPoolName $HostPool).Name
+    $SessionHosts = (Get-AzWvdSessionHost -ResourceGroupName $HostPoolResourceGroupName -HostPoolName $HostPoolName).Name
     foreach($SessionHost in $SessionHosts)
     {
-        $Name = ($SessionHost -split "/")[1]; Update-AzWvdSessionHost -ResourceGroupName $ResourceGroup -HostPoolName $HostPool -Name $Name -AllowNewSession:$False
+        $Name = ($SessionHost -split "/")[1]
+        Update-AzWvdSessionHost -ResourceGroupName $HostPoolResourceGroupName -HostPoolName $HostPoolName -Name $Name -AllowNewSession:$False | Out-Null
     }
     Write-Log -Message 'Drain Mode Succeeded' -Type 'INFO'
     $Output = [pscustomobject][ordered]@{
-        hostPool = $HostPool
+        hostPool = $HostPoolName
     }
 
     Disconnect-AzAccount | Out-Null
