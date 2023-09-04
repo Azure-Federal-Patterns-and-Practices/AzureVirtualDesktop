@@ -13,11 +13,11 @@ Param(
     $HostPoolResourceGroupName,
 
     [parameter(Mandatory)]
-    [string]
+    [int]
     $SessionHostCount,
 
     [parameter(Mandatory)]
-    [string]
+    [int]
     $SessionHostIndex,
 
     [parameter(Mandatory)]
