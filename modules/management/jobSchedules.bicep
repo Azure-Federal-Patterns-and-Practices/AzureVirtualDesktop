@@ -1,5 +1,6 @@
 param AutomationAccountName string
 param Environment string
+param FslogixSolution string
 param ResourceGroupName string
 param RunbookName string
 param StorageAccountName string
@@ -16,7 +17,7 @@ resource jobSchedules_ProfileContainers 'Microsoft.Automation/automationAccounts
   properties: {
     parameters: {
       Environment: Environment
-      FileShareName: 'profilecontainers'
+      FileShareName: 'profile-containers'
       ResourceGroupName: ResourceGroupName
       StorageAccountName: StorageAccountName
       SubscriptionId: SubscriptionId
@@ -31,13 +32,13 @@ resource jobSchedules_ProfileContainers 'Microsoft.Automation/automationAccounts
   }
 }]
 
-resource jobSchedules_OfficeContainers 'Microsoft.Automation/automationAccounts/jobSchedules@2022-08-08' = [for i in range(0, 4): {
+resource jobSchedules_OfficeContainers 'Microsoft.Automation/automationAccounts/jobSchedules@2022-08-08' = [for i in range(0, 4): if (contains(FslogixSolution, 'Office')) {
   parent: automationAccount
   name: guid(Timestamp, RunbookName, StorageAccountName, 'OfficeContainers', string(i))
   properties: {
     parameters: {
       Environment: Environment
-      FileShareName: 'officecontainers'
+      FileShareName: 'office-containers'
       ResourceGroupName: ResourceGroupName
       StorageAccountName: StorageAccountName
       SubscriptionId: SubscriptionId

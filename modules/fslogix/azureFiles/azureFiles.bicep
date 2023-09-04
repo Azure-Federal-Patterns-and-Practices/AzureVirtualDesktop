@@ -215,6 +215,7 @@ module autoIncreasePremiumFileShareQuota '../../management/autoIncreasePremiumFi
   params: {
     ArtifactsLocation: ArtifactsLocation
     AutomationAccountName: AutomationAccountName
+    FslogixSolution: FslogixSolution
     Location: Location
     StorageAccountNamePrefix: StorageAccountNamePrefix
     StorageCount: StorageCount

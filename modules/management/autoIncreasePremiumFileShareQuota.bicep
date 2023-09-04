@@ -1,5 +1,6 @@
 param ArtifactsLocation string
 param AutomationAccountName string
+param FslogixSolution string
 param Location string
 param StorageAccountNamePrefix string
 param StorageCount int
@@ -46,6 +47,7 @@ module jobSchedules 'jobSchedules.bicep' = [for i in range(StorageIndex, Storage
   params: {
     AutomationAccountName: automationAccount.name
     Environment: environment().name
+    FslogixSolution: FslogixSolution
     RunbookName: RunbookName
     ResourceGroupName: StorageResourceGroupName
     StorageAccountName: '${StorageAccountNamePrefix}${padLeft(i, 2, '0')}'

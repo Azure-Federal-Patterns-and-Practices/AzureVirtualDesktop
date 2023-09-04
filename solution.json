@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "11513581790308324104"
+      "templateHash": "7762129321832072827"
     }
   },
   "parameters": {
@@ -4490,7 +4490,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "14263302444431333947"
+              "templateHash": "6390701227074570083"
             }
           },
           "parameters": {
@@ -5097,7 +5097,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "10097310755487211200"
+                      "templateHash": "6469480309080313491"
                     }
                   },
                   "parameters": {
@@ -5752,6 +5752,9 @@
                           "AutomationAccountName": {
                             "value": "[parameters('AutomationAccountName')]"
                           },
+                          "FslogixSolution": {
+                            "value": "[parameters('FslogixSolution')]"
+                          },
                           "Location": {
                             "value": "[parameters('Location')]"
                           },
@@ -5784,7 +5787,7 @@
                             "_generator": {
                               "name": "bicep",
                               "version": "0.20.4.51522",
-                              "templateHash": "8009148943158134498"
+                              "templateHash": "2657965871285135518"
                             }
                           },
                           "parameters": {
@@ -5792,6 +5795,9 @@
                               "type": "string"
                             },
                             "AutomationAccountName": {
+                              "type": "string"
+                            },
+                            "FslogixSolution": {
                               "type": "string"
                             },
                             "Location": {
@@ -5950,6 +5956,9 @@
                                   "Environment": {
                                     "value": "[environment().name]"
                                   },
+                                  "FslogixSolution": {
+                                    "value": "[parameters('FslogixSolution')]"
+                                  },
                                   "RunbookName": {
                                     "value": "[variables('RunbookName')]"
                                   },
@@ -5973,7 +5982,7 @@
                                     "_generator": {
                                       "name": "bicep",
                                       "version": "0.20.4.51522",
-                                      "templateHash": "347643499261182550"
+                                      "templateHash": "16273636116923797447"
                                     }
                                   },
                                   "parameters": {
@@ -5981,6 +5990,9 @@
                                       "type": "string"
                                     },
                                     "Environment": {
+                                      "type": "string"
+                                    },
+                                    "FslogixSolution": {
                                       "type": "string"
                                     },
                                     "ResourceGroupName": {
@@ -6011,7 +6023,7 @@
                                       "properties": {
                                         "parameters": {
                                           "Environment": "[parameters('Environment')]",
-                                          "FileShareName": "profilecontainers",
+                                          "FileShareName": "profile-containers",
                                           "ResourceGroupName": "[parameters('ResourceGroupName')]",
                                           "StorageAccountName": "[parameters('StorageAccountName')]",
                                           "SubscriptionId": "[parameters('SubscriptionId')]"
@@ -6030,13 +6042,14 @@
                                         "name": "jobSchedules_OfficeContainers",
                                         "count": "[length(range(0, 4))]"
                                       },
+                                      "condition": "[contains(parameters('FslogixSolution'), 'Office')]",
                                       "type": "Microsoft.Automation/automationAccounts/jobSchedules",
                                       "apiVersion": "2022-08-08",
                                       "name": "[format('{0}/{1}', parameters('AutomationAccountName'), guid(parameters('Timestamp'), parameters('RunbookName'), parameters('StorageAccountName'), 'OfficeContainers', string(range(0, 4)[copyIndex()])))]",
                                       "properties": {
                                         "parameters": {
                                           "Environment": "[parameters('Environment')]",
-                                          "FileShareName": "officecontainers",
+                                          "FileShareName": "office-containers",
                                           "ResourceGroupName": "[parameters('ResourceGroupName')]",
                                           "StorageAccountName": "[parameters('StorageAccountName')]",
                                           "SubscriptionId": "[parameters('SubscriptionId')]"
