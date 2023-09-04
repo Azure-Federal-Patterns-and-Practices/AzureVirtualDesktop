@@ -33,6 +33,7 @@ param NetworkInterfaceNamePrefix string
 param PooledHostPool bool
 param RecoveryServices bool
 param RecoveryServicesVaultName string
+param ResourceGroupControlPlane string
 param ResourceGroupManagement string
 param ResourceGroupStorage string
 param RoleDefinitions object
@@ -67,6 +68,7 @@ module userAssignedIdentity 'userAssignedIdentity.bicep' = {
     FslogixStorage: FslogixStorage
     Location: LocationVirtualMachines
     UserAssignedIdentityName: UserAssignedIdentityName
+    ResourceGroupControlPlane: ResourceGroupControlPlane
     ResourceGroupStorage: ResourceGroupStorage
     Tags: contains(Tags, 'Microsoft.ManagedIdentity/userAssignedIdentities') ? Tags['Microsoft.ManagedIdentity/userAssignedIdentities'] : {}
     Timestamp: Timestamp

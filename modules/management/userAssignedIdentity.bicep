@@ -4,6 +4,7 @@ param DrainMode bool
 param Fslogix bool
 param FslogixStorage string
 param Location string
+param ResourceGroupControlPlane string
 param ResourceGroupStorage string
 param Tags object
 param Timestamp string
@@ -25,7 +26,7 @@ var DiskEncryptionRoleAssignment = DiskEncryption ? [
 var DrainModeRoleAssignment = DrainMode ? [
   {
     roleDefinitionId: '2ad6aaab-ead9-4eaa-8ac5-da422f562408' // Desktop Virtualization Session Host Operator (Drain Mode)
-    scope: resourceGroup().name
+    scope: ResourceGroupControlPlane
   }
 ] : []
 var FSLogixNtfsRoleAssignments = Fslogix ? [

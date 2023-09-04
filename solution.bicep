@@ -330,6 +330,7 @@ module management 'modules/management/management.bicep' = {
     PooledHostPool: logic.outputs.PooledHostPool
     RecoveryServices: RecoveryServices
     RecoveryServicesVaultName: resourceNames.outputs.RecoveryServicesVaultName
+    ResourceGroupControlPlane: resourceNames.outputs.ResourceGroupControlPlane
     ResourceGroupManagement: resourceNames.outputs.ResourceGroupManagement
     ResourceGroupStorage: resourceNames.outputs.ResourceGroupStorage
     RoleDefinitions: logic.outputs.RoleDefinitions
