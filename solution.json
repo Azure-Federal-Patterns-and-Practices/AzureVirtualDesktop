@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "12858667751420075321"
+      "templateHash": "12318790444640990168"
     }
   },
   "parameters": {
@@ -6184,7 +6184,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "7348777415595132211"
+              "templateHash": "7282166505637254562"
             }
           },
           "parameters": {
@@ -6723,7 +6723,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "17652764399798407594"
+                      "templateHash": "5896762063845582367"
                     }
                   },
                   "parameters": {
@@ -6731,6 +6731,9 @@
                       "type": "string"
                     },
                     "AcceleratedNetworking": {
+                      "type": "string"
+                    },
+                    "ActiveDirectorySolution": {
                       "type": "string"
                     },
                     "Availability": {
@@ -6761,9 +6764,6 @@
                       "type": "string"
                     },
                     "DomainName": {
-                      "type": "string"
-                    },
-                    "ActiveDirectorySolution": {
                       "type": "string"
                     },
                     "DrainMode": {
@@ -7237,7 +7237,7 @@
                             "value": "[parameters('Location')]"
                           },
                           "Parameters": {
-                            "value": "[format('-HostPoolName {0} -HostPoolResourceGroupName {1}', parameters('HostPoolName'), parameters('ResourceGroupManagement'))]"
+                            "value": "[format('-Environment {0} -HostPoolName {1} -HostPoolResourceGroupName {2} -SubscriptionId {3} -TenantId {4} -UserAssignedIdentityClientId {5}', environment().name, parameters('HostPoolName'), parameters('ResourceGroupManagement'), subscription().subscriptionId, tenant().tenantId, parameters('UserAssignedIdentityClientId'))]"
                           },
                           "Tags": {
                             "value": "[parameters('TagsVirtualMachines')]"

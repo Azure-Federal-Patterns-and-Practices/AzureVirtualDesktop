@@ -1,5 +1,6 @@
 param ArtifactsLocation string
 param AcceleratedNetworking string
+param ActiveDirectorySolution string
 param Availability string
 param AvailabilitySetNamePrefix string
 param AvailabilityZones array
@@ -11,7 +12,6 @@ param DiskSku string
 param DomainJoinPassword string
 param DomainJoinUserPrincipalName string
 param DomainName string
-param ActiveDirectorySolution string
 param DrainMode bool
 param Fslogix bool
 param FslogixSolution string
@@ -286,7 +286,7 @@ module drainMode '../management/customScriptExtensions.bicep' = if (DrainMode) {
     ArtifactsLocation: ArtifactsLocation
     File: 'Set-AvdDrainMode.ps1'
     Location: Location
-    Parameters: '-HostPoolName ${HostPoolName} -HostPoolResourceGroupName ${ResourceGroupManagement}'
+    Parameters: '-Environment ${environment().name} -HostPoolName ${HostPoolName} -HostPoolResourceGroupName ${ResourceGroupManagement} -SubscriptionId ${subscription().subscriptionId} -TenantId ${tenant().tenantId} -UserAssignedIdentityClientId ${UserAssignedIdentityClientId}'
     Tags: TagsVirtualMachines
     UserAssignedIdentityClientId: UserAssignedIdentityClientId
     VirtualMachineName: ManagementVMName
