@@ -280,7 +280,7 @@ resource extension_CustomScriptExtension 'Microsoft.Compute/virtualMachines/exte
 
 // Enables drain mode on the session hosts so users cannot login to hosts immediately after the deployment
 module drainMode '../management/customScriptExtensions.bicep' = if (DrainMode) {
-  name: 'DeploymentScript_DrainMode_${Timestamp}'
+  name: 'CSE_DrainMode_${Timestamp}'
   scope: resourceGroup(ResourceGroupManagement)
   params: {
     ArtifactsLocation: ArtifactsLocation
