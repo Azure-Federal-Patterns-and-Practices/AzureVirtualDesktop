@@ -203,7 +203,7 @@ try
     Disconnect-AzAccount | Out-Null
 
     $Output = [pscustomobject][ordered]@{
-        acceleratedNetworking = $AcceleratedNetworking
+        acceleratedNetworking = $AcceleratedNetworking.ToLower()
         anfDnsServers = if($StorageSolution -eq "AzureNetAppFiles"){$DnsServers}else{"NotApplicable"}
         anfSubnetId = if($StorageSolution -eq "AzureNetAppFiles"){$SubnetId}else{"NotApplicable"}
         anfActiveDirectory = if($StorageSolution -eq "AzureNetAppFiles"){$DeployAnfAd}else{"false"}
