@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "17886782992998300340"
+      "templateHash": "15418543371038162170"
     }
   },
   "parameters": {
@@ -6184,7 +6184,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "13455786733425891817"
+              "templateHash": "15349144144419949040"
             }
           },
           "parameters": {
@@ -7570,11 +7570,11 @@
                   "MinimumNumberOfRdsh": {
                     "value": "[parameters('ScalingMinimumNumberOfRdsh')]"
                   },
+                  "ResourceGroupControlPlane": {
+                    "value": "[parameters('ResourceGroupControlPlane')]"
+                  },
                   "ResourceGroupHosts": {
                     "value": "[parameters('ResourceGroupHosts')]"
-                  },
-                  "ResourceGroupManagement": {
-                    "value": "[parameters('ResourceGroupManagement')]"
                   },
                   "SessionThresholdPerCPU": {
                     "value": "[parameters('ScalingSessionThresholdPerCPU')]"
@@ -7596,7 +7596,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "16751788488885408706"
+                      "templateHash": "5393549782601896762"
                     }
                   },
                   "parameters": {
@@ -7627,10 +7627,10 @@
                     "MinimumNumberOfRdsh": {
                       "type": "string"
                     },
-                    "ResourceGroupHosts": {
+                    "ResourceGroupControlPlane": {
                       "type": "string"
                     },
-                    "ResourceGroupManagement": {
+                    "ResourceGroupHosts": {
                       "type": "string"
                     },
                     "SessionThresholdPerCPU": {
@@ -7652,8 +7652,8 @@
                   },
                   "variables": {
                     "RoleAssignments": [
-                      "[parameters('ResourceGroupHosts')]",
-                      "[parameters('ResourceGroupManagement')]"
+                      "[parameters('ResourceGroupControlPlane')]",
+                      "[parameters('ResourceGroupHosts')]"
                     ]
                   },
                   "resources": [
