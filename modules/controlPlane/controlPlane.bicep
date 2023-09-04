@@ -21,8 +21,6 @@ param VmTemplate string
 param WorkspaceFriendlyName string
 param WorkspaceName string
 
-var NullArray = []
-
 module hostPool 'hostPool.bicep' = {
   name: 'HostPool_${Timestamp}'
   scope: resourceGroup(ResourceGroupControlPlane)
@@ -62,6 +60,7 @@ module existingWorkspace '../management/workspace.bicep' = {
     Existing: true
     FriendlyName: WorkspaceFriendlyName
     Location: Location
+    Timestamp: Timestamp
     WorkspaceName: WorkspaceName
   }
 }
@@ -70,11 +69,12 @@ module updateWorkspace '../management/workspace.bicep' = {
   name: 'Workspace_Update_${Timestamp}'
   scope: resourceGroup(ResourceGroupManagement)
   params: {
-    ApplicationGroupReferences: union(existingWorkspace.outputs.applicationGroupReferences, applicationGroup.outputs.ApplicationGroupReference, NullArray)
+    ApplicationGroupReferences: union(existingWorkspace.outputs.applicationGroupReferences, applicationGroup.outputs.ApplicationGroupReference)
     Existing: false
     FriendlyName: WorkspaceFriendlyName
     Location: Location
     Tags: existingWorkspace.outputs.tags
+    Timestamp: Timestamp
     WorkspaceName: WorkspaceName
   }
 }

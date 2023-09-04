@@ -209,6 +209,7 @@ module workspace 'workspace.bicep' = {
     LogAnalyticsWorkspaceResourceId: Monitoring ? logAnalyticsWorkspace.outputs.ResourceId : ''
     Monitoring: Monitoring
     Tags: contains(Tags, 'Microsoft.DesktopVirtualization/workspaces') ? Tags['Microsoft.DesktopVirtualization/workspaces'] : {}
+    Timestamp: Timestamp
     WorkspaceName: WorkspaceName
   }
 }

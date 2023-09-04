@@ -5,10 +5,18 @@ param Location string
 param LogAnalyticsWorkspaceResourceId string = ''
 param Monitoring bool = false
 param Tags object = {}
+param Timestamp string
 param WorkspaceName string
 
 resource existingWorkspace 'Microsoft.DesktopVirtualization/workspaces@2021-03-09-preview' existing = if (Existing) {
   name: WorkspaceName
+}
+
+module fixAppGroupReferences 'applicationGroupReferencesFix.bicep' = if (!Existing && length(ApplicationGroupReferences) > 1) {
+  name: 'FixApplicationGroupReferences_${Timestamp}'
+  params: {
+    ApplicationGroupReferences: ApplicationGroupReferences
+  }
 }
 
 resource newWorkspace 'Microsoft.DesktopVirtualization/workspaces@2021-03-09-preview' = if (!Existing) {
@@ -16,7 +24,7 @@ resource newWorkspace 'Microsoft.DesktopVirtualization/workspaces@2021-03-09-pre
   location: Location
   tags: Tags
   properties: {
-    applicationGroupReferences: ApplicationGroupReferences
+    applicationGroupReferences: length(ApplicationGroupReferences) > 1 ? fixAppGroupReferences.outputs.ApplicationGroupReferences : ApplicationGroupReferences
     friendlyName: '${FriendlyName} (${Location})'
   }
 }

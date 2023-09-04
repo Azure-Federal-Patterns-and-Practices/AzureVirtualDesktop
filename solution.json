@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "14701473182610500059"
+      "templateHash": "11513581790308324104"
     }
   },
   "parameters": {
@@ -1425,7 +1425,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "18425839457406024475"
+              "templateHash": "3574302437465601440"
             }
           },
           "parameters": {
@@ -3309,6 +3309,9 @@
                     "value": "[parameters('Monitoring')]"
                   },
                   "Tags": "[if(contains(parameters('Tags'), 'Microsoft.DesktopVirtualization/workspaces'), createObject('value', parameters('Tags')['Microsoft.DesktopVirtualization/workspaces']), createObject('value', createObject()))]",
+                  "Timestamp": {
+                    "value": "[parameters('Timestamp')]"
+                  },
                   "WorkspaceName": {
                     "value": "[parameters('WorkspaceName')]"
                   }
@@ -3320,7 +3323,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "9037512703313986"
+                      "templateHash": "2012578591723614029"
                     }
                   },
                   "parameters": {
@@ -3348,6 +3351,9 @@
                       "type": "object",
                       "defaultValue": {}
                     },
+                    "Timestamp": {
+                      "type": "string"
+                    },
                     "WorkspaceName": {
                       "type": "string"
                     }
@@ -3361,9 +3367,12 @@
                       "location": "[parameters('Location')]",
                       "tags": "[parameters('Tags')]",
                       "properties": {
-                        "applicationGroupReferences": "[parameters('ApplicationGroupReferences')]",
+                        "applicationGroupReferences": "[if(greater(length(parameters('ApplicationGroupReferences')), 1), reference(resourceId('Microsoft.Resources/deployments', format('FixApplicationGroupReferences_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ApplicationGroupReferences.value, parameters('ApplicationGroupReferences'))]",
                         "friendlyName": "[format('{0} ({1})', parameters('FriendlyName'), parameters('Location'))]"
-                      }
+                      },
+                      "dependsOn": [
+                        "[resourceId('Microsoft.Resources/deployments', format('FixApplicationGroupReferences_{0}', parameters('Timestamp')))]"
+                      ]
                     },
                     {
                       "condition": "[and(not(parameters('Existing')), parameters('Monitoring'))]",
@@ -3395,6 +3404,55 @@
                       "dependsOn": [
                         "[resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName'))]"
                       ]
+                    },
+                    {
+                      "condition": "[and(not(parameters('Existing')), greater(length(parameters('ApplicationGroupReferences')), 1))]",
+                      "type": "Microsoft.Resources/deployments",
+                      "apiVersion": "2022-09-01",
+                      "name": "[format('FixApplicationGroupReferences_{0}', parameters('Timestamp'))]",
+                      "properties": {
+                        "expressionEvaluationOptions": {
+                          "scope": "inner"
+                        },
+                        "mode": "Incremental",
+                        "parameters": {
+                          "ApplicationGroupReferences": {
+                            "value": "[parameters('ApplicationGroupReferences')]"
+                          }
+                        },
+                        "template": {
+                          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                          "contentVersion": "1.0.0.0",
+                          "metadata": {
+                            "_generator": {
+                              "name": "bicep",
+                              "version": "0.20.4.51522",
+                              "templateHash": "10941243783684180648"
+                            }
+                          },
+                          "parameters": {
+                            "ApplicationGroupReferences": {
+                              "type": "array"
+                            }
+                          },
+                          "variables": {
+                            "copy": [
+                              {
+                                "name": "FixNames",
+                                "count": "[length(parameters('ApplicationGroupReferences'))]",
+                                "input": "[replace(replace(parameters('ApplicationGroupReferences')[copyIndex('FixNames')], 'resourcegroups', 'resourceGroups'), 'applicationgroups', 'applicationGroups')]"
+                              }
+                            ]
+                          },
+                          "resources": [],
+                          "outputs": {
+                            "ApplicationGroupReferences": {
+                              "type": "array",
+                              "value": "[union(variables('FixNames'), createArray())]"
+                            }
+                          }
+                        }
+                      }
                     }
                   ],
                   "outputs": {
@@ -3546,7 +3604,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "8118000851369431068"
+              "templateHash": "4794563107737518162"
             }
           },
           "parameters": {
@@ -3610,9 +3668,6 @@
             "WorkspaceName": {
               "type": "string"
             }
-          },
-          "variables": {
-            "NullArray": []
           },
           "resources": [
             {
@@ -3916,6 +3971,9 @@
                   "Location": {
                     "value": "[parameters('Location')]"
                   },
+                  "Timestamp": {
+                    "value": "[parameters('Timestamp')]"
+                  },
                   "WorkspaceName": {
                     "value": "[parameters('WorkspaceName')]"
                   }
@@ -3927,7 +3985,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "9037512703313986"
+                      "templateHash": "2012578591723614029"
                     }
                   },
                   "parameters": {
@@ -3955,6 +4013,9 @@
                       "type": "object",
                       "defaultValue": {}
                     },
+                    "Timestamp": {
+                      "type": "string"
+                    },
                     "WorkspaceName": {
                       "type": "string"
                     }
@@ -3968,9 +4029,12 @@
                       "location": "[parameters('Location')]",
                       "tags": "[parameters('Tags')]",
                       "properties": {
-                        "applicationGroupReferences": "[parameters('ApplicationGroupReferences')]",
+                        "applicationGroupReferences": "[if(greater(length(parameters('ApplicationGroupReferences')), 1), reference(resourceId('Microsoft.Resources/deployments', format('FixApplicationGroupReferences_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ApplicationGroupReferences.value, parameters('ApplicationGroupReferences'))]",
                         "friendlyName": "[format('{0} ({1})', parameters('FriendlyName'), parameters('Location'))]"
-                      }
+                      },
+                      "dependsOn": [
+                        "[resourceId('Microsoft.Resources/deployments', format('FixApplicationGroupReferences_{0}', parameters('Timestamp')))]"
+                      ]
                     },
                     {
                       "condition": "[and(not(parameters('Existing')), parameters('Monitoring'))]",
@@ -4002,6 +4066,55 @@
                       "dependsOn": [
                         "[resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName'))]"
                       ]
+                    },
+                    {
+                      "condition": "[and(not(parameters('Existing')), greater(length(parameters('ApplicationGroupReferences')), 1))]",
+                      "type": "Microsoft.Resources/deployments",
+                      "apiVersion": "2022-09-01",
+                      "name": "[format('FixApplicationGroupReferences_{0}', parameters('Timestamp'))]",
+                      "properties": {
+                        "expressionEvaluationOptions": {
+                          "scope": "inner"
+                        },
+                        "mode": "Incremental",
+                        "parameters": {
+                          "ApplicationGroupReferences": {
+                            "value": "[parameters('ApplicationGroupReferences')]"
+                          }
+                        },
+                        "template": {
+                          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                          "contentVersion": "1.0.0.0",
+                          "metadata": {
+                            "_generator": {
+                              "name": "bicep",
+                              "version": "0.20.4.51522",
+                              "templateHash": "10941243783684180648"
+                            }
+                          },
+                          "parameters": {
+                            "ApplicationGroupReferences": {
+                              "type": "array"
+                            }
+                          },
+                          "variables": {
+                            "copy": [
+                              {
+                                "name": "FixNames",
+                                "count": "[length(parameters('ApplicationGroupReferences'))]",
+                                "input": "[replace(replace(parameters('ApplicationGroupReferences')[copyIndex('FixNames')], 'resourcegroups', 'resourceGroups'), 'applicationgroups', 'applicationGroups')]"
+                              }
+                            ]
+                          },
+                          "resources": [],
+                          "outputs": {
+                            "ApplicationGroupReferences": {
+                              "type": "array",
+                              "value": "[union(variables('FixNames'), createArray())]"
+                            }
+                          }
+                        }
+                      }
                     }
                   ],
                   "outputs": {
@@ -4029,7 +4142,7 @@
                 "mode": "Incremental",
                 "parameters": {
                   "ApplicationGroupReferences": {
-                    "value": "[union(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Workspace_Existing_{0}', parameters('Timestamp'))), '2022-09-01').outputs.applicationGroupReferences.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupControlPlane')), 'Microsoft.Resources/deployments', format('ApplicationGroup_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ApplicationGroupReference.value, variables('NullArray'))]"
+                    "value": "[union(reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Workspace_Existing_{0}', parameters('Timestamp'))), '2022-09-01').outputs.applicationGroupReferences.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupControlPlane')), 'Microsoft.Resources/deployments', format('ApplicationGroup_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ApplicationGroupReference.value)]"
                   },
                   "Existing": {
                     "value": false
@@ -4043,6 +4156,9 @@
                   "Tags": {
                     "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('Workspace_Existing_{0}', parameters('Timestamp'))), '2022-09-01').outputs.tags.value]"
                   },
+                  "Timestamp": {
+                    "value": "[parameters('Timestamp')]"
+                  },
                   "WorkspaceName": {
                     "value": "[parameters('WorkspaceName')]"
                   }
@@ -4054,7 +4170,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "9037512703313986"
+                      "templateHash": "2012578591723614029"
                     }
                   },
                   "parameters": {
@@ -4082,6 +4198,9 @@
                       "type": "object",
                       "defaultValue": {}
                     },
+                    "Timestamp": {
+                      "type": "string"
+                    },
                     "WorkspaceName": {
                       "type": "string"
                     }
@@ -4095,9 +4214,12 @@
                       "location": "[parameters('Location')]",
                       "tags": "[parameters('Tags')]",
                       "properties": {
-                        "applicationGroupReferences": "[parameters('ApplicationGroupReferences')]",
+                        "applicationGroupReferences": "[if(greater(length(parameters('ApplicationGroupReferences')), 1), reference(resourceId('Microsoft.Resources/deployments', format('FixApplicationGroupReferences_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ApplicationGroupReferences.value, parameters('ApplicationGroupReferences'))]",
                         "friendlyName": "[format('{0} ({1})', parameters('FriendlyName'), parameters('Location'))]"
-                      }
+                      },
+                      "dependsOn": [
+                        "[resourceId('Microsoft.Resources/deployments', format('FixApplicationGroupReferences_{0}', parameters('Timestamp')))]"
+                      ]
                     },
                     {
                       "condition": "[and(not(parameters('Existing')), parameters('Monitoring'))]",
@@ -4129,6 +4251,55 @@
                       "dependsOn": [
                         "[resourceId('Microsoft.DesktopVirtualization/workspaces', parameters('WorkspaceName'))]"
                       ]
+                    },
+                    {
+                      "condition": "[and(not(parameters('Existing')), greater(length(parameters('ApplicationGroupReferences')), 1))]",
+                      "type": "Microsoft.Resources/deployments",
+                      "apiVersion": "2022-09-01",
+                      "name": "[format('FixApplicationGroupReferences_{0}', parameters('Timestamp'))]",
+                      "properties": {
+                        "expressionEvaluationOptions": {
+                          "scope": "inner"
+                        },
+                        "mode": "Incremental",
+                        "parameters": {
+                          "ApplicationGroupReferences": {
+                            "value": "[parameters('ApplicationGroupReferences')]"
+                          }
+                        },
+                        "template": {
+                          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                          "contentVersion": "1.0.0.0",
+                          "metadata": {
+                            "_generator": {
+                              "name": "bicep",
+                              "version": "0.20.4.51522",
+                              "templateHash": "10941243783684180648"
+                            }
+                          },
+                          "parameters": {
+                            "ApplicationGroupReferences": {
+                              "type": "array"
+                            }
+                          },
+                          "variables": {
+                            "copy": [
+                              {
+                                "name": "FixNames",
+                                "count": "[length(parameters('ApplicationGroupReferences'))]",
+                                "input": "[replace(replace(parameters('ApplicationGroupReferences')[copyIndex('FixNames')], 'resourcegroups', 'resourceGroups'), 'applicationgroups', 'applicationGroups')]"
+                              }
+                            ]
+                          },
+                          "resources": [],
+                          "outputs": {
+                            "ApplicationGroupReferences": {
+                              "type": "array",
+                              "value": "[union(variables('FixNames'), createArray())]"
+                            }
+                          }
+                        }
+                      }
                     }
                   ],
                   "outputs": {
