@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "3652844634619533668"
+      "templateHash": "3814173733236579619"
     }
   },
   "parameters": {
@@ -6385,7 +6385,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "8236219177817522493"
+              "templateHash": "11292142290878529444"
             }
           },
           "parameters": {
@@ -6927,7 +6927,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "5998896189234673768"
+                      "templateHash": "10939325806721081131"
                     }
                   },
                   "parameters": {
@@ -7444,7 +7444,7 @@
                             "value": "[parameters('Location')]"
                           },
                           "Parameters": {
-                            "value": "[format('-Environment {0} -HostPoolName {1} -HostPoolResourceGroupName {2} -SubscriptionId {3} -TenantId {4} -UserAssignedIdentityClientId {5}', environment().name, parameters('HostPoolName'), parameters('ResourceGroupManagement'), subscription().subscriptionId, tenant().tenantId, parameters('UserAssignedIdentityClientId'))]"
+                            "value": "[format('-Environment {0} -HostPoolName {1} -HostPoolResourceGroupName {2} -SubscriptionId {3} -TenantId {4} -UserAssignedIdentityClientId {5}', environment().name, parameters('HostPoolName'), parameters('ResourceGroupControlPlane'), subscription().subscriptionId, tenant().tenantId, parameters('UserAssignedIdentityClientId'))]"
                           },
                           "Tags": {
                             "value": "[parameters('TagsVirtualMachines')]"
