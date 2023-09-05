@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "1888888489261301676"
+      "templateHash": "10132781573151263948"
     }
   },
   "parameters": {
@@ -4490,7 +4490,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "6390701227074570083"
+              "templateHash": "11323235299441360286"
             }
           },
           "parameters": {
@@ -5097,7 +5097,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "6469480309080313491"
+                      "templateHash": "11055866844227871097"
                     }
                   },
                   "parameters": {
@@ -5787,7 +5787,7 @@
                             "_generator": {
                               "name": "bicep",
                               "version": "0.20.4.51522",
-                              "templateHash": "2657965871285135518"
+                              "templateHash": "3518381934624691669"
                             }
                           },
                           "parameters": {
@@ -5863,6 +5863,9 @@
                                   "AutomationAccountName": {
                                     "value": "[parameters('AutomationAccountName')]"
                                   },
+                                  "FslogixSolution": {
+                                    "value": "[parameters('FslogixSolution')]"
+                                  },
                                   "StorageAccountName": {
                                     "value": "[format('{0}{1}', parameters('StorageAccountNamePrefix'), padLeft(range(parameters('StorageIndex'), parameters('StorageCount'))[copyIndex()], 2, '0'))]"
                                   },
@@ -5877,11 +5880,14 @@
                                     "_generator": {
                                       "name": "bicep",
                                       "version": "0.20.4.51522",
-                                      "templateHash": "11753962359551665378"
+                                      "templateHash": "7730247919641237859"
                                     }
                                   },
                                   "parameters": {
                                     "AutomationAccountName": {
+                                      "type": "string"
+                                    },
+                                    "FslogixSolution": {
                                       "type": "string"
                                     },
                                     "StorageAccountName": {
@@ -5919,6 +5925,7 @@
                                         "name": "schedules_OfficeContainers",
                                         "count": "[length(range(0, 4))]"
                                       },
+                                      "condition": "[contains(parameters('FslogixSolution'), 'Office')]",
                                       "type": "Microsoft.Automation/automationAccounts/schedules",
                                       "apiVersion": "2022-08-08",
                                       "name": "[format('{0}/{1}', parameters('AutomationAccountName'), format('{0}_OfficeContainers_{1}min', parameters('StorageAccountName'), mul(add(range(0, 4)[copyIndex()], 1), 15)))]",
@@ -6385,7 +6392,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "16694057404250402777"
+              "templateHash": "14407746892048068287"
             }
           },
           "parameters": {
@@ -7766,7 +7773,7 @@
                     "value": "[parameters('HostPoolName')]"
                   },
                   "HostPoolResourceGroupName": {
-                    "value": "[parameters('ResourceGroupManagement')]"
+                    "value": "[parameters('ResourceGroupControlPlane')]"
                   },
                   "LimitSecondsToForceLogOffUser": {
                     "value": "[parameters('ScalingLimitSecondsToForceLogOffUser')]"
