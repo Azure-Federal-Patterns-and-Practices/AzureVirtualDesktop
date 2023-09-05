@@ -25,7 +25,6 @@ This feature is enabled automatically when the following conditions are met:
 
 - a generation 2, "g2", image SKU is selected
 - the VM size supports the feature
-- a supported Azure cloud is selected; currently "AzureCloud" only
 
 It is a security best practice to enable this feature to protect your virtual machines from:
 
