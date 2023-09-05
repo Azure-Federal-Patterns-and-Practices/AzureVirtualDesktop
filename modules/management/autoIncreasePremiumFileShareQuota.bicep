@@ -37,6 +37,7 @@ module schedules 'schedules.bicep' = [for i in range(StorageIndex, StorageCount)
   name: 'Schedules_${i}_${Timestamp}'
   params: {
     AutomationAccountName: automationAccount.name
+    FslogixSolution: FslogixSolution
     StorageAccountName: '${StorageAccountNamePrefix}${padLeft(i, 2, '0')}'
     TimeZone: TimeZone
   }
