@@ -185,8 +185,6 @@ module recoveryServices 'recoveryServices.bicep' = if (RecoveryServices) {
   ]
 }
 
-
-
 module scalingTool '../management/scalingTool.bicep' = if (ScalingTool && PooledHostPool) {
   name: 'ScalingTool_${Timestamp}'
   scope: resourceGroup(ResourceGroupManagement)
@@ -196,7 +194,7 @@ module scalingTool '../management/scalingTool.bicep' = if (ScalingTool && Pooled
     BeginPeakTime: ScalingBeginPeakTime
     EndPeakTime: ScalingEndPeakTime
     HostPoolName: HostPoolName
-    HostPoolResourceGroupName: ResourceGroupManagement
+    HostPoolResourceGroupName: ResourceGroupControlPlane
     LimitSecondsToForceLogOffUser: ScalingLimitSecondsToForceLogOffUser
     Location: Location
     MinimumNumberOfRdsh: ScalingMinimumNumberOfRdsh
