@@ -25,6 +25,6 @@ This feature will validate your deployment selections to ensure you are deployin
 
 **Deployed Resources:**
 
-- Deployment Script
-  - Storage Account
-  - Container Instance
+- Virtual Machine
+  - Custom Script Extension
+- Role Assignments
