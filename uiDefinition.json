@@ -1030,7 +1030,7 @@
                                     "name": "logAnalyticsWorkspace",
                                     "type": "Microsoft.Solutions.ResourceSelector",
                                     "label": "Existing Log Analytics Workspace for Security",
-                                    "visible": "[steps('management').monitoring.enableSecurity]",
+                                    "visible": "[and(steps('management').monitoring.enable, steps('management').monitoring.enableSecurity)]",
                                     "resourceType": "Microsoft.OperationalInsights/workspaces",
                                     "toolTip": "Select the log analytics workspace used for collecting security data for Sentinel or Defender for Cloud. This is required to multihome the Microsoft Monitoring Agent.",
                                     "options": {}
