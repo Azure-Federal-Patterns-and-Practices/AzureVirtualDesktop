@@ -6,7 +6,6 @@
 
 - [**Auto Increase Premium File Share Quota**](./autoIncreasePremiumFileShareQuota.md#auto-increase-premium-file-share-quota)
 - [**Backups**](./backups.md#backups)
-
 - [**Drain Mode**](./drainMode.md#drain-mode)
 - [**FSLogix**](./fslogix.md#fslogix)
 - [**GPU Drivers & Settings**](./gpu.md#gpu-drivers--settings)
