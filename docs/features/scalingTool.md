@@ -28,10 +28,11 @@ This feature is automatically deployed if a "pooled" host pool is selected to he
 **Deployed Resources:**
 
 - Automation Account
+  - Job Schedules
   - PowerShell Modules
   - Runbook
+  - Schedules
   - System Assigned Identity
   - Variable
   - Webhook
-- Logic App
 - Role Assignment
