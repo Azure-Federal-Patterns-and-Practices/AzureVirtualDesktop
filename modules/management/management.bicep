@@ -98,8 +98,6 @@ module diskEncryption 'diskEncryption.bicep' = if (DiskEncryption) {
     TagsDiskEncryptionSet: contains(Tags, 'Microsoft.Compute/diskEncryptionSets') ? Tags['Microsoft.Compute/diskEncryptionSets'] : {}
     TagsKeyVault: contains(Tags, 'Microsoft.KeyVault/vaults') ? Tags['Microsoft.KeyVault/vaults'] : {}
     Timestamp: Timestamp
-    UserAssignedIdentityPrincipalId: userAssignedIdentity.outputs.principalId
-    UserAssignedIdentityResourceId: userAssignedIdentity.outputs.id
   }
 }
 

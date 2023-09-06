@@ -6,8 +6,6 @@ param Location string
 param TagsDiskEncryptionSet object
 param TagsKeyVault object
 param Timestamp string
-param UserAssignedIdentityPrincipalId string
-param UserAssignedIdentityResourceId string
 
 resource vault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   name: KeyVaultName
@@ -65,24 +63,12 @@ resource key 'Microsoft.KeyVault/vaults/keys@2022-07-01' = {
   }
 }
 
-module roleAssignment '../roleAssignment.bicep' = {
-  name: 'RoleAssignment_${Timestamp}'
-  params: {
-    PrincipalId: UserAssignedIdentityPrincipalId
-    PrincipalType: 'ServicePrincipal'
-    RoleDefinitionId: 'e147488a-f6f5-4113-8e2d-b22465e65bf6' // Key Vault Crypto Service Encryption User
-  }
-}
-
 resource diskEncryptionSet 'Microsoft.Compute/diskEncryptionSets@2022-07-02' = {
   name: DiskEncryptionSetName
   location: Location
   tags: TagsDiskEncryptionSet
   identity: {
-    type: 'SystemAssigned, UserAssigned'
-    userAssignedIdentities: {
-      '${UserAssignedIdentityResourceId}': {}
-    }
+    type: 'SystemAssigned'
   }
   properties: {
     activeKey: {
@@ -94,6 +80,15 @@ resource diskEncryptionSet 'Microsoft.Compute/diskEncryptionSets@2022-07-02' = {
     encryptionType: 'EncryptionAtRestWithPlatformAndCustomerKeys'
     federatedClientId: 'None'
     rotationToLatestKeyVersionEnabled: true
+  }
+}
+
+module roleAssignment '../roleAssignment.bicep' = {
+  name: 'RoleAssignment_${Timestamp}'
+  params: {
+    PrincipalId: diskEncryptionSet.identity.principalId
+    PrincipalType: 'ServicePrincipal'
+    RoleDefinitionId: 'e147488a-f6f5-4113-8e2d-b22465e65bf6' // Key Vault Crypto Service Encryption User
   }
 }
 
