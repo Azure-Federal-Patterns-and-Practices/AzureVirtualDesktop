@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "10132781573151263948"
+      "templateHash": "487213983457322726"
     }
   },
   "parameters": {
@@ -6392,7 +6392,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "14407746892048068287"
+              "templateHash": "17988391202835075955"
             }
           },
           "parameters": {
@@ -6934,7 +6934,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "18440596139087960406"
+                      "templateHash": "16649149373350448497"
                     }
                   },
                   "parameters": {
@@ -7179,7 +7179,7 @@
                       "zones": "[if(equals(parameters('Availability'), 'AvailabilityZones'), createArray(parameters('AvailabilityZones')[mod(range(0, parameters('SessionHostCount'))[copyIndex()], length(parameters('AvailabilityZones')))]), null())]",
                       "identity": "[variables('Identity')]",
                       "properties": {
-                        "availabilitySet": "[if(equals(parameters('Availability'), 'AvailabilitySets'), createObject('id', resourceId('Microsoft.Compute/availabilitySets', format('{0}-{1}', parameters('AvailabilitySetNamePrefix'), div(add(range(0, parameters('SessionHostCount'))[copyIndex()], parameters('SessionHostIndex')), 200)))), null())]",
+                        "availabilitySet": "[if(equals(parameters('Availability'), 'AvailabilitySets'), createObject('id', resourceId('Microsoft.Compute/availabilitySets', format('{0}{1}', parameters('AvailabilitySetNamePrefix'), padLeft(div(add(range(0, parameters('SessionHostCount'))[copyIndex()], parameters('SessionHostIndex')), 200), 2, '0')))), null())]",
                         "hardwareProfile": {
                           "vmSize": "[parameters('VirtualMachineSize')]"
                         },
