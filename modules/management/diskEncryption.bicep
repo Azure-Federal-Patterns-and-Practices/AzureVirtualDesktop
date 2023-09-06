@@ -78,7 +78,6 @@ resource diskEncryptionSet 'Microsoft.Compute/diskEncryptionSets@2022-07-02' = {
       keyUrl: key.properties.keyUriWithVersion
     }
     encryptionType: 'EncryptionAtRestWithPlatformAndCustomerKeys'
-    federatedClientId: 'None'
     rotationToLatestKeyVersionEnabled: true
   }
 }
