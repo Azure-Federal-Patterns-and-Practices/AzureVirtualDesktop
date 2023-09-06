@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "487213983457322726"
+      "templateHash": "3217518707100604114"
     }
   },
   "parameters": {
@@ -1425,7 +1425,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "3574302437465601440"
+              "templateHash": "9711210939697858960"
             }
           },
           "parameters": {
@@ -1842,7 +1842,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "13477580203417678602"
+                      "templateHash": "14077127037255105270"
                     }
                   },
                   "parameters": {
@@ -1946,7 +1946,7 @@
                       "location": "[parameters('Location')]",
                       "tags": "[parameters('TagsDiskEncryptionSet')]",
                       "identity": {
-                        "type": "UserAssigned",
+                        "type": "SystemAssigned, UserAssigned",
                         "userAssignedIdentities": {
                           "[format('{0}', parameters('UserAssignedIdentityResourceId'))]": {}
                         }

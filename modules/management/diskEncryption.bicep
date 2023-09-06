@@ -79,7 +79,7 @@ resource diskEncryptionSet 'Microsoft.Compute/diskEncryptionSets@2022-07-02' = {
   location: Location
   tags: TagsDiskEncryptionSet
   identity: {
-    type: 'UserAssigned'
+    type: 'SystemAssigned, UserAssigned'
     userAssignedIdentities: {
       '${UserAssignedIdentityResourceId}': {}
     }
