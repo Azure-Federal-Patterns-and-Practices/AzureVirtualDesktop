@@ -17,7 +17,7 @@ To successfully deploy this solution, you will need to ensure the following prer
       - "Join the Domain" on the domain
       - "Create Computer" on the parent OU or domain
       - "Delete Computer" on the parent OU or domain
-    - Azure AD DS: ensure the principal is a member of the "AAD DC Administrators" group.
+    - Azure AD DS: ensure the principal is a member of the "AAD DC Administrators" group in Azure AD.
 - **Security Group:** create a security group for your AVD users.
   - AD DS: create the group in ADUC and ensure the group has synchronized to Azure AD.
   - Azure AD: create the group.
