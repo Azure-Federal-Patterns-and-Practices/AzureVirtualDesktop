@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "4483321070668727308"
+      "templateHash": "9450372165645964180"
     }
   },
   "parameters": {
@@ -6376,7 +6376,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "17988391202835075955"
+              "templateHash": "616757669532926059"
             }
           },
           "parameters": {
@@ -6918,7 +6918,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "16649149373350448497"
+                      "templateHash": "16990393782881573833"
                     }
                   },
                   "parameters": {
@@ -7253,6 +7253,40 @@
                     },
                     {
                       "copy": {
+                        "name": "extension_GuestAttestation",
+                        "count": "[length(range(0, parameters('SessionHostCount')))]"
+                      },
+                      "condition": "[equals(parameters('TrustedLaunch'), 'true')]",
+                      "type": "Microsoft.Compute/virtualMachines/extensions",
+                      "apiVersion": "2021-03-01",
+                      "name": "[format('{0}/{1}', format('{0}{1}', parameters('VirtualMachineNamePrefix'), padLeft(add(range(0, parameters('SessionHostCount'))[range(0, parameters('SessionHostCount'))[copyIndex()]], parameters('SessionHostIndex')), 4, '0')), 'GuestAttestation')]",
+                      "location": "[parameters('Location')]",
+                      "properties": {
+                        "publisher": "Microsoft.Azure.Security.WindowsAttestation",
+                        "type": "GuestAttestation",
+                        "typeHandlerVersion": "1.0",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                          "AttestationConfig": {
+                            "MaaSettings": {
+                              "maaEndpoint": "",
+                              "maaTenantName": "GuestAttestation"
+                            },
+                            "AscSettings": {
+                              "ascReportingEndpoint": "",
+                              "ascReportingFrequency": ""
+                            },
+                            "useCustomToken": "false",
+                            "disableAlerts": "false"
+                          }
+                        }
+                      },
+                      "dependsOn": [
+                        "[resourceId('Microsoft.Compute/virtualMachines', format('{0}{1}', parameters('VirtualMachineNamePrefix'), padLeft(add(range(0, parameters('SessionHostCount'))[range(0, parameters('SessionHostCount'))[copyIndex()]], parameters('SessionHostIndex')), 4, '0')))]"
+                      ]
+                    },
+                    {
+                      "copy": {
                         "name": "extension_MicrosoftMonitoringAgent",
                         "count": "[length(range(0, parameters('SessionHostCount')))]"
                       },
@@ -7356,7 +7390,7 @@
                       "properties": {
                         "publisher": "Microsoft.Azure.ActiveDirectory",
                         "type": "AADLoginForWindows",
-                        "typeHandlerVersion": "1.0",
+                        "typeHandlerVersion": "2.0",
                         "autoUpgradeMinorVersion": true,
                         "settings": "[if(variables('Intune'), createObject('mdmId', '0000000a-0000-0000-c000-000000000000'), null())]"
                       },

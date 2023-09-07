@@ -232,6 +232,32 @@ resource extension_IaasAntimalware 'Microsoft.Compute/virtualMachines/extensions
   }
 }]
 
+resource extension_GuestAttestation 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = [for i in range(0, SessionHostCount): if (TrustedLaunch == 'true') {
+  parent: virtualMachine[i]
+  name: 'GuestAttestation'
+  location: Location
+  properties: {
+    publisher: 'Microsoft.Azure.Security.WindowsAttestation'
+    type: 'GuestAttestation'
+    typeHandlerVersion: '1.0'
+    autoUpgradeMinorVersion: true
+    settings: {
+      AttestationConfig: {
+        MaaSettings: {
+          maaEndpoint: ''
+          maaTenantName: 'GuestAttestation'
+        }
+        AscSettings: {
+          ascReportingEndpoint: ''
+          ascReportingFrequency: ''
+        }
+        useCustomToken: 'false'
+        disableAlerts: 'false'
+      }
+    }
+  }
+}]
+
 resource extension_MicrosoftMonitoringAgent 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = [for i in range(0, SessionHostCount): if (Monitoring) {
   parent: virtualMachine[i]
   name: 'MicrosoftMonitoringAgent'
@@ -332,7 +358,7 @@ resource extension_AADLoginForWindows 'Microsoft.Compute/virtualMachines/extensi
   properties: {
     publisher: 'Microsoft.Azure.ActiveDirectory'
     type: 'AADLoginForWindows'
-    typeHandlerVersion: '1.0'
+    typeHandlerVersion: '2.0'
     autoUpgradeMinorVersion: true
     settings: Intune ? {
       mdmId: '0000000a-0000-0000-c000-000000000000'
