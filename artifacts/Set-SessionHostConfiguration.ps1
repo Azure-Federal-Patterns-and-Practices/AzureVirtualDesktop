@@ -550,8 +550,17 @@ try
     ##############################################################
     if($SecurityMonitoring -eq 'true')
     {
+        $AzureEnvironment = switch($Environment)
+        {
+            AzureCloud {0}
+            AzureUSGovernment {1}
+            AzureChina {2}
+            USNat {3}
+            USSec {4}
+        }
+
         $mma = New-Object -ComObject 'AgentConfigManager.MgmtSvcCfg'
-        $mma.AddCloudWorkspace($SecurityWorkspaceId, $SecurityWorkspaceKey)
+        $mma.AddCloudWorkspace($SecurityWorkspaceId, $SecurityWorkspaceKey, $AzureEnvironment)
         $mma.ReloadConfiguration() | Out-Null
     }
 
