@@ -6,7 +6,7 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2022-03-01' existing 
   name: VirtualMachineName
 }
 
-resource removeVm 'Microsoft.Compute/virtualMachines/runCommands@2023-03-01' = {
+resource removeVirtualMachine 'Microsoft.Compute/virtualMachines/runCommands@2023-03-01' = {
   parent: virtualMachine
   name: 'RunCommand'
   location: Location
