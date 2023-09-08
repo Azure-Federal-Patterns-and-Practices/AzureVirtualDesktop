@@ -389,7 +389,7 @@ module controlPlane 'modules/controlPlane/controlPlane.bicep' = {
   ]
 }
 
-module fslogix 'modules/fslogix/fslogix.bicep' = if (contains(FslogixStorage, 'Azure') && contains(ActiveDirectorySolution, 'DomainServices')) {
+module fslogix 'modules/fslogix/fslogix.bicep' = {
   name: 'FSLogix_${Timestamp}'
   params: {
     ArtifactsLocation: ArtifactsLocation
