@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "2829035896038582782"
+      "templateHash": "8172464168539834618"
     }
   },
   "parameters": {
@@ -6130,7 +6130,8 @@
       "dependsOn": [
         "[subscriptionResourceId('Microsoft.Resources/deployments', format('Logic_{0}', parameters('Timestamp')))]",
         "[subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp')))]",
-        "[subscriptionResourceId('Microsoft.Resources/deployments', format('ResourceNames_{0}', parameters('Timestamp')))]"
+        "[subscriptionResourceId('Microsoft.Resources/deployments', format('ResourceNames_{0}', parameters('Timestamp')))]",
+        "[subscriptionResourceId('Microsoft.Resources/deployments', format('ResourceGroups_{0}', parameters('Timestamp')))]"
       ]
     },
     {

@@ -451,6 +451,9 @@ module fslogix 'modules/fslogix/fslogix.bicep' = if (contains(FslogixStorage, 'A
     VirtualNetwork: split(SubnetResourceId, '/')[8]
     VirtualNetworkResourceGroup: split(SubnetResourceId, '/')[4]
   }
+  dependsOn: [
+    rgs
+  ]
 }
 
 module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
