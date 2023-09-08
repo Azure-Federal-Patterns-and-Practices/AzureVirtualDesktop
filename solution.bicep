@@ -560,4 +560,7 @@ module cleanUp 'modules/cleanUp/cleanUp.bicep' = {
     UserAssignedIdentityClientId: management.outputs.UserAssignedIdentityClientId
     VirtualMachineName: management.outputs.VirtualMachineName
   }
+  dependsOn: [
+    sessionHosts
+  ]
 }
