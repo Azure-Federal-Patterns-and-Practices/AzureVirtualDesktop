@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "8172464168539834618"
+      "templateHash": "10396530780386168369"
     }
   },
   "parameters": {
@@ -1270,6 +1270,9 @@
         },
         "mode": "Incremental",
         "parameters": {
+          "ActiveDirectorySolution": {
+            "value": "[parameters('ActiveDirectorySolution')]"
+          },
           "ArtifactsLocation": {
             "value": "[parameters('ArtifactsLocation')]"
           },
@@ -1422,10 +1425,13 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "5132332048976133850"
+              "templateHash": "17523303073583834296"
             }
           },
           "parameters": {
+            "ActiveDirectorySolution": {
+              "type": "string"
+            },
             "ArtifactsLocation": {
               "type": "string"
             },
@@ -2432,7 +2438,7 @@
                     "value": "[parameters('LocationVirtualMachines')]"
                   },
                   "Parameters": {
-                    "value": "[format('-CpuCountMax {0} -CpuCountMin {1} -DomainName {2} -Environment {3} -KerberosEncryption {4} -Location {5} -SessionHostCount {6} -StorageSolution {7} -SubscriptionId {8} -TenantId {9} -UserAssignedIdentityClientId {10} -VirtualMachineSize {11} -VirtualNetworkName {12} -VirtualNetworkResourceGroupName {13} -WorkspaceName {14} -WorkspaceResourceGroupName {15}', variables('CpuCountMax'), variables('CpuCountMin'), parameters('DomainName'), environment().name, parameters('KerberosEncryption'), parameters('LocationVirtualMachines'), parameters('SessionHostCount'), parameters('StorageSolution'), subscription().subscriptionId, tenant().tenantId, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('UserAssignedIdentity_{0}', parameters('Timestamp'))), '2022-09-01').outputs.clientId.value, parameters('VirtualMachineSize'), variables('VirtualNetworkName'), variables('VirtualNetworkResourceGroupName'), parameters('WorkspaceName'), parameters('ResourceGroupManagement'))]"
+                    "value": "[format('-ActiveDirectorySolution {0} -CpuCountMax {1} -CpuCountMin {2} -DomainName {3} -Environment {4} -KerberosEncryption {5} -Location {6} -SessionHostCount {7} -StorageSolution {8} -SubscriptionId {9} -TenantId {10} -UserAssignedIdentityClientId {11} -VirtualMachineSize {12} -VirtualNetworkName {13} -VirtualNetworkResourceGroupName {14} -WorkspaceName {15} -WorkspaceResourceGroupName {16}', parameters('ActiveDirectorySolution'), variables('CpuCountMax'), variables('CpuCountMin'), parameters('DomainName'), environment().name, parameters('KerberosEncryption'), parameters('LocationVirtualMachines'), parameters('SessionHostCount'), parameters('StorageSolution'), subscription().subscriptionId, tenant().tenantId, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('UserAssignedIdentity_{0}', parameters('Timestamp'))), '2022-09-01').outputs.clientId.value, parameters('VirtualMachineSize'), variables('VirtualNetworkName'), variables('VirtualNetworkResourceGroupName'), parameters('WorkspaceName'), parameters('ResourceGroupManagement'))]"
                   },
                   "Tags": "[if(contains(parameters('Tags'), 'Microsoft.Compute/virtualMachines'), createObject('value', parameters('Tags')['Microsoft.Compute/virtualMachines']), createObject('value', createObject()))]",
                   "UserAssignedIdentityClientId": {

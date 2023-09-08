@@ -1,5 +1,6 @@
 targetScope = 'subscription'
 
+param ActiveDirectorySolution string
 param ArtifactsLocation string
 param ArtifactsStorageAccountResourceId string
 param AutomationAccountName string
@@ -139,7 +140,7 @@ module validations 'customScriptExtensions.bicep' = {
     ArtifactsLocation: ArtifactsLocation
     File: 'Get-Validations.ps1'
     Location: LocationVirtualMachines
-    Parameters: '-CpuCountMax ${CpuCountMax} -CpuCountMin ${CpuCountMin} -DomainName ${DomainName} -Environment ${environment().name} -KerberosEncryption ${KerberosEncryption} -Location ${LocationVirtualMachines} -SessionHostCount ${SessionHostCount} -StorageSolution ${StorageSolution} -SubscriptionId ${subscription().subscriptionId} -TenantId ${tenant().tenantId} -UserAssignedIdentityClientId ${userAssignedIdentity.outputs.clientId} -VirtualMachineSize ${VirtualMachineSize} -VirtualNetworkName ${VirtualNetworkName} -VirtualNetworkResourceGroupName ${VirtualNetworkResourceGroupName} -WorkspaceName ${WorkspaceName} -WorkspaceResourceGroupName ${ResourceGroupManagement}'
+    Parameters: '-ActiveDirectorySolution ${ActiveDirectorySolution} -CpuCountMax ${CpuCountMax} -CpuCountMin ${CpuCountMin} -DomainName ${DomainName} -Environment ${environment().name} -KerberosEncryption ${KerberosEncryption} -Location ${LocationVirtualMachines} -SessionHostCount ${SessionHostCount} -StorageSolution ${StorageSolution} -SubscriptionId ${subscription().subscriptionId} -TenantId ${tenant().tenantId} -UserAssignedIdentityClientId ${userAssignedIdentity.outputs.clientId} -VirtualMachineSize ${VirtualMachineSize} -VirtualNetworkName ${VirtualNetworkName} -VirtualNetworkResourceGroupName ${VirtualNetworkResourceGroupName} -WorkspaceName ${WorkspaceName} -WorkspaceResourceGroupName ${ResourceGroupManagement}'
     Tags: contains(Tags, 'Microsoft.Compute/virtualMachines') ? Tags['Microsoft.Compute/virtualMachines'] : {}
     UserAssignedIdentityClientId: userAssignedIdentity.outputs.clientId
     VirtualMachineName: virtualMachine.outputs.Name

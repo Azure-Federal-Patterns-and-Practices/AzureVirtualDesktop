@@ -1,6 +1,10 @@
 [Cmdletbinding()]
 Param(
     [parameter(Mandatory)]
+    [string]
+    $ActiveDirectorySolution,
+
+    [parameter(Mandatory)]
     [int]
     $CpuCountMax,
     
@@ -147,13 +151,16 @@ try
     ##############################################################
     # Kerberos Encryption Validation
     ##############################################################
-    $KerberosRc4Encryption = (Get-AzResource -Name $DomainName -ExpandProperties).Properties.domainSecuritySettings.kerberosRc4Encryption
-    if($KerberosRc4Encryption -eq "Enabled" -and $KerberosEncryption -eq "AES256")
+    if($ActiveDirectorySolution -eq 'AzureActiveDirectoryDomainServices')
     {
-        Write-Error -Exception "INVALID KERBEROS ENCRYPTION: The Kerberos Encryption on Azure AD DS does not match your Kerberos Encyrption selection."
+        $KerberosRc4Encryption = (Get-AzResource -Name $DomainName -ExpandProperties).Properties.domainSecuritySettings.kerberosRc4Encryption
+        if($KerberosRc4Encryption -eq "Enabled" -and $KerberosEncryption -eq "AES256")
+        {
+            Write-Error -Exception "INVALID KERBEROS ENCRYPTION: The Kerberos Encryption on Azure AD DS does not match your Kerberos Encyrption selection."
+        }
+        Write-Log -Message "Kerberos Encryption Validation Succeeded" -Type 'INFO'
     }
-    Write-Log -Message "Kerberos Encryption Validation Succeeded" -Type 'INFO'
-
+    
     ##############################################################
     # Trusted Launch Validation
     ##############################################################
