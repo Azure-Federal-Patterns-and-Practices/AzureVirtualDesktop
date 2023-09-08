@@ -550,3 +550,14 @@ module sessionHosts 'modules/sessionHosts/sessionHosts.bicep' = {
     rgs
   ]
 }
+
+module cleanUp 'modules/cleanUp/cleanUp.bicep' = {
+  name: 'CleanUp_${Timestamp}'
+  params: {
+    Location: virtualNetwork.location
+    ResourceGroupManagement: resourceNames.outputs.ResourceGroupManagement
+    Timestamp: Timestamp
+    UserAssignedIdentityClientId: management.outputs.UserAssignedIdentityClientId
+    VirtualMachineName: management.outputs.VirtualMachineName
+  }
+}

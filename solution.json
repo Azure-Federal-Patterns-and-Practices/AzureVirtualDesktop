@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "13154870367839293482"
+      "templateHash": "4375297248931056971"
     }
   },
   "parameters": {
@@ -8035,6 +8035,155 @@
         "[subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp')))]",
         "[subscriptionResourceId('Microsoft.Resources/deployments', format('ResourceNames_{0}', parameters('Timestamp')))]",
         "[subscriptionResourceId('Microsoft.Resources/deployments', format('ResourceGroups_{0}', parameters('Timestamp')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "[format('CleanUp_{0}', parameters('Timestamp'))]",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "Location": {
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', split(parameters('SubnetResourceId'), '/')[2], split(parameters('SubnetResourceId'), '/')[4]), 'Microsoft.Network/virtualNetworks', split(parameters('SubnetResourceId'), '/')[8]), '2023-04-01', 'full').location]"
+          },
+          "ResourceGroupManagement": {
+            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('ResourceNames_{0}', parameters('Timestamp'))), '2022-09-01').outputs.ResourceGroupManagement.value]"
+          },
+          "Timestamp": {
+            "value": "[parameters('Timestamp')]"
+          },
+          "UserAssignedIdentityClientId": {
+            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp'))), '2022-09-01').outputs.UserAssignedIdentityClientId.value]"
+          },
+          "VirtualMachineName": {
+            "value": "[reference(subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp'))), '2022-09-01').outputs.VirtualMachineName.value]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.20.4.51522",
+              "templateHash": "7722625682179147574"
+            }
+          },
+          "parameters": {
+            "Location": {
+              "type": "string"
+            },
+            "ResourceGroupManagement": {
+              "type": "string"
+            },
+            "Timestamp": {
+              "type": "string"
+            },
+            "UserAssignedIdentityClientId": {
+              "type": "string"
+            },
+            "VirtualMachineName": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2022-09-01",
+              "name": "[format('RemoveManagementVirtualMachine_{0}', parameters('Timestamp'))]",
+              "resourceGroup": "[parameters('ResourceGroupManagement')]",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "Location": {
+                    "value": "[parameters('Location')]"
+                  },
+                  "UserAssignedIdentityClientId": {
+                    "value": "[parameters('UserAssignedIdentityClientId')]"
+                  },
+                  "VirtualMachineName": {
+                    "value": "[parameters('VirtualMachineName')]"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.20.4.51522",
+                      "templateHash": "9835163081605822758"
+                    }
+                  },
+                  "parameters": {
+                    "Location": {
+                      "type": "string"
+                    },
+                    "UserAssignedIdentityClientId": {
+                      "type": "string"
+                    },
+                    "VirtualMachineName": {
+                      "type": "string"
+                    }
+                  },
+                  "resources": [
+                    {
+                      "type": "Microsoft.Compute/virtualMachines/runCommands",
+                      "apiVersion": "2023-03-01",
+                      "name": "[format('{0}/{1}', parameters('VirtualMachineName'), 'RunCommand')]",
+                      "location": "[parameters('Location')]",
+                      "properties": {
+                        "treatFailureAsDeploymentFailure": false,
+                        "asyncExecution": true,
+                        "parameters": [
+                          {
+                            "name": "Environment",
+                            "value": "[environment().name]"
+                          },
+                          {
+                            "name": "ResourceGroupName",
+                            "value": "[resourceGroup().name]"
+                          },
+                          {
+                            "name": "SubscriptionId",
+                            "value": "[subscription().subscriptionId]"
+                          },
+                          {
+                            "name": "TenantId",
+                            "value": "[tenant().tenantId]"
+                          },
+                          {
+                            "name": "UserAssignedIdentityClientId",
+                            "value": "[parameters('UserAssignedIdentityClientId')]"
+                          },
+                          {
+                            "name": "VirtualMachineName",
+                            "value": "[parameters('VirtualMachineName')]"
+                          }
+                        ],
+                        "source": {
+                          "script": "        param(\r\n          [string]$Environment\r\n          [string]$ResourceGroupName,\r\n          [string]$SubscriptionId,\r\n          [string]$TenantId,\r\n          [string]$UserAssignedIdentityClientId,\r\n          [string]$VirtualMachineName,\r\n        )\r\n        Connect-AzAccount -Environment $Environment -Tenant $TenantId -Subscription $SubscriptionId -Identity -AccountId $UserAssignedIdentityClientId\r\n        Remove-AzVM -ResourceGroupName $ResourceGroupName -Name $VirtualMachineName -NoWait -ForceDeletion $true -Force -AsJob\r\n      "
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[subscriptionResourceId('Microsoft.Resources/deployments', format('Management_{0}', parameters('Timestamp')))]",
+        "[subscriptionResourceId('Microsoft.Resources/deployments', format('ResourceNames_{0}', parameters('Timestamp')))]"
       ]
     }
   ]
