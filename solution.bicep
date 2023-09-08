@@ -299,7 +299,6 @@ module rgs 'modules/resourceGroups.bicep' = {
 module management 'modules/management/management.bicep' = {
   name: 'Management_${Timestamp}'
   params: {
-    ActiveDirectorySolution: ActiveDirectorySolution
     ArtifactsLocation: ArtifactsLocation
     ArtifactsStorageAccountResourceId: ArtifactsStorageAccountResourceId
     AutomationAccountName: resourceNames.outputs.AutomationAccountName

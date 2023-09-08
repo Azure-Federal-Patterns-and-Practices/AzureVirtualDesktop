@@ -1,6 +1,5 @@
 targetScope = 'subscription'
 
-param ActiveDirectorySolution string
 param ArtifactsLocation string
 param ArtifactsStorageAccountResourceId string
 param AutomationAccountName string

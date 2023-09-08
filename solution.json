@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "17036035517298260944"
+      "templateHash": "9081903050333277137"
     }
   },
   "parameters": {
@@ -1270,9 +1270,6 @@
         },
         "mode": "Incremental",
         "parameters": {
-          "ActiveDirectorySolution": {
-            "value": "[parameters('ActiveDirectorySolution')]"
-          },
           "ArtifactsLocation": {
             "value": "[parameters('ArtifactsLocation')]"
           },
@@ -1425,13 +1422,10 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "9090737904957973411"
+              "templateHash": "15189058626790668702"
             }
           },
           "parameters": {
-            "ActiveDirectorySolution": {
-              "type": "string"
-            },
             "ArtifactsLocation": {
               "type": "string"
             },
