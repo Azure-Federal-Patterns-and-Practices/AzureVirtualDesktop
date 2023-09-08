@@ -109,7 +109,7 @@ module virtualMachine 'virtualMachine.bicep' = {
     ArtifactsLocation: ArtifactsLocation
     AzurePowerShellAzModuleMsiLink: AzurePowerShellAzModuleMsiLink 
     DiskEncryption: DiskEncryption
-    DiskEncryptionSetResourceId: diskEncryption.outputs.diskEncryptionSetResourceId
+    DiskEncryptionSetResourceId: DiskEncryption ? diskEncryption.outputs.diskEncryptionSetResourceId : ''
     DiskNamePrefix: DiskNamePrefix
     DiskSku: DiskSku
     DomainJoinPassword: DomainJoinPassword

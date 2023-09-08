@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "9633230424646634091"
+      "templateHash": "2829035896038582782"
     }
   },
   "parameters": {
@@ -1422,7 +1422,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "15189058626790668702"
+              "templateHash": "5132332048976133850"
             }
           },
           "parameters": {
@@ -2034,9 +2034,7 @@
                   "DiskEncryption": {
                     "value": "[parameters('DiskEncryption')]"
                   },
-                  "DiskEncryptionSetResourceId": {
-                    "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('DiskEncryption_{0}', parameters('Timestamp'))), '2022-09-01').outputs.diskEncryptionSetResourceId.value]"
-                  },
+                  "DiskEncryptionSetResourceId": "[if(parameters('DiskEncryption'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupManagement')), 'Microsoft.Resources/deployments', format('DiskEncryption_{0}', parameters('Timestamp'))), '2022-09-01').outputs.diskEncryptionSetResourceId.value), createObject('value', ''))]",
                   "DiskNamePrefix": {
                     "value": "[parameters('DiskNamePrefix')]"
                   },
