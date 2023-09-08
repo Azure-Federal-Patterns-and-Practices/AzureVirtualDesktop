@@ -38,7 +38,12 @@ var FSLogixNtfsRoleAssignments = Fslogix ? [
     roleDefinitionId: '17d1049b-9a84-46fb-8f53-869881c3d3ab' // Storage Account Contributor (Domain Join & NTFS Permissions)
     scope: ResourceGroupStorage
   }
-] : []
+] : [
+  {
+    roleDefinitionId: 'a959dbd1-f747-45e3-8ba6-dd80f235f97c' // Desktop Virtualization Virtual Machine Contributor (NTFS Permissions - Remove management virtual machine)
+    scope: resourceGroup().name
+  }
+]
 var FSLogixPrivateEndpointRoleAssignment = contains(FslogixStorage, 'PrivateEndpoint') ? [
   {
     roleDefinitionId: '4d97b98b-1d4f-4787-a291-c67834d212e7' // Network Contributor (Private Endpoint - Configure DNS resolution)
