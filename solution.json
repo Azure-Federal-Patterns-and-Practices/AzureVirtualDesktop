@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "9081903050333277137"
+      "templateHash": "9633230424646634091"
     }
   },
   "parameters": {
@@ -4307,7 +4307,7 @@
       ]
     },
     {
-      "condition": "[and(not(equals(parameters('FslogixStorage'), 'None')), contains(parameters('ActiveDirectorySolution'), 'DomainServices'))]",
+      "condition": "[and(contains(parameters('FslogixStorage'), 'Azure'), contains(parameters('ActiveDirectorySolution'), 'DomainServices'))]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
       "name": "[format('FSLogix_{0}', parameters('Timestamp'))]",
@@ -4467,7 +4467,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "11323235299441360286"
+              "templateHash": "17318748331741036876"
             }
           },
           "parameters": {
@@ -4615,7 +4615,7 @@
           },
           "resources": [
             {
-              "condition": "[and(equals(parameters('StorageSolution'), 'AzureNetAppFiles'), contains(parameters('ActiveDirectorySolution'), 'DomainServices'))]",
+              "condition": "[equals(parameters('StorageSolution'), 'AzureNetAppFiles')]",
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2022-09-01",
               "name": "[format('AzureNetAppFiles_{0}', parameters('Timestamp'))]",
@@ -4938,7 +4938,7 @@
               }
             },
             {
-              "condition": "[and(equals(parameters('StorageSolution'), 'AzureStorageAccount'), contains(parameters('ActiveDirectorySolution'), 'DomainServices'))]",
+              "condition": "[equals(parameters('StorageSolution'), 'AzureStorageAccount')]",
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2022-09-01",
               "name": "[format('AzureFiles_{0}', parameters('Timestamp'))]",

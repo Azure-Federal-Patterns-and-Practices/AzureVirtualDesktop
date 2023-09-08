@@ -50,7 +50,7 @@ param VirtualNetwork string
 param VirtualNetworkResourceGroup string
 
 // Azure NetApp Files for Fslogix
-module azureNetAppFiles 'azureNetAppFiles.bicep' = if (StorageSolution == 'AzureNetAppFiles' && contains(ActiveDirectorySolution, 'DomainServices')) {
+module azureNetAppFiles 'azureNetAppFiles.bicep' = if (StorageSolution == 'AzureNetAppFiles') {
   name: 'AzureNetAppFiles_${Timestamp}'
   scope: resourceGroup(ResourceGroupStorage)
   params: {
@@ -80,7 +80,7 @@ module azureNetAppFiles 'azureNetAppFiles.bicep' = if (StorageSolution == 'Azure
 }
 
 // Azure Files for FSLogix
-module azureFiles 'azureFiles/azureFiles.bicep' = if (StorageSolution == 'AzureStorageAccount' && contains(ActiveDirectorySolution, 'DomainServices')) {
+module azureFiles 'azureFiles/azureFiles.bicep' = if (StorageSolution == 'AzureStorageAccount') {
   name: 'AzureFiles_${Timestamp}'
   scope: resourceGroup(ResourceGroupStorage)
   params: {
