@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "9450372165645964180"
+      "templateHash": "17036035517298260944"
     }
   },
   "parameters": {
@@ -1425,7 +1425,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "3349997701002608663"
+              "templateHash": "9090737904957973411"
             }
           },
           "parameters": {
@@ -2021,7 +2021,6 @@
               }
             },
             {
-              "condition": "[contains(parameters('ActiveDirectorySolution'), 'DomainServices')]",
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2022-09-01",
               "name": "[format('ManagementVirtualMachine_{0}', parameters('Timestamp'))]",

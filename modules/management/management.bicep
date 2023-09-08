@@ -103,7 +103,7 @@ module diskEncryption 'diskEncryption.bicep' = if (DiskEncryption) {
 
 // Management VM
 // The management VM is required to validate the deployment and configure FSLogix storage.
-module virtualMachine 'virtualMachine.bicep' = if (contains(ActiveDirectorySolution, 'DomainServices')) {
+module virtualMachine 'virtualMachine.bicep' = {
   name: 'ManagementVirtualMachine_${Timestamp}'
   scope: resourceGroup(ResourceGroupManagement)
   params: {
