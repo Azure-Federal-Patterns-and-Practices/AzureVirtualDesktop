@@ -19,39 +19,36 @@ var ArtifactsStorageRoleAssignment = !empty(ArtifactsStorageAccountResourceId) ?
 ] : []
 var DiskEncryptionRoleAssignment = DiskEncryption ? [
   {
-    roleDefinitionId: '14b46e9e-c2b7-41b4-b07b-48a6ebf60603' // Key Vault Crypto Officer (Bitlocker key)
+    roleDefinitionId: '14b46e9e-c2b7-41b4-b07b-48a6ebf60603' // Key Vault Crypto Officer (Purpose: create customer managed key)
     scope: resourceGroup().name
   }
 ] : []
 var DrainModeRoleAssignment = DrainMode ? [
   {
-    roleDefinitionId: '2ad6aaab-ead9-4eaa-8ac5-da422f562408' // Desktop Virtualization Session Host Operator (Drain Mode)
+    roleDefinitionId: '2ad6aaab-ead9-4eaa-8ac5-da422f562408' // Desktop Virtualization Session Host Operator (Purpose: put session hosts in drain mode)
     scope: ResourceGroupControlPlane
   }
 ] : []
 var FSLogixNtfsRoleAssignments = Fslogix ? [
   {
-    roleDefinitionId: 'a959dbd1-f747-45e3-8ba6-dd80f235f97c' // Desktop Virtualization Virtual Machine Contributor (NTFS Permissions - Remove management virtual machine)
-    scope: resourceGroup().name
-  }
-  {
-    roleDefinitionId: '17d1049b-9a84-46fb-8f53-869881c3d3ab' // Storage Account Contributor (Domain Join & NTFS Permissions)
+    roleDefinitionId: '17d1049b-9a84-46fb-8f53-869881c3d3ab' // Storage Account Contributor (Purpose: domain join storage account & set NTFS permissions on the file share)
     scope: ResourceGroupStorage
   }
-] : [
+] : []
+var RemoveManagementVirtualMachine = [
   {
-    roleDefinitionId: 'a959dbd1-f747-45e3-8ba6-dd80f235f97c' // Desktop Virtualization Virtual Machine Contributor (NTFS Permissions - Remove management virtual machine)
+    roleDefinitionId: 'a959dbd1-f747-45e3-8ba6-dd80f235f97c' // Desktop Virtualization Virtual Machine Contributor (Purpose: remove the management virtual machine)
     scope: resourceGroup().name
   }
 ]
 var FSLogixPrivateEndpointRoleAssignment = contains(FslogixStorage, 'PrivateEndpoint') ? [
   {
-    roleDefinitionId: '4d97b98b-1d4f-4787-a291-c67834d212e7' // Network Contributor (Private Endpoint - Configure DNS resolution)
+    roleDefinitionId: '4d97b98b-1d4f-4787-a291-c67834d212e7' // Network Contributor (Purpose: configure DNS resolution for private endpoints)
     scope: VirtualNetworkResourceGroupName
   }
 ] : []
 var FSLogixRoleAssignments = union(FSLogixNtfsRoleAssignments, FSLogixPrivateEndpointRoleAssignment)
-var RoleAssignments = union(ArtifactsStorageRoleAssignment, DiskEncryptionRoleAssignment, DrainModeRoleAssignment, FSLogixRoleAssignments)
+var RoleAssignments = union(ArtifactsStorageRoleAssignment, DiskEncryptionRoleAssignment, DrainModeRoleAssignment, FSLogixRoleAssignments, RemoveManagementVirtualMachine)
 
 resource userAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
   name: UserAssignedIdentityName
