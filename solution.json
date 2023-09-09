@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "16650662422890482905"
+      "templateHash": "15743356485746449990"
     }
   },
   "parameters": {
@@ -1425,7 +1425,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "11665556162096489506"
+              "templateHash": "13145919092057889813"
             }
           },
           "parameters": {
@@ -1659,7 +1659,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "6006739952692617751"
+                      "templateHash": "10441457304595618657"
                     }
                   },
                   "parameters": {
@@ -1704,10 +1704,16 @@
                     "ArtifactsStorageRoleAssignment": "[if(not(empty(parameters('ArtifactsStorageAccountResourceId'))), createArray(createObject('roleDefinitionId', '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1', 'scope', format('{0}, {1}', split(parameters('ArtifactsStorageAccountResourceId'), '/')[2], split(parameters('ArtifactsStorageAccountResourceId'), '/')[4]))), createArray())]",
                     "DiskEncryptionRoleAssignment": "[if(parameters('DiskEncryption'), createArray(createObject('roleDefinitionId', '14b46e9e-c2b7-41b4-b07b-48a6ebf60603', 'scope', resourceGroup().name)), createArray())]",
                     "DrainModeRoleAssignment": "[if(parameters('DrainMode'), createArray(createObject('roleDefinitionId', '2ad6aaab-ead9-4eaa-8ac5-da422f562408', 'scope', parameters('ResourceGroupControlPlane'))), createArray())]",
-                    "FSLogixNtfsRoleAssignments": "[if(parameters('Fslogix'), createArray(createObject('roleDefinitionId', 'a959dbd1-f747-45e3-8ba6-dd80f235f97c', 'scope', resourceGroup().name), createObject('roleDefinitionId', '17d1049b-9a84-46fb-8f53-869881c3d3ab', 'scope', parameters('ResourceGroupStorage'))), createArray(createObject('roleDefinitionId', 'a959dbd1-f747-45e3-8ba6-dd80f235f97c', 'scope', resourceGroup().name)))]",
+                    "FSLogixNtfsRoleAssignments": "[if(parameters('Fslogix'), createArray(createObject('roleDefinitionId', '17d1049b-9a84-46fb-8f53-869881c3d3ab', 'scope', parameters('ResourceGroupStorage'))), createArray())]",
+                    "RemoveManagementVirtualMachine": [
+                      {
+                        "roleDefinitionId": "a959dbd1-f747-45e3-8ba6-dd80f235f97c",
+                        "scope": "[resourceGroup().name]"
+                      }
+                    ],
                     "FSLogixPrivateEndpointRoleAssignment": "[if(contains(parameters('FslogixStorage'), 'PrivateEndpoint'), createArray(createObject('roleDefinitionId', '4d97b98b-1d4f-4787-a291-c67834d212e7', 'scope', parameters('VirtualNetworkResourceGroupName'))), createArray())]",
                     "FSLogixRoleAssignments": "[union(variables('FSLogixNtfsRoleAssignments'), variables('FSLogixPrivateEndpointRoleAssignment'))]",
-                    "RoleAssignments": "[union(variables('ArtifactsStorageRoleAssignment'), variables('DiskEncryptionRoleAssignment'), variables('DrainModeRoleAssignment'), variables('FSLogixRoleAssignments'))]"
+                    "RoleAssignments": "[union(variables('ArtifactsStorageRoleAssignment'), variables('DiskEncryptionRoleAssignment'), variables('DrainModeRoleAssignment'), variables('FSLogixRoleAssignments'), variables('RemoveManagementVirtualMachine'))]"
                   },
                   "resources": [
                     {
@@ -8071,7 +8077,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "7722625682179147574"
+              "templateHash": "9764608353192396524"
             }
           },
           "parameters": {
@@ -8120,7 +8126,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "9835163081605822758"
+                      "templateHash": "11365860405355282399"
                     }
                   },
                   "parameters": {
@@ -8170,7 +8176,7 @@
                           }
                         ],
                         "source": {
-                          "script": "        param(\r\n          [string]$Environment\r\n          [string]$ResourceGroupName,\r\n          [string]$SubscriptionId,\r\n          [string]$TenantId,\r\n          [string]$UserAssignedIdentityClientId,\r\n          [string]$VirtualMachineName,\r\n        )\r\n        Connect-AzAccount -Environment $Environment -Tenant $TenantId -Subscription $SubscriptionId -Identity -AccountId $UserAssignedIdentityClientId\r\n        Remove-AzVM -ResourceGroupName $ResourceGroupName -Name $VirtualMachineName -NoWait -ForceDeletion $true -Force -AsJob\r\n      "
+                          "script": "        param(\r\n          [string]$Environment\r\n          [string]$ResourceGroupName,\r\n          [string]$SubscriptionId,\r\n          [string]$TenantId,\r\n          [string]$UserAssignedIdentityClientId,\r\n          [string]$VirtualMachineName\r\n        )\r\n        Connect-AzAccount -Environment $Environment -Tenant $TenantId -Subscription $SubscriptionId -Identity -AccountId $UserAssignedIdentityClientId\r\n        Remove-AzVM -ResourceGroupName $ResourceGroupName -Name $VirtualMachineName -NoWait -ForceDeletion $true -Force -AsJob\r\n      "
                         }
                       }
                     }
