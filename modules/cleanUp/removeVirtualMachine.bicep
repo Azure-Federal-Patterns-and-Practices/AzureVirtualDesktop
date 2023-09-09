@@ -48,7 +48,7 @@ resource removeVirtualMachine 'Microsoft.Compute/virtualMachines/runCommands@202
           [string]$SubscriptionId,
           [string]$TenantId,
           [string]$UserAssignedIdentityClientId,
-          [string]$VirtualMachineName,
+          [string]$VirtualMachineName
         )
         Connect-AzAccount -Environment $Environment -Tenant $TenantId -Subscription $SubscriptionId -Identity -AccountId $UserAssignedIdentityClientId
         Remove-AzVM -ResourceGroupName $ResourceGroupName -Name $VirtualMachineName -NoWait -ForceDeletion $true -Force -AsJob
