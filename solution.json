@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "15743356485746449990"
+      "templateHash": "9895784125752746332"
     }
   },
   "parameters": {
@@ -8077,7 +8077,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "9764608353192396524"
+              "templateHash": "18322659436747752223"
             }
           },
           "parameters": {
@@ -8126,7 +8126,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.20.4.51522",
-                      "templateHash": "11365860405355282399"
+                      "templateHash": "12824304272024945478"
                     }
                   },
                   "parameters": {
@@ -8176,7 +8176,7 @@
                           }
                         ],
                         "source": {
-                          "script": "        param(\r\n          [string]$Environment\r\n          [string]$ResourceGroupName,\r\n          [string]$SubscriptionId,\r\n          [string]$TenantId,\r\n          [string]$UserAssignedIdentityClientId,\r\n          [string]$VirtualMachineName\r\n        )\r\n        Connect-AzAccount -Environment $Environment -Tenant $TenantId -Subscription $SubscriptionId -Identity -AccountId $UserAssignedIdentityClientId\r\n        Remove-AzVM -ResourceGroupName $ResourceGroupName -Name $VirtualMachineName -NoWait -ForceDeletion $true -Force -AsJob\r\n      "
+                          "script": "        param(\r\n          [string]$Environment,\r\n          [string]$ResourceGroupName,\r\n          [string]$SubscriptionId,\r\n          [string]$TenantId,\r\n          [string]$UserAssignedIdentityClientId,\r\n          [string]$VirtualMachineName\r\n        )\r\n        Connect-AzAccount -Environment $Environment -Tenant $TenantId -Subscription $SubscriptionId -Identity -AccountId $UserAssignedIdentityClientId\r\n        Remove-AzVM -ResourceGroupName $ResourceGroupName -Name $VirtualMachineName -NoWait -ForceDeletion $true -Force -AsJob\r\n      "
                         }
                       }
                     }
