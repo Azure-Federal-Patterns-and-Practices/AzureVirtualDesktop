@@ -43,7 +43,7 @@ resource removeVirtualMachine 'Microsoft.Compute/virtualMachines/runCommands@202
     source: {
       script: '''
         param(
-          [string]$Environment
+          [string]$Environment,
           [string]$ResourceGroupName,
           [string]$SubscriptionId,
           [string]$TenantId,
