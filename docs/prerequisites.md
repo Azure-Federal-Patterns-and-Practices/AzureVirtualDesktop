@@ -11,7 +11,8 @@ To successfully deploy this solution, you will need to ensure the following prer
   - Virtual network and subnet(s)
   - Domain Services: if you plan to domain or hybrid join the session hosts, ensure ADDS is available in your enviroment and that you are synchronizing the required objects using Azure AD Connect. AD Sites & Services should be configured for the address space of your Azure virtual network.
 
-> **_NOTE:_** A simple landing zone can be deployed using my [Azure Landing Zones repository](https://github.com/jamasten/AzureLandingZones).
+> **NOTE**
+> A simple landing zone can be deployed using my [Azure Landing Zones repository](https://github.com/jamasten/AzureLandingZones).
 
 - **DNS:** if you plan to deploy private endpoints, you must ensure your DNS is configured with ONE of the following:
   - DNS forwarder points the [Azure VIP, 168.63.129.16](https://learn.microsoft.com/azure/virtual-network/what-is-ip-address-168-63-129-16).
