@@ -6,7 +6,7 @@
 
 To successfully deploy this solution, you will need to ensure the following prerequisites have been completed:
 
-- **Licenses:** ensure you have the [required licensing for AVD](https://docs.microsoft.com/en-us/azure/virtual-desktop/overview#requirements).
+- **Licenses:** ensure you have the [required licensing for AVD](https://learn.microsoft.com/en-us/azure/virtual-desktop/overview#requirements).
 - **Landing Zone:** ensure the minimum required resources are deployed in your Azure subscription.
   - Virtual network and subnet(s)
   - Domain Services: if you plan to domain or hybrid join the session hosts, ensure ADDS is available in your enviroment and that you are synchronizing the required objects using Azure AD Connect. AD Sites & Services should be configured for the address space of your Azure virtual network.
@@ -43,11 +43,11 @@ To successfully deploy this solution, you will need to ensure the following prer
 - **FSLogix:**
   - Azure Files:
     - Service Endpoint - if you plan to deploy Azure Files with a Service Endpoint, be sure the subnet for the sessions hosts has the "Azure Storage" service endpoint enabled on the subnet.
-    - Private Endpoint - if you plan to deploy Azure Files with a Private Endpoint, ensure the [Private Endpoint Network Policy has been disabled](https://docs.microsoft.com/azure/private-link/disable-private-endpoint-network-policy) on the subnet. Otherwise, the private endpoint resource will fail to deploy.
+    - Private Endpoint - if you plan to deploy Azure Files with a Private Endpoint, ensure the [Private Endpoint Network Policy has been disabled](https://learn.microsoft.com/azure/private-link/disable-private-endpoint-network-policy) on the subnet. Otherwise, the private endpoint resource will fail to deploy.
   - Azure NetApp Files:
-    - [Register the resource provider](https://docs.microsoft.com/azure/azure-netapp-files/azure-netapp-files-register)
-    - [Delegate a subnet to Azure NetApp Files](https://docs.microsoft.com/azure/azure-netapp-files/azure-netapp-files-delegate-subnet)
-    - [Enable the shared AD feature](https://docs.microsoft.com/azure/azure-netapp-files/create-active-directory-connections#shared_ad): this feature is required if you plan to deploy more than one domain joined NetApp account in the same Azure subscription and region.  As of 1/31/2022, this feature is in "public preview" in Azure Cloud and not available in Azure US Government.
+    - [Register the resource provider](https://learn.microsoft.com/azure/azure-netapp-files/azure-netapp-files-register)
+    - [Delegate a subnet to Azure NetApp Files](https://learn.microsoft.com/azure/azure-netapp-files/azure-netapp-files-delegate-subnet)
+    - [Enable the shared AD feature](https://learn.microsoft.com/azure/azure-netapp-files/create-active-directory-connections#shared_ad) - this feature is required if you plan to deploy more than one domain joined NetApp account in the same Azure subscription and region.  As of 1/31/2022, this feature is in "public preview" in Azure Cloud and not available in Azure US Government.
 - **Disk Encryption:** the encryption at host feature is deployed on the virtual machines when the "DiskEncryption" parameter is set to "true". This feature is not enabled in your Azure subscription by default and must be manually enabled. Use the following steps to enable the feature: [Enable Encryption at Host](https://learn.microsoft.com/azure/virtual-machines/disks-enable-host-based-encryption-portal).
 - **Marketplace Image:** If you plan to deploy this solution using PowerShell or AzureCLI and use a marketplace image for the virtual machines, use the code below to find the appropriate image:
 
