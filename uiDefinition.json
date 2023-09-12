@@ -342,7 +342,7 @@
                             "type": "Microsoft.Common.Slider",
                             "label": "Count",
                             "defaultValue": 1,
-                            "toolTip": "Select the number of virtual machines needed to expedite your data migration.",
+                            "toolTip": "Select the number of virtual machines to deploy in your AVD host pool.",
                             "min": 1,
                             "max": 4999,
                             "showStepMarkers": true,
