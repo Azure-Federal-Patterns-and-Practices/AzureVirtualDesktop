@@ -14,20 +14,6 @@ Both a personal or pooled host pool can be deployed with this solution. Either o
 
 With this solution you can scale up to Azure's subscription limitations. This solution has been updated to allow sharding. A shard provides additional capacity to an AVD stamp. See the options below for increasing network or storage capacity.
 
-## Sharding to Increase Capacity
-
-### Network Shard
-
-To add networking capacity to an AVD stamp, the virtual networks should be staged prior to deploying the solution. The first initial deployment would target the first virtual network. Any subsequent deployments could target other virtual networks. When running a new deployment specify a new value for the "SubnetResourceId" parameter. The sessions hosts will be deployed to the new virtual network. The "SessionHostIndex" and "SessionHostCount" parameters will also play into the network shards. For example:
-
-| Shard | VNET           | Subnet  | Session Host Index | Session Host Count |
-|-------|----------------|---------|--------------------|--------------------|
-| 0     | vnet-p-use-000 | Clients | 0                  | 250                |
-| 1     | vnet-p-use-001 | Clients | 250                | 250                |
-| 2     | vnet-p-use-002 | Clients | 500                | 250                |
-
-In this example, each shard will contain 250 session hosts and each set of sessions hosts will be in different VNET.
-
-### Storage Shard
+## Sharding to Increase Storage Capacity
 
 To add storage capacity to an AVD stamp, the "StorageIndex" and "StorageCount" parameters should be modified to your desired capacity. The last two digits in the name for the chosen storage solution will be incremented between each deployment. The "VHDLocations" setting will include all the file shares. The "SecurityPrincipalIds" and "SecurityPrincipalNames" will have an RBAC assignment and NTFS permissions set on one storage shard per stamp. Each user in the stamp should only have access to one file share. When the user accesses a session host, their profile will load from their respective file share.
