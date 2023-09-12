@@ -657,7 +657,7 @@
                 {
                     "name": "userProfiles",
                     "label": "User Profiles",
-                    "visible": true,
+                    "visible": "[contains(steps('hosts').identity.solution, 'DomainServices')]",
                     "elements": [
                         {
                             "name": "profileSolution",
