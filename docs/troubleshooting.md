@@ -4,4 +4,4 @@
 
 ## Troubleshooting
 
-If you need to redeploy this solution b/c of an error or other reason, be sure the virtual machines are turned on.  If your host pool is "pooled", I would recommended disabling your logic app to ensure the scaling solution doesn't turn off any of your VMs during the deployment.  If the VMs are off, the deployment will fail since the extensions cannot be validated / updated.
+If you need to redeploy this solution due to an error or to add resources, be sure the virtual machines (aka session hosts) are turned on.  For "pooled" host pools, you must disable scaling as well.  If the virtual machines are shutdown, the deployment will fail since virtaul machine extensions cannot be updated when virtual machines are in a shutdown state.
