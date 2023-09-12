@@ -9,7 +9,7 @@ To successfully deploy this solution, you will need to ensure the following prer
 - **Licenses:** ensure you have the [required licensing for AVD](https://learn.microsoft.com/en-us/azure/virtual-desktop/overview#requirements).
 - **Landing Zone:** ensure the minimum required resources are deployed in your Azure subscription.
   - Virtual network and subnet(s)
-  - Domain Services: if you plan to domain or hybrid join the session hosts, ensure ADDS is available in your enviroment and that you are synchronizing the required objects using Azure AD Connect. AD Sites & Services should be configured for the address space of your Azure virtual network.
+  - Domain Services: if you plan to domain or hybrid join the session hosts, ensure ADDS or Azure ADDS is available in your enviroment and that you are synchronizing the required objects using Azure AD Connect. AD Sites & Services should be configured for the address space of your Azure virtual network if you are extending your on premises AD infrastruture into the cloud.
 
 > **NOTE**
 > A simple landing zone can be deployed using my [Azure Landing Zones repository](https://github.com/jamasten/AzureLandingZones).
