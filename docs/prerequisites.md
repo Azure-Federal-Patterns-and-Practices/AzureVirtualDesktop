@@ -17,6 +17,7 @@ To successfully deploy this solution, you will need to ensure the following prer
   - DNS forwarder points the [Azure VIP, 168.63.129.16](https://learn.microsoft.com/azure/virtual-network/what-is-ip-address-168-63-129-16).
   - Conditional forwarders for the following [public DNS zone forwarders](https://learn.microsoft.com/azure/private-link/private-endpoint-dns) that point to the [Azure VIP, 168.63.129.16](https://learn.microsoft.com/azure/virtual-network/what-is-ip-address-168-63-129-16):
     | Cloud | Automation Account | Azure Files | Azure Virtual Desktop | Key Vault |
+    |-------|--------------------|-------------|-----------------------|-----------|
     | AzureCloud | azure-automation.net | file.core.windows.net | wvd.microsoft.com | vault.azure.net & vaultcore.azure.net |
     | AzureUsGovernment | azure-automation.us | file.core.usgovcloudapi.net | wvd.azure.us | vault.usgovcloudapi.net & vaultcore.usgovcloudapi.net |
 - **Permissions:**
