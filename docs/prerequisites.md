@@ -38,8 +38,8 @@ To successfully deploy this solution, you will need to ensure the following prer
     - [PowerShell Scripts](https://github.com/jamasten/AzureVirtualDesktop/tree/main/artifacts)
     - [Virtual Desktop Optimization Tool](https://github.com/The-Virtual-Desktop-Team/Virtual-Desktop-Optimization-Tool/archive/refs/heads/main.zip)
   - update the following parameters during deployment:
-    - ArtifactsLocation - this is the URL to the container in Azure Blobs.
-    - ArtifactsStorageAccountResourceId - this is the resource ID of the storage account that contains artificats in Azure Blobs.
+    - ArtifactsLocation - this is the URL to your container in Azure Blobs.
+    - ArtifactsStorageAccountResourceId - this is the resource ID for your storage account that contains the artifacts in Azure Blobs.
 - **FSLogix:**
   - Azure Files:
     - Service Endpoint - if you plan to deploy Azure Files with a Service Endpoint, be sure the subnet for the sessions hosts has the "Azure Storage" service endpoint enabled on the subnet.
