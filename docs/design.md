@@ -10,7 +10,7 @@ When the same "Identifier" is used but the "StampIndex" is incremented across th
 
 The code is idempotent, allowing you to scale storage and sessions hosts, but the core management resources will persist and update for an subsequent deployments. Some of those resources are the host pool, application group, and log analytics workspace. See the diagram below for more details about the resources deployed in this solution:
 
-![Solution](../images/solution.png)
+![Resources](../images/resources.png)
 
 Both a personal or pooled host pool can be deployed with this solution. Either option will deploy a desktop application group with a role assignment. Selecting a pooled host pool will deploy the required resources and configurations to fully enable FSLogix. This solution also automates many of the features that are usually enabled manually after deploying an AVD host pool.  See the [features](./features.md) page for more details.
 
