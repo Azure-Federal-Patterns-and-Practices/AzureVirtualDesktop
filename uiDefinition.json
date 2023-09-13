@@ -87,7 +87,6 @@
                 {
                     "name": "controlPlane",
                     "label": "Control Plane",
-                    "visible": true,
                     "elements": [
                         {
                             "name": "location",
@@ -254,7 +253,6 @@
                 {
                     "name": "hosts",
                     "label": "Session Hosts",
-                    "visible": true,
                     "elements": [
                         {
                             "name": "network",
@@ -657,7 +655,6 @@
                 {
                     "name": "userProfiles",
                     "label": "User Profiles",
-                    "visible": "[equals(steps('hosts').identity.solution, 'AzureActiveDirectory')]",
                     "elements": [
                         {
                             "name": "profileSolution",
@@ -864,7 +861,6 @@
                 {
                     "name": "management",
                     "label": "Management",
-                    "visible": true,
                     "elements": [
                         {
                             "name": "workspaceFriendlyName",
@@ -1042,7 +1038,6 @@
                 {
                     "name": "tags",
                     "label": "Tags",
-                    "visible": true,
                     "elements": [
                         {
                             "name": "tags",
