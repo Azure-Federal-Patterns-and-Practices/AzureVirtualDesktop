@@ -558,7 +558,7 @@
                                 {
                                     "name": "domainName",
                                     "type": "Microsoft.Common.TextBox",
-                                    "visible": "[not(equals(steps('hosts').identity.solution, 'AzureActiveDirectory'))]",
+                                    "visible": "[not(equals(steps('hosts').identity.solution, 'Azure Active Directory (AAD)'))]",
                                     "label": "Domain Name",
                                     "toolTip": "Provide domain name for the selected Active Directory solution.",
                                     "placeholder": "Example: contoso.com",
