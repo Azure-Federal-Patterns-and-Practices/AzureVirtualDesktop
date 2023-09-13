@@ -39,7 +39,7 @@ To successfully deploy this solution, you will need to ensure the following prer
     - [PowerShell Scripts](https://github.com/jamasten/AzureVirtualDesktop/tree/main/artifacts)
     - [Virtual Desktop Optimization Tool](https://github.com/The-Virtual-Desktop-Team/Virtual-Desktop-Optimization-Tool/archive/refs/heads/main.zip)
   - update the following parameters during deployment:
-    - ArtifactsLocation - this is the URL to your container in Azure Blobs (e.g. \https://saavdduse.blob.core.windows.net/artifacts/\).
+    - ArtifactsLocation - this is the URL to your container in Azure Blobs (e.g. https[]://saavdduse.blob.core.windows.net/artifacts/).
     - ArtifactsStorageAccountResourceId - this is the resource ID for your storage account that contains the artifacts in Azure Blobs.
 - **FSLogix:**
   - Azure Files:
