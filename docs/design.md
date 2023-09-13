@@ -4,9 +4,11 @@
 
 ## Design
 
-This Azure Virtual Desktop (AVD) solution will deploy a fully operational AVD [stamp](https://docs.microsoft.com/en-us/azure/architecture/patterns/deployment-stamp) in an Azure subscription. The "StampIndex" parameter in this solution allows each stamp to be identified and scale to the capacity of a single subscription. Either several small stamps or one large stamp could be deployed in one subscription. To uniquely name multiple, unrelated stamps within a subscription, input a unique value for the "Identifier" parameter in each deployment.  To name multiple related stamps, use the same value for the "Identifier" but increment the "StampIndex" across your subscriptions.
+This Azure Virtual Desktop (AVD) solution will deploy a fully operational AVD [stamp](https://learn.microsoft.com/azure/architecture/patterns/deployment-stamp) in an Azure subscription. The "StampIndex" parameter in this solution allows each stamp to be identified and scale to the capacity of a single subscription. Either several small stamps or one large stamp could be deployed in one subscription. To uniquely name multiple, unrelated stamps within a subscription, input a unique value for the "Identifier" parameter in each deployment.  To name multiple related stamps, use the same value for the "Identifier" but increment the "StampIndex" across your subscriptions.
 
-The code is idempotent, allowing you to scale storage, networking, and sessions hosts but the core management resources will persist and update for an subsequent deployments. Some of those resources are the host pool, application group, and log analytics workspace. See the diagram below for more details about the resources deployed in this solution:
+When the same "Identifier" is used but the "StampIndex" is incremented across the same subscription, the management resource group is uniquely named so the resource group and its resources are only deployed once. This enables the sharing of resources within the same "Identifier".  The "Identfier" is meant to represent a business unit or project within an organization.
+
+The code is idempotent, allowing you to scale storage and sessions hosts, but the core management resources will persist and update for an subsequent deployments. Some of those resources are the host pool, application group, and log analytics workspace. See the diagram below for more details about the resources deployed in this solution:
 
 ![Solution](../images/solution.png)
 
