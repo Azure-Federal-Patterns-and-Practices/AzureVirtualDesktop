@@ -27,4 +27,4 @@ This PowerShell tool is run using the Custom Script Extension on the virtual mac
 
 **Deployed Resources:**
 
-- CustomScriptExtension
+- Custom Script Extension
