@@ -859,7 +859,7 @@
                             }
                         }
                     ],
-                    "visible": "[not(equals(steps('hosts').identity.solution, 'AzureActiveDirectory'))]",
+                    "visible": "[not(equals(steps('hosts').identity.solution, 'AzureActiveDirectory'))]"
                 },
                 {
                     "name": "management",
