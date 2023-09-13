@@ -665,7 +665,7 @@
                             "toolTip": "Select the user profile solution for your end users.",
                             "constraints": {
                                 "required": true,
-                                "allowedValues": "[if(equals(steps('hosts').identity.solution, 'AzureActiveDirectory'), parse([{\"label\":\"Local\",\"value\":\"local\"}]), parse([{\"label\":\"FSLogix\",\"value\":\"fslogix\"},{\"label\":\"Local\",\"value\":\"local\"}]))]"
+                                "allowedValues": "[if(equals(steps('hosts').identity.solution, 'AzureActiveDirectory'), parse('[{\"label\":\"Local\",\"value\":\"local\"}]'), parse('[{\"label\":\"FSLogix\",\"value\":\"fslogix\"},{\"label\":\"Local\",\"value\":\"local\"}]'))]"
                             }
                         },
                         {
