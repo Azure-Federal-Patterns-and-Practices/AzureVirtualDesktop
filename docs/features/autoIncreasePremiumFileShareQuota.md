@@ -27,8 +27,10 @@ When Azure Files Premium is selected for FSLogix Storage, this feature is deploy
 
 **Deployed Resources:**
 
-- Logic App
 - Automation Account
+  - Diagnositics Setting (optional)
+  - Job Schedules
   - Runbook
-  - Webhook
-  - Variable
+  - Schedules
+  - System Assigned Identity
+- Role Assignment
