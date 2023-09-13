@@ -27,6 +27,5 @@ When this optional feature is deployed, the sessions hosts will be put in drain 
 
 **Deployed Resources:**
 
-- Deployment Script
-  - Storage Account
-  - Container Instance
+- Virtual Machine
+  - Custom Script Extension
