@@ -657,7 +657,6 @@
                 {
                     "name": "userProfiles",
                     "label": "User Profiles",
-                    "visible": "[not(equals(steps('hosts').identity.solution, 'AzureActiveDirectory'))]",
                     "elements": [
                         {
                             "name": "profileSolution",
@@ -859,7 +858,8 @@
                                 ]
                             }
                         }
-                    ]
+                    ],
+                    "visible": "[not(equals(steps('hosts').identity.solution, 'AzureActiveDirectory'))]",
                 },
                 {
                     "name": "management",
