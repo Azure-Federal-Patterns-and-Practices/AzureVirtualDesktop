@@ -7,7 +7,7 @@ This Azure Virtual Desktop (AVD) solution will deploy a fully operational [stamp
 ## Deployment Options
 
 > **WARNING**
-> Be sure to review the [prerequisites](./docs/prerequisites.md) before deploying this solution.
+> Failure to complete the [prerequisites](./docs/prerequisites.md) will likely result in an unsuccessful deployment.
 
 ### Azure Portal
 
