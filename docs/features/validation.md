@@ -27,4 +27,6 @@ This feature will validate your deployment selections to ensure you are deployin
 
 - Virtual Machine
   - Custom Script Extension
+  - Disk
+  - Network Interface
 - Role Assignments
