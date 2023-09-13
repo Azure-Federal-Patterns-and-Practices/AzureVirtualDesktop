@@ -21,7 +21,7 @@
 
 ### Drain Mode
 
-When this optional feature is deployed, the sessions hosts will be put in drain mode to ensure the end users cannot access the host pool until ready.
+When this optional feature is deployed, the sessions hosts will be put in drain mode to ensure the end users cannot access them until they have been validated.
 
 **Reference:** [Drain Mode - Microsoft Docs](https://docs.microsoft.com/en-us/azure/virtual-desktop/drain-mode)
 
