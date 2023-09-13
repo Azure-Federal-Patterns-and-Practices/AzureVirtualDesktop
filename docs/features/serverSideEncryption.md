@@ -23,7 +23,8 @@
 
 This optional feature deploys the required resources & configuration to enable server-side encryption encryption on the session hosts using a customer managed key. The configuration also enables double encryption which uses a platform managed key in combination with the customer managed key. Also, the temp and cache disks are encrypted using the "encryption at host" feature.
 
-> NOTE: If deploying a "pooled" host pool with FSLogix, the data in the profile and office containers are encrypted using encryption on the storage service, not the virtual machine.
+> **NOTE**
+> If deploying a "pooled" host pool with FSLogix, the data in the profile and office containers are encrypted using encryption on the storage service, not the virtual machine.
 
 **Reference:** [Azure Server-Side Encryption - Microsoft Docs](https://learn.microsoft.com/azure/virtual-machines/disk-encryption)
 
