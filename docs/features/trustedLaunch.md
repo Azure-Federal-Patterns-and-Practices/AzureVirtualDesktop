@@ -21,7 +21,7 @@
 
 ### Trusted Launch
 
-This feature is enabled automatically when the following conditions are met:
+This feature is enabled automatically with the safe boot and vTPM settings when the following conditions are met:
 
 - a generation 2, "g2", image SKU is selected
 - the VM size supports the feature
@@ -36,4 +36,5 @@ It is a security best practice to enable this feature to protect your virtual ma
 
 **Deployed Resources:**
 
-- None
+- Virtual Machines
+  - Guest Attestation extension
